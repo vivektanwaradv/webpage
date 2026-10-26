@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vivek Tanwar | Advocate</title>
+  <meta name="description" content="Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law.">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="robots" content="index,follow">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #d97706;
+      --accent-hover: #b45309;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; overflow-x: hidden; }
+    h1,h2,h3,h4,.serif { font-family: 'Playfair Display', Georgia, serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn .5s ease-out forwards; opacity: 0; transform: translateY(12px); }
+    @keyframes fadeIn { to { opacity: 1; transform: none; } }
+
+    .glass-card {
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: 0 10px 40px -10px rgba(15,23,42,.08);
+    }
+
+    .editable-active[contenteditable="true"] {
+      outline: 2px dashed var(--accent);
+      background: #fffbeb;
+      border-radius: 6px;
+      padding: 2px 6px;
+      cursor: text;
+      transition: outline .15s;
+    }
+
+    body:not(.is-admin) .admin-only { display: none !important; }
+    body.is-admin .admin-only { display: inline-flex !important; }
+
+    .blog-content h1 { font-size: 1.9rem; font-weight: 700; margin: 1.2rem 0 .6rem; }
+    .blog-content h2 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 .5rem; }
+    .blog-content h3 { font-size: 1.25rem; font-weight: 600; margin: .8rem 0 .4rem; }
+    .blog-content p { margin: .75rem 0; line-height: 1.7; }
+    .blog-content ul, .blog-content ol { padding-left: 1.5rem; margin: .75rem 0; }
+    .blog-content ul { list-style: disc; }
+    .blog-content ol { list-style: decimal; }
+    .blog-content a { color: #1d4ed8; text-decoration: underline; }
+    .blog-content img, .blog-content video, .blog-content iframe { max-width: 100%; border-radius: 10px; margin: 1rem 0; }
+
+    #wa-float::before {
+      content: ""; position: absolute; inset: 0; border-radius: 9999px;
+      background: #25D366; animation: waPulse 2s infinite; z-index: -1;
+    }
+    @keyframes waPulse {
+      0% { transform: scale(1); opacity: .55; }
+      100% { transform: scale(1.7); opacity: 0; }
+    }
+
+    #mobile-menu { transition: max-height .35s ease, opacity .25s; overflow: hidden; }
+    #mobile-menu.hidden { max-height: 0; opacity: 0; }
+    #mobile-menu:not(.hidden) { max-height: 420px; opacity: 1; }
+
+    .skeleton {
+      background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .admin-toolbar {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 90; display: flex; gap: .5rem; align-items: center;
+      background: #0f172a; color: #fff; padding: .6rem 1rem;
+      border-radius: 9999px; box-shadow: 0 20px 40px -10px rgba(0,0,0,.4);
+      font-size: .85rem; font-weight: 600;
+    }
+    .admin-toolbar button {
+      background: rgba(255,255,255,.12); border: none; color: #fff;
+      padding: .4rem .75rem; border-radius: 9999px; cursor: pointer;
+      transition: background .15s;
+    }
+    .admin-toolbar button:hover { background: rgba(255,255,255,.25); }
+    .admin-toolbar .status { font-size: .75rem; opacity: .8; margin-right: .5rem; }
+
+    .practice-card, .team-card { transition: transform .25s, box-shadow .25s; }
+    .practice-card:hover, .team-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -15px rgba(15,23,42,.15); }
+
+    .ql-editor { min-height: 160px; font-size: 1rem; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* Theme variables applied dynamically */
+    .bg-primary { background-color: var(--primary); }
+    .text-accent { color: var(--accent); }
+    .bg-accent { background-color: var(--accent); }
+    .border-accent { border-color: var(--accent); }
+    .hover\:bg-accent:hover { background-color: var(--accent-hover); }
+  </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen">
+
+  <!-- NAV -->
+  <nav class="bg-slate-900 text-white shadow-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-18 items-center py-3">
+        <div class="flex items-center cursor-pointer gap-3" onclick="showPage('home')">
+          <i class="fas fa-balance-scale text-amber-500 text-2xl md:text-3xl"></i>
+          <div>
+            <span class="block font-bold text-lg md:text-xl tracking-wide leading-none editable-text" data-key="nav_name">VIVEK TANWAR</span>
+            <span class="block text-[10px] md:text-xs text-slate-400 tracking-widest uppercase editable-text" data-key="nav_role">Advocate</span>
+          </div>
+        </div>
+
+        <div class="hidden md:flex space-x-1">
+          <button onclick="showPage('home')" class="nav-link hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Home</button>
+          <button onclick="showPage('about')" class="nav-link hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">About</button>
+          <button onclick="showPage('blogs')" class="nav-link hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Blogs & Media</button>
+          <button onclick="showPage('documents')" class="nav-link hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Documents</button>
+          <button onclick="showPage('contact')" class="nav-link hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Contact</button>
+        </div>
+
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" class="text-white hover:text-amber-400 p-2" aria-label="Menu">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-800 px-4 pb-4">
+      <button onclick="showPage('home')" class="block w-full text-left py-3 border-b border-slate-700 hover:text-amber-400">Home</button>
+      <button onclick="showPage('about')" class="block w-full text-left py-3 border-b border-slate-700 hover:text-amber-400">About</button>
+      <button onclick="showPage('blogs')" class="block w-full text-left py-3 border-b border-slate-700 hover:text-amber-400">Blogs</button>
+      <button onclick="showPage('documents')" class="block w-full text-left py-3 border-b border-slate-700 hover:text-amber-400">Documents</button>
+      <button onclick="showPage('contact')" class="block w-full text-left py-3 hover:text-amber-400">Contact</button>
+    </div>
+  </nav>
+
+  <main id="app-content" class="flex-grow relative">
+
+    <!-- HOME -->
+    <section id="home" class="page-section fade-in">
+      <div class="relative bg-slate-900 text-white py-20 lg:py-32 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+          <img id="hero-bg-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1950&q=80" alt="" class="w-full h-full object-cover opacity-30">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+          <div class="relative w-28 h-28 md:w-36 md:h-36 mx-auto mb-7">
+            <img src="" alt="Vivek Tanwar" class="profile-img w-full h-full rounded-full object-cover border-4 border-amber-500 shadow-2xl ring-4 ring-white/10">
+            <label class="admin-only absolute bottom-0 right-0 bg-white w-9 h-9 flex items-center justify-center rounded-full shadow cursor-pointer" title="Change photo">
+              <i class="fas fa-camera text-slate-800 text-sm"></i>
+              <input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden">
+            </label>
+          </div>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-5 editable-text leading-tight" data-key="hero_title">Justice, Integrity, Results</h1>
+          <p class="text-lg md:text-xl text-slate-300 mb-9 max-w-2xl mx-auto editable-text" data-key="hero_sub">
+            Dedicated legal representation at District Court, Bhiwani.<br>Specializing in Civil, Criminal, Revenue, and Consumer Law.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <button onclick="showPage('contact')" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3.5 px-8 rounded-xl transition shadow-lg">
+              <i class="fas fa-phone-alt mr-2"></i> Consult Now
+            </button>
+            <button onclick="showPage('about')" class="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-xl transition">
+              View Profile
+            </button>
+          </div>
+          <form onsubmit="event.preventDefault();globalSearch()" class="max-w-lg mx-auto mt-10 flex shadow-lg rounded-xl overflow-hidden">
+            <input id="home-search" type="search" placeholder="Search blogs, documents…" class="flex-1 min-w-0 px-4 py-3.5 text-slate-800 outline-none">
+            <button class="bg-amber-600 hover:bg-amber-700 px-5 font-semibold"><i class="fas fa-search"></i></button>
+          </form>
+        </div>
+      </div>
+
+      <!-- About preview -->
+      <div class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+          <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="w-full md:w-1/3 relative group">
+              <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-900 rounded-2xl blur opacity-25 group-hover:opacity-40 transition"></div>
+              <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] bg-slate-200">
+                <img src="" alt="Vivek Tanwar" class="profile-img w-full h-full object-cover">
+                <label class="admin-only absolute bottom-4 right-4 bg-white p-2.5 rounded-full shadow cursor-pointer">
+                  <i class="fas fa-camera text-slate-800"></i>
+                  <input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden">
+                </label>
+              </div>
+            </div>
+            <div class="w-full md:w-2/3">
+              <h2 class="text-3xl font-bold text-slate-900 mb-5 border-l-4 border-amber-500 pl-4 editable-text" data-key="home_about_title">Dedicated to Your Rights</h2>
+              <p class="text-slate-600 text-lg leading-relaxed mb-6 editable-text" data-key="home_about_text">
+                With a robust academic foundation and practical courtroom experience, I provide strategic legal solutions tailored to your unique needs. My approach combines thorough research with aggressive advocacy to secure the best possible outcome for my clients.
+              </p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                  <h4 class="font-bold text-slate-900 mb-1 editable-text" data-key="cred1_title">LL.M. (Criminal Law)</h4>
+                  <p class="text-sm text-slate-500 editable-text" data-key="cred1_sub">Post Graduate Specialization</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                  <h4 class="font-bold text-slate-900 mb-1 editable-text" data-key="cred2_title">NET Qualified</h4>
+                  <p class="text-sm text-slate-500 editable-text" data-key="cred2_sub">National Eligibility Test</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Areas -->
+      <div class="py-16 bg-slate-50" id="practice-section">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-3 editable-text" data-key="practice_title">Practice Areas</h2>
+            <div class="w-16 h-1 bg-amber-500 mx-auto rounded-full"></div>
+          </div>
+          <div id="practice-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+          <div class="admin-only mt-8 text-center">
+            <button onclick="addPracticeArea()" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-800">
+              <i class="fas fa-plus mr-2"></i>Add Practice Area
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page-section hidden fade-in py-0 bg-white">
+      <div class="bg-slate-900 text-white py-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+          <i class="fas fa-balance-scale text-9xl absolute -left-10 -top-10"></i>
+          <i class="fas fa-gavel text-9xl absolute -right-10 -bottom-10"></i>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4">
+          <h2 class="text-4xl md:text-5xl font-bold mb-3 serif editable-text" data-key="about_header">Meet The Legal Expert</h2>
+          <p class="text-lg text-slate-300 editable-text" data-key="about_subheader">Committed to excellence, integrity, and winning your case.</p>
+        </div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-4 py-16">
+        <div class="flex flex-col md:flex-row items-start gap-12">
+          <div class="w-full md:w-1/2">
+            <h3 class="text-3xl font-bold text-slate-900 mb-5 editable-text" data-key="about_bio_title">A Decade of Advocacy</h3>
+            <p class="text-slate-600 text-lg leading-relaxed mb-5 editable-text" data-key="about_bio1">
+              Starting from the basics of law to mastering complex litigation, every step in my career has been driven by a passion for justice. I believe in understanding the human side of every case, not just the legal clauses.
+            </p>
+            <p class="text-slate-600 text-lg leading-relaxed editable-text" data-key="about_bio2">
+              Whether it's a property dispute or a criminal appeal, I bring the same level of dedication and scrutiny to ensure the best outcome for my clients.
+            </p>
+          </div>
+          <div class="w-full md:w-1/2">
+            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+              <h4 class="text-xl font-bold text-slate-900 mb-4 editable-text" data-key="core_values_title">Core Values</h4>
+              <ul id="core-values-list" class="space-y-3"></ul>
+              <div class="admin-only mt-4">
+                <button onclick="addCoreValue()" class="text-sm text-amber-600 font-semibold"><i class="fas fa-plus mr-1"></i>Add value</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team -->
+      <div class="bg-slate-50 py-16">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2 serif editable-text" data-key="team_title">Our Legal Team</h2>
+            <p class="text-slate-500 editable-text" data-key="team_sub">Work together to achieve justice.</p>
+          </div>
+
+          <div id="admin-team-controls" class="admin-only mb-8 glass-card p-5 rounded-xl border-l-4 border-amber-500 max-w-3xl mx-auto">
+            <h3 class="font-bold text-slate-900 mb-3">Add Team Member</h3>
+            <div class="flex flex-wrap gap-3">
+              <input type="text" id="member-name" placeholder="Full Name" class="p-2.5 border rounded-lg flex-1 min-w-[140px]">
+              <input type="text" id="member-role" placeholder="Role" class="p-2.5 border rounded-lg flex-1 min-w-[140px]">
+              <input type="file" id="member-photo" accept="image/*" class="text-sm">
+              <button onclick="addTeamMember()" class="bg-slate-900 text-white px-5 py-2.5 rounded-lg hover:bg-slate-800 font-semibold">Add</button>
+            </div>
+          </div>
+
+          <div id="team-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOGS -->
+    <section id="blogs" class="page-section hidden fade-in py-14 bg-slate-50 min-h-screen">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 serif editable-text" data-key="blogs_title">Latest Legal Insights</h2>
+          <p class="text-slate-500 max-w-xl mx-auto editable-text" data-key="blogs_sub">Articles, judgments and practical legal guidance.</p>
+        </div>
+        <form onsubmit="event.preventDefault();blogSearch()" class="max-w-xl mx-auto mb-8 flex shadow rounded-xl overflow-hidden">
+          <input id="blog-search" oninput="blogSearch()" type="search" placeholder="Search blogs…" class="flex-1 min-w-0 p-3.5 outline-none">
+          <button class="bg-slate-900 text-white px-5"><i class="fas fa-search"></i></button>
+        </form>
+
+        <div id="admin-blog-controls" class="admin-only mb-8 glass-card p-6 rounded-xl border-l-4 border-amber-500">
+          <h3 class="font-bold text-lg text-slate-900 mb-4"><i class="fas fa-plus-circle mr-2 text-amber-500"></i>Add New Blog Post</h3>
+          <input type="text" id="new-blog-title" placeholder="Blog Title" class="w-full p-3 border border-slate-200 rounded-lg mb-3 outline-none focus:ring-2 focus:ring-amber-400">
+          <label class="inline-flex items-center gap-2 mb-3 text-sm cursor-pointer bg-amber-50 text-amber-800 px-4 py-2 rounded-full font-semibold hover:bg-amber-100">
+            <i class="fas fa-image"></i> Cover image (optional)
+            <input type="file" accept="image/*" class="hidden" onchange="pickCover(this)">
+          </label>
+          <span id="cover-name" class="text-xs text-slate-500 ml-2"></span>
+          <div id="new-blog-editor-container" class="bg-white rounded-lg border border-slate-200 mb-3" style="height:200px"></div>
+          <button onclick="addBlog()" class="bg-slate-900 text-white px-6 py-3 rounded-xl hover:bg-slate-800 font-semibold shadow">
+            Publish Post
+          </button>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div id="blog-list" class="lg:col-span-2 space-y-5"></div>
+          <aside class="space-y-5">
+            <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+              <h3 class="font-bold text-slate-900 mb-3 serif border-b pb-2">Recent Posts</h3>
+              <ul id="blog-recent" class="space-y-3"></ul>
+            </div>
+            <div class="bg-slate-900 text-white p-6 rounded-xl text-center">
+              <h3 class="font-bold text-lg mb-2 serif">Need legal advice?</h3>
+              <p class="text-slate-300 text-sm mb-4">Message me directly on WhatsApp.</p>
+              <a href="#" data-wa class="inline-block bg-[#25D366] hover:opacity-90 px-5 py-2.5 rounded-lg font-semibold" target="_blank" rel="noopener">
+                <i class="fab fa-whatsapp mr-1"></i> Chat Now
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- SINGLE BLOG -->
+    <section id="single-blog-view" class="page-section hidden fade-in py-14 bg-white">
+      <div class="max-w-3xl mx-auto px-4">
+        <button onclick="showPage('blogs')" class="mb-6 text-amber-600 hover:text-amber-700 font-semibold text-sm">
+          <i class="fas fa-arrow-left mr-2"></i> All Blogs
+        </button>
+        <article>
+          <h1 id="single-blog-title" class="text-3xl md:text-4xl font-bold text-slate-900 mb-3 serif"></h1>
+          <div id="single-blog-date" class="text-slate-500 mb-8 border-b pb-4 text-sm"></div>
+          <div id="single-blog-content" class="blog-content text-slate-700 leading-relaxed text-lg"></div>
+        </article>
+        <div class="mt-10 flex flex-wrap gap-3 border-t pt-6">
+          <a id="post-share" target="_blank" rel="noopener" class="bg-[#25D366] text-white px-5 py-2.5 rounded-lg font-semibold text-sm">
+            <i class="fab fa-whatsapp mr-1"></i> Share
+          </a>
+          <a href="#" data-wa class="bg-slate-900 text-white px-5 py-2.5 rounded-lg font-semibold text-sm" target="_blank" rel="noopener">Consult Advocate</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCUMENTS -->
+    <section id="documents" class="page-section hidden fade-in py-14 bg-white min-h-screen">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-slate-900 mb-2 serif editable-text" data-key="docs_title">Legal Resources</h2>
+          <p class="text-slate-500 editable-text" data-key="docs_sub">Download forms, templates and acts. Free and premium documents.</p>
+        </div>
+        <form onsubmit="event.preventDefault();docSearch()" class="max-w-xl mx-auto mb-8 flex shadow rounded-xl overflow-hidden">
+          <input id="doc-search" oninput="docSearch()" type="search" placeholder="Search documents…" class="flex-1 min-w-0 p-3.5 outline-none">
+          <button class="bg-slate-900 text-white px-5"><i class="fas fa-search"></i></button>
+        </form>
+
+        <div id="admin-doc-controls" class="admin-only mb-8 glass-card p-6 rounded-xl border-l-4 border-amber-500">
+          <h3 class="font-bold text-slate-900 mb-4">Upload Document</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input type="text" id="doc-name" placeholder="Document Name" class="p-3 border rounded-lg">
+            <input type="number" id="doc-price" min="0" placeholder="Price ₹ (0 = free)" class="p-3 border rounded-lg">
+            <input type="file" id="doc-file" class="p-2 border rounded-lg text-sm">
+            <input type="url" id="doc-link" placeholder="…or Google Drive / external link" class="p-3 border rounded-lg">
+          </div>
+          <p class="text-xs text-slate-500 mt-2">Files under 600 KB can be uploaded directly. Larger files → paste a public link.</p>
+          <button onclick="addDoc()" class="mt-3 bg-slate-900 text-white px-6 py-2.5 rounded-xl hover:bg-slate-800 font-semibold">Add Document</button>
+        </div>
+        <div id="docs-container" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="page-section hidden fade-in py-16 bg-slate-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="space-y-8">
+            <div>
+              <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-3 serif editable-text" data-key="contact_title">Get in Touch</h2>
+              <p class="text-slate-600 text-lg editable-text" data-key="contact_hours">Consultation hours: Mon-Sat, 10:00 AM - 6:00 PM.</p>
+            </div>
+            <div class="space-y-5">
+              <div class="flex items-start gap-4">
+                <div class="bg-slate-900 p-3.5 rounded-xl shadow-lg shrink-0">
+                  <i class="fas fa-map-marker-alt text-white"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-800">Office Address</h4>
+                  <p class="text-slate-600 editable-text" data-key="contact_address">New Litigation Hall,<br>District Courts Complex,<br>Bhiwani, Haryana</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="bg-slate-900 p-3.5 rounded-xl shadow-lg shrink-0">
+                  <i class="fas fa-phone-alt text-white"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-800">Phone</h4>
+                  <p class="text-slate-600 editable-text" data-key="contact_phone">+91 9671755613</p>
+                  <p class="text-slate-600">WhatsApp: <a data-wa href="#" target="_blank" rel="noopener" class="text-amber-600 underline">+91 93064 56633</a></p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="bg-slate-900 p-3.5 rounded-xl shadow-lg shrink-0">
+                  <i class="fas fa-envelope text-white"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-800">Email</h4>
+                  <p class="text-slate-600 editable-text" data-key="contact_email">vivektanwaradv@gmail.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-7 rounded-2xl shadow-xl">
+            <form onsubmit="sendContact(event)">
+              <div class="mb-4">
+                <label class="block text-slate-700 text-sm font-semibold mb-1.5">Full Name</label>
+                <input type="text" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+              </div>
+              <div class="mb-4">
+                <label class="block text-slate-700 text-sm font-semibold mb-1.5">Email</label>
+                <input type="email" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+              </div>
+              <div class="mb-5">
+                <label class="block text-slate-700 text-sm font-semibold mb-1.5">Message</label>
+                <textarea class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" rows="4" required></textarea>
+              </div>
+              <button type="submit" class="w-full bg-slate-900 text-white font-semibold py-3.5 rounded-xl hover:bg-slate-800 transition shadow">
+                <i class="fab fa-whatsapp mr-2"></i>Send via WhatsApp
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEGAL PAGES (Privacy / Terms / Disclaimer) -->
+    <section id="privacy" class="page-section hidden fade-in py-14 bg-white">
+      <div class="max-w-3xl mx-auto px-4 prose prose-slate">
+        <h2 class="text-3xl font-bold mb-6">Privacy Policy</h2>
+        <div class="editable-text text-slate-600 leading-relaxed space-y-4" data-key="privacy_content">
+          <p>This website respects your privacy. We collect only the information you voluntarily provide through contact forms or WhatsApp. Data is used solely to respond to your legal enquiries and is never sold to third parties.</p>
+          <p>Cookies may be used to improve experience and show relevant ads. You may decline non-essential cookies.</p>
+          <p>For any privacy concern contact: vivektanwaradv@gmail.com</p>
+        </div>
+      </div>
+    </section>
+    <section id="terms" class="page-section hidden fade-in py-14 bg-white">
+      <div class="max-w-3xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-6">Terms &amp; Refund Policy</h2>
+        <div class="editable-text text-slate-600 leading-relaxed space-y-4" data-key="terms_content">
+          <p>All content on this site is for general information only and does not constitute legal advice. Consultation fees, if any, are communicated before engagement.</p>
+          <p>Digital documents once purchased are non-refundable unless the file is defective. Free resources may be used for personal non-commercial purposes.</p>
+        </div>
+      </div>
+    </section>
+    <section id="disclaimer" class="page-section hidden fade-in py-14 bg-white">
+      <div class="max-w-3xl mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-6">Disclaimer</h2>
+        <div class="editable-text text-slate-600 leading-relaxed space-y-4" data-key="disclaimer_content">
+          <p>The information provided on this website is for educational and informational purposes only. It is not a substitute for professional legal advice. Laws change frequently; always consult a qualified advocate for your specific matter.</p>
+          <p>Advocate Vivek Tanwar and this website accept no liability for any action taken based on the content herein.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-white py-10 mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <div class="flex justify-center space-x-6 mb-5">
+        <a href="#" data-wa target="_blank" rel="noopener" aria-label="WhatsApp" class="text-slate-400 hover:text-amber-500 transition text-2xl"><i class="fab fa-whatsapp"></i></a>
+        <a href="tel:+919671755613" aria-label="Call" class="text-slate-400 hover:text-amber-500 transition text-2xl"><i class="fas fa-phone"></i></a>
+        <a href="mailto:vivektanwaradv@gmail.com" aria-label="Email" class="text-slate-400 hover:text-amber-500 transition text-2xl"><i class="fas fa-envelope"></i></a>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 mb-4 text-sm text-slate-400">
+        <a href="#" onclick="showPage('privacy');return false" class="hover:text-amber-500">Privacy Policy</a>
+        <a href="#" onclick="showPage('terms');return false" class="hover:text-amber-500">Terms &amp; Refund</a>
+        <a href="#" onclick="showPage('disclaimer');return false" class="hover:text-amber-500">Disclaimer</a>
+        <a href="#" onclick="showPage('contact');return false" class="hover:text-amber-500">Contact</a>
+      </div>
+      <p class="text-slate-500 text-sm">&copy; <span id="year"></span> Vivek Tanwar, Advocate. All Rights Reserved.</p>
+
+      <div id="about-lock-container" class="mt-6">
+        <button id="admin-toggle-btn" onclick="openLogin()" class="text-slate-600 hover:text-slate-400 transition p-2 rounded-full border border-slate-700 hover:border-slate-500" title="Admin">
+          <i class="fas fa-lock text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SEARCH MODAL (was missing) -->
+  <div id="search-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto">
+      <div class="flex justify-between items-center p-5 border-b">
+        <h3 id="search-title" class="font-bold text-lg">Search Results</h3>
+        <button onclick="closeSearch()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="search-results" class="p-5"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-7 w-full max-w-md">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-slate-800">Admin Login</h3>
+        <button onclick="closeLogin()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
+      </div>
+      <form onsubmit="handleLogin(event)">
+        <div class="mb-4">
+          <label class="block text-slate-700 text-sm font-semibold mb-1.5">Email</label>
+          <input type="email" id="username" class="w-full px-3.5 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Admin email" required>
+        </div>
+        <div class="mb-5">
+          <label class="block text-slate-700 text-sm font-semibold mb-1.5">Password</label>
+          <input type="password" id="password" class="w-full px-3.5 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Password" required>
+        </div>
+        <button type="submit" class="w-full bg-slate-900 text-white font-semibold py-3 rounded-xl hover:bg-slate-800 transition">Login</button>
+      </form>
+      <p class="text-xs text-slate-400 mt-4 text-center">Only the site owner can access edit mode.</p>
+    </div>
+  </div>
+
+  <!-- ADMIN TOOLBAR -->
+  <div id="admin-toolbar" class="admin-toolbar hidden">
+    <span class="status" id="save-status">Ready</span>
+    <button onclick="saveAll()" title="Save all changes"><i class="fas fa-save mr-1"></i> Save</button>
+    <button onclick="openThemePanel()" title="Theme & settings"><i class="fas fa-palette"></i></button>
+    <button onclick="exportSite()" title="Export backup"><i class="fas fa-download"></i></button>
+    <button onclick="importSite()" title="Import backup"><i class="fas fa-upload"></i></button>
+    <button onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+  </div>
+
+  <!-- THEME / SETTINGS PANEL -->
+  <div id="theme-panel" class="fixed inset-0 bg-black/40 z-[85] hidden flex items-end sm:items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="font-bold text-lg">Site Settings</h3>
+        <button onclick="closeThemePanel()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="space-y-4 text-sm">
+        <div>
+          <label class="font-semibold block mb-1">Accent Colour</label>
+          <input type="color" id="theme-accent" value="#d97706" class="w-full h-10 rounded cursor-pointer">
+        </div>
+        <div>
+          <label class="font-semibold block mb-1">Primary (dark) Colour</label>
+          <input type="color" id="theme-primary" value="#0f172a" class="w-full h-10 rounded cursor-pointer">
+        </div>
+        <div>
+          <label class="font-semibold block mb-1">Hero Background URL</label>
+          <input type="url" id="theme-hero" class="w-full p-2.5 border rounded-lg" placeholder="https://…">
+        </div>
+        <div>
+          <label class="font-semibold block mb-1">WhatsApp Number (with country code)</label>
+          <input type="text" id="theme-wa" class="w-full p-2.5 border rounded-lg" placeholder="919306456633">
+        </div>
+        <div>
+          <label class="font-semibold block mb-1">Page Title (SEO)</label>
+          <input type="text" id="theme-title" class="w-full p-2.5 border rounded-lg">
+        </div>
+        <div>
+          <label class="font-semibold block mb-1">Meta Description</label>
+          <textarea id="theme-desc" rows="2" class="w-full p-2.5 border rounded-lg"></textarea>
+        </div>
+        <button onclick="applyTheme()" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-semibold">Apply & Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING WHATSAPP -->
+  <a id="wa-float" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+     class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:scale-110 transition">
+    <i class="fab fa-whatsapp text-3xl"></i>
+  </a>
+
+  <!-- COOKIE BAR -->
+  <div id="cookie-bar" class="hidden fixed bottom-4 left-4 right-24 md:right-auto md:max-w-md z-[55] bg-white border shadow-xl rounded-xl p-4 text-sm text-slate-700">
+    We use cookies to improve your experience. See our <a href="#" onclick="showPage('privacy');return false" class="text-amber-600 underline">Privacy Policy</a>.
+    <div class="mt-3 flex gap-2">
+      <button onclick="cookieSet('yes')" class="bg-slate-900 text-white px-4 py-1.5 rounded-lg text-sm font-semibold">Accept</button>
+      <button onclick="cookieSet('no')" class="border px-4 py-1.5 rounded-lg text-sm">Decline</button>
+    </div>
+  </div>
+
+  <script>
+  // ========================= CONFIG =========================
+  const CONFIG = {
+    WA: '919306456633',
+    ADMIN_EMAIL: 'vivektanwaradv@gmail.com',
+    ADMIN_PASSWORD: 'vivek@76342',
+    FIREBASE: {
+      apiKey: "AIzaSyCbg-lHPhQ4BeK86zfbK6LZ-ho-Y-LiOZs",
+      authDomain: "vivek-law-site.firebaseapp.com",
+      projectId: "vivek-law-site",
+      storageBucket: "vivek-law-site.firebasestorage.app",
+      messagingSenderId: "759653231300",
+      appId: "1:759653231300:web:a7d40dfb974c21d8787791"
+    }
+  };
+
+  // ========================= HELPERS =========================
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const AVATAR = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1e3a8a"/><circle cx="50" cy="38" r="18" fill="#f59e0b"/><path d="M14 100c0-24 16-38 36-38s36 14 36 38z" fill="#f59e0b"/></svg>');
+
+  function wa(text) {
+    return 'https://wa.me/' + CONFIG.WA + '?text=' + encodeURIComponent(text || 'Hello Advocate Vivek Tanwar, I visited your website and would like to consult.');
+  }
+
+  // ========================= STATE =========================
+  const DEFAULT_PRACTICE = [
+    { id: 'p1', icon: 'fa-gavel', title: 'Civil Disputes', desc: 'Property disputes, contracts, recovery suits, and civil litigation.' },
+    { id: 'p2', icon: 'fa-user-shield', title: 'Criminal Law', desc: 'Bail applications, trial defense, appeals, and FIR registration.' },
+    { id: 'p3', icon: 'fa-landmark', title: 'Revenue Affairs', desc: 'Land records mutation, revenue court cases, and municipal disputes.' },
+    { id: 'p4', icon: 'fa-store', title: 'Consumer Cases', desc: 'Deficiency in services, product liability, and consumer complaints.' }
+  ];
+  const DEFAULT_VALUES = [
+    { id: 'v1', text: 'Client-Centric Approach' },
+    { id: 'v2', text: 'Transparent Communication' },
+    { id: 'v3', text: 'Strategic Litigation' }
+  ];
+  const DEFAULT_TEAM = [
+    { id: 't1', name: 'Vivek Tanwar', role: 'Advocate', owner: true, photo: '' },
+    { id: 't2', name: 'Priya Sharma', role: 'Legal Consultant', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80' }
+  ];
+
+  let DB = {
+    photo: '',
+    texts: {},
+    practice: [...DEFAULT_PRACTICE],
+    values: [...DEFAULT_VALUES],
+    blogs: [],
+    docs: [],
+    team: [...DEFAULT_TEAM],
+    settings: {
+      accent: '#d97706',
+      primary: '#0f172a',
+      heroBg: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1950&q=80',
+      title: 'Vivek Tanwar | Advocate',
+      description: 'Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law.'
+    }
+  };
+
+  let fdb = null;
+  let isAdmin = false;
+  let saveTimer = null;
+  let quill = null;
+  let coverData = null;
+  let unsubscribers = [];
+
+  // ========================= FIREBASE =========================
+  function initFirebase() {
+    if (!CONFIG.FIREBASE.apiKey || CONFIG.FIREBASE.apiKey.startsWith('PASTE')) {
+      console.warn('Firebase not configured – using localStorage only');
+      return;
+    }
+    try {
+      firebase.initializeApp(CONFIG.FIREBASE);
+      fdb = firebase.firestore();
+      // Enable offline persistence
+      fdb.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+    } catch (e) {
+      console.error('Firebase init failed', e);
+    }
+  }
+
+  function setStatus(msg, isError = false) {
+    const el = $('save-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = isError ? '#fca5a5' : '';
+  }
+
+  async function saveSiteDoc() {
+    if (!fdb) return localSave();
+    const payload = {
+      photo: DB.photo,
+      texts: DB.texts,
+      practice: DB.practice,
+      values: DB.values,
+      settings: DB.settings,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    // Guard size
+    const size = JSON.stringify(payload).length;
+    if (size > 900000) {
+      setStatus('Too large – remove big images', true);
+      alert('Site data is too large for Firestore (mostly images). Use external image URLs instead of uploading large photos.');
+      return false;
+    }
+    try {
+      await fdb.doc('site/main').set(payload, { merge: true });
+      localSave();
+      setStatus('Saved ✓');
+      return true;
+    } catch (e) {
+      console.error(e);
+      setStatus('Save failed', true);
+      if (e.code === 'permission-denied') alert('Permission denied. Check Firestore security rules.');
+      else alert('Could not save: ' + (e.message || e));
+      return false;
+    }
+  }
+
+  function localSave() {
+    try {
+      localStorage.setItem('vt_site_v3', JSON.stringify(DB));
+    } catch (e) { console.warn('localStorage full', e); }
+  }
+
+  function loadLocal() {
+    try {
+      const raw = localStorage.getItem('vt_site_v3');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        Object.assign(DB, parsed);
+        if (!DB.practice?.length) DB.practice = [...DEFAULT_PRACTICE];
+        if (!DB.values?.length) DB.values = [...DEFAULT_VALUES];
+        if (!DB.team?.length) DB.team = [...DEFAULT_TEAM];
+        if (!DB.settings) DB.settings = {};
+      }
+    } catch (e) {}
+  }
+
+  // Real-time listeners
+  function startListeners() {
+    if (!fdb) return;
+    // Site main
+    unsubscribers.push(
+      fdb.doc('site/main').onSnapshot(snap => {
+        if (!snap.exists) return;
+        const d = snap.data();
+        if (d.photo !== undefined) DB.photo = d.photo;
+        if (d.texts) DB.texts = d.texts;
+        if (d.practice) DB.practice = d.practice;
+        if (d.values) DB.values = d.values;
+        if (d.settings) Object.assign(DB.settings, d.settings);
+        renderAll();
+        applyThemeFromDB();
+      }, err => console.warn('site listener', err))
+    );
+
+    // Blogs collection
+    unsubscribers.push(
+      fdb.collection('blogs').orderBy('date', 'desc').onSnapshot(snap => {
+        DB.blogs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderBlogs();
+      }, err => console.warn('blogs listener', err))
+    );
+
+    // Docs collection
+    unsubscribers.push(
+      fdb.collection('docs').orderBy('name').onSnapshot(snap => {
+        DB.docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderDocs();
+      }, err => console.warn('docs listener', err))
+    );
+
+    // Team collection
+    unsubscribers.push(
+      fdb.collection('team').onSnapshot(snap => {
+        if (!snap.empty) {
+          DB.team = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        }
+        renderTeam();
+      }, err => console.warn('team listener', err))
+    );
+  }
+
+  // ========================= RENDER =========================
+  function renderAll() {
+    updateEditableTexts();
+    updateImages();
+    renderPractice();
+    renderCoreValues();
+    renderTeam();
+    renderBlogs();
+    renderDocs();
+  }
+
+  function updateEditableTexts() {
+    document.querySelectorAll('.editable-text[data-key]').forEach(el => {
+      const key = el.dataset.key;
+      if (DB.texts[key] !== undefined) el.innerHTML = DB.texts[key];
+    });
+  }
+
+  function updateImages() {
+    document.querySelectorAll('.profile-img').forEach(img => {
+      img.src = DB.photo || AVATAR;
+    });
+    if (DB.settings?.heroBg) {
+      const hero = $('hero-bg-img');
+      if (hero) hero.src = DB.settings.heroBg;
+    }
+  }
+
+  function renderPractice() {
+    const grid = $('practice-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    (DB.practice || []).forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'practice-card bg-white p-6 rounded-xl shadow-sm border border-slate-100 group relative';
+      div.innerHTML = `
+        <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-slate-900 transition">
+          <i class="fas ${esc(item.icon || 'fa-gavel')} text-slate-800 text-xl group-hover:text-white transition"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2 editable-text" data-key="practice_${item.id}_title">${esc(item.title)}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed editable-text" data-key="practice_${item.id}_desc">${esc(item.desc)}</p>
+        ${isAdmin ? `<button onclick="removePractice('${item.id}')" class="admin-only absolute top-3 right-3 text-red-400 hover:text-red-600 text-sm"><i class="fas fa-trash"></i></button>` : ''}
+      `;
+      grid.appendChild(div);
+    });
+    // Re-enable contentEditable if admin
+    if (isAdmin) enableEditing();
+  }
+
+  function renderCoreValues() {
+    const list = $('core-values-list');
+    if (!list) return;
+    list.innerHTML = '';
+    (DB.values || []).forEach(v => {
+      const li = document.createElement('li');
+      li.className = 'flex items-center text-slate-700 gap-3';
+      li.innerHTML = `
+        <i class="fas fa-check-circle text-green-500"></i>
+        <span class="editable-text flex-1" data-key="value_${v.id}">${esc(v.text)}</span>
+        ${isAdmin ? `<button onclick="removeValue('${v.id}')" class="admin-only text-red-400 hover:text-red-600 text-xs"><i class="fas fa-times"></i></button>` : ''}
+      `;
+      list.appendChild(li);
+    });
+    if (isAdmin) enableEditing();
+  }
+
+  function renderTeam() {
+    const container = $('team-container');
+    if (!container) return;
+    container.innerHTML = '';
+    (DB.team || []).forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'team-card bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center relative';
+      div.innerHTML = `
+        <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4 bg-slate-200">
+          <img src="${m.photo || AVATAR}" class="w-full h-full object-cover" loading="lazy" alt="">
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">${esc(m.name)}</h3>
+        <p class="text-slate-500 text-sm">${esc(m.role)}</p>
+        ${isAdmin && !m.owner ? `<button onclick="removeTeam('${m.id}')" class="admin-only absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>` : ''}
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function renderBlogs() {
+    const list = $('blog-list');
+    const recent = $('blog-recent');
+    if (!list) return;
+    list.innerHTML = '';
+    if (recent) recent.innerHTML = '';
+
+    const sorted = [...(DB.blogs || [])].sort((a, b) => (b.date || 0) - (a.date || 0));
+    if (sorted.length === 0) {
+      list.innerHTML = '<div class="text-center text-slate-400 py-16">No blog posts yet.</div>';
+      return;
+    }
+    sorted.forEach(blog => {
+      const div = document.createElement('div');
+      div.className = 'bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition cursor-pointer';
+      div.onclick = () => viewBlog(blog.id);
+      div.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-400">${blog.date ? new Date(blog.date).toLocaleDateString() : ''}</span>
+          ${isAdmin ? `<button onclick="event.stopPropagation();deleteBlog('${blog.id}')" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>` : ''}
+        </div>
+        <h3 class="text-xl font-bold text-slate-900 mb-1.5">${esc(blog.title)}</h3>
+        <p class="text-slate-600 text-sm line-clamp-2">${esc(blog.excerpt || '')}</p>
+      `;
+      list.appendChild(div);
+
+      if (recent && recent.children.length < 5) {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="#" onclick="viewBlog('${blog.id}');return false" class="block text-sm text-slate-800 hover:text-amber-600 font-medium">${esc(blog.title)}</a>`;
+        recent.appendChild(li);
+      }
+    });
+  }
+
+  function renderDocs() {
+    const container = $('docs-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const docs = DB.docs || [];
+    if (docs.length === 0) {
+      container.innerHTML = '<div class="text-center text-slate-400 py-12">No documents yet.</div>';
+      return;
+    }
+    docs.forEach(doc => {
+      const div = document.createElement('div');
+      div.className = 'bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center gap-3';
+      div.innerHTML = `
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="bg-blue-50 p-3 rounded-full shrink-0"><i class="fas fa-file-pdf text-slate-800"></i></div>
+          <div class="min-w-0">
+            <h4 class="font-bold text-slate-900 truncate">${esc(doc.name)}</h4>
+            <p class="text-sm text-slate-500">${doc.price == 0 || !doc.price ? 'Free' : '₹' + doc.price}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <a href="${esc(doc.link || '#')}" target="_blank" rel="noopener" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800">Download</a>
+          ${isAdmin ? `<button onclick="deleteDoc('${doc.id}')" class="text-red-400 hover:text-red-600 p-2"><i class="fas fa-trash"></i></button>` : ''}
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // ========================= ADMIN ACTIONS =========================
+  function enableEditing() {
+    document.querySelectorAll('.editable-text').forEach(el => {
+      el.contentEditable = 'true';
+      el.classList.add('editable-active');
+      el.onblur = () => {
+        const key = el.dataset.key;
+        if (key) {
+          DB.texts[key] = el.innerHTML;
+          scheduleSave();
+        }
+      };
+    });
+  }
+
+  function disableEditing() {
+    document.querySelectorAll('.editable-text').forEach(el => {
+      el.contentEditable = 'false';
+      el.classList.remove('editable-active');
+      el.onblur = null;
+    });
+  }
+
+  function scheduleSave() {
+    setStatus('Saving…');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => saveAll(), 900);
+  }
+
+  async function saveAll() {
+    // Collect current editable texts
+    document.querySelectorAll('.editable-text[data-key]').forEach(el => {
+      DB.texts[el.dataset.key] = el.innerHTML;
+    });
+    // Also sync practice titles/descs from live DOM if needed
+    await saveSiteDoc();
+    // Save blogs/docs/team individually if they changed (already handled by add/delete)
+  }
+
+  function changeProfile(input) {
+    if (!input.files?.[0]) return;
+    const file = input.files[0];
+    if (file.size > 450000) {
+      alert('Please use an image under 450 KB or host it externally and paste the URL in Theme settings.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      DB.photo = e.target.result;
+      updateImages();
+      scheduleSave();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Practice
+  function addPracticeArea() {
+    const title = prompt('Practice area title:');
+    if (!title) return;
+    const desc = prompt('Short description:') || '';
+    const icon = prompt('Font Awesome icon class (e.g. fa-gavel):', 'fa-gavel') || 'fa-gavel';
+    const id = uid();
+    DB.practice.push({ id, icon, title, desc });
+    renderPractice();
+    scheduleSave();
+  }
+  function removePractice(id) {
+    if (!confirm('Remove this practice area?')) return;
+    DB.practice = DB.practice.filter(p => p.id !== id);
+    renderPractice();
+    scheduleSave();
+  }
+
+  // Core values
+  function addCoreValue() {
+    const text = prompt('Core value text:');
+    if (!text) return;
+    DB.values.push({ id: uid(), text });
+    renderCoreValues();
+    scheduleSave();
+  }
+  function removeValue(id) {
+    DB.values = DB.values.filter(v => v.id !== id);
+    renderCoreValues();
+    scheduleSave();
+  }
+
+  // Team
+  async function addTeamMember() {
+    const name = $('member-name').value.trim();
+    const role = $('member-role').value.trim();
+    if (!name || !role) return alert('Name and role required');
+    let photo = '';
+    const file = $('member-photo').files?.[0];
+    if (file) {
+      if (file.size > 350000) return alert('Photo too large (max ~350 KB)');
+      photo = await new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => res(e.target.result);
+        r.readAsDataURL(file);
+      });
+    }
+    const member = { id: uid(), name, role, photo };
+    DB.team.push(member);
+    renderTeam();
+    if (fdb) {
+      try {
+        await fdb.collection('team').doc(member.id).set(member);
+      } catch (e) { console.error(e); }
+    }
+    scheduleSave();
+    $('member-name').value = '';
+    $('member-role').value = '';
+    $('member-photo').value = '';
+  }
+  async function removeTeam(id) {
+    if (!confirm('Remove this member?')) return;
+    DB.team = DB.team.filter(m => m.id !== id);
+    renderTeam();
+    if (fdb) await fdb.collection('team').doc(id).delete().catch(() => {});
+    scheduleSave();
+  }
+
+  // Blogs
+  function pickCover(input) {
+    if (input.files?.[0]) {
+      $('cover-name').textContent = input.files[0].name;
+      const reader = new FileReader();
+      reader.onload = e => { coverData = e.target.result; };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  async function addBlog() {
+    const title = $('new-blog-title').value.trim();
+    if (!title) return alert('Title required');
+    const content = quill ? quill.root.innerHTML : '';
+    const excerpt = content.replace(/<[^>]+>/g, '').substring(0, 120) + (content.length > 120 ? '…' : '');
+    const blog = {
+      id: uid(),
+      title,
+      content,
+      excerpt,
+      cover: coverData || '',
+      date: Date.now(),
+      published: true
+    };
+    DB.blogs.unshift(blog);
+    renderBlogs();
+    if (fdb) {
+      try {
+        await fdb.collection('blogs').doc(blog.id).set(blog);
+        setStatus('Blog published');
+      } catch (e) {
+        alert('Could not publish to Firebase: ' + e.message);
+      }
+    } else {
+      scheduleSave();
+    }
+    $('new-blog-title').value = '';
+    if (quill) quill.setText('');
+    coverData = null;
+    $('cover-name').textContent = '';
+  }
+  async function deleteBlog(id) {
+    if (!confirm('Delete this post permanently?')) return;
+    DB.blogs = DB.blogs.filter(b => b.id !== id);
+    renderBlogs();
+    if (fdb) await fdb.collection('blogs').doc(id).delete().catch(() => {});
+    scheduleSave();
+  }
+  function viewBlog(id) {
+    const blog = DB.blogs.find(b => b.id === id);
+    if (!blog) return;
+    $('single-blog-title').textContent = blog.title;
+    $('single-blog-date').textContent = blog.date ? new Date(blog.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '';
+    $('single-blog-content').innerHTML = blog.content || '';
+    $('post-share').href = wa(`Check out this article: ${blog.title}`);
+    showPage('single-blog-view');
+  }
+  function blogSearch() {
+    const term = ($('blog-search').value || '').toLowerCase();
+    const list = $('blog-list');
+    list.innerHTML = '';
+    const filtered = (DB.blogs || []).filter(b =>
+      (b.title || '').toLowerCase().includes(term) ||
+      (b.content || '').toLowerCase().includes(term)
+    );
+    if (!filtered.length) {
+      list.innerHTML = '<div class="text-center text-slate-400 py-12">No matching posts.</div>';
+      return;
+    }
+    filtered.sort((a, b) => (b.date || 0) - (a.date || 0)).forEach(blog => {
+      const div = document.createElement('div');
+      div.className = 'bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition cursor-pointer';
+      div.onclick = () => viewBlog(blog.id);
+      div.innerHTML = `
+        <div class="text-xs text-slate-400 mb-1">${blog.date ? new Date(blog.date).toLocaleDateString() : ''}</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-1">${esc(blog.title)}</h3>
+        <p class="text-slate-600 text-sm line-clamp-2">${esc(blog.excerpt || '')}</p>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  // Docs
+  async function addDoc() {
+    const name = $('doc-name').value.trim();
+    if (!name) return alert('Name required');
+    const price = parseInt($('doc-price').value) || 0;
+    let link = $('doc-link').value.trim();
+    const file = $('doc-file').files?.[0];
+    if (file) {
+      if (file.size > 600000) return alert('File too large for direct upload. Use a Google Drive / Dropbox public link instead.');
+      link = await new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => res(e.target.result);
+        r.readAsDataURL(file);
+      });
+    }
+    if (!link) return alert('Provide a file or a link');
+    const doc = { id: uid(), name, price, link };
+    DB.docs.push(doc);
+    renderDocs();
+    if (fdb) {
+      try {
+        await fdb.collection('docs').doc(doc.id).set(doc);
+      } catch (e) { alert('Save failed: ' + e.message); }
+    } else scheduleSave();
+    $('doc-name').value = '';
+    $('doc-price').value = '';
+    $('doc-link').value = '';
+    $('doc-file').value = '';
+  }
+  async function deleteDoc(id) {
+    if (!confirm('Delete this document?')) return;
+    DB.docs = DB.docs.filter(d => d.id !== id);
+    renderDocs();
+    if (fdb) await fdb.collection('docs').doc(id).delete().catch(() => {});
+    scheduleSave();
+  }
+  function docSearch() {
+    const term = ($('doc-search').value || '').toLowerCase();
+    const container = $('docs-container');
+    container.innerHTML = '';
+    const filtered = (DB.docs || []).filter(d => (d.name || '').toLowerCase().includes(term));
+    if (!filtered.length) {
+      container.innerHTML = '<div class="text-center text-slate-400 py-10">No documents found.</div>';
+      return;
+    }
+    filtered.forEach(doc => {
+      const div = document.createElement('div');
+      div.className = 'bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center gap-3';
+      div.innerHTML = `
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="bg-blue-50 p-3 rounded-full"><i class="fas fa-file-pdf text-slate-800"></i></div>
+          <div class="min-w-0">
+            <h4 class="font-bold text-slate-900 truncate">${esc(doc.name)}</h4>
+            <p class="text-sm text-slate-500">${doc.price == 0 ? 'Free' : '₹' + doc.price}</p>
+          </div>
+        </div>
+        <a href="${esc(doc.link || '#')}" target="_blank" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold">Download</a>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // Contact
+  function sendContact(e) {
+    e.preventDefault();
+    const f = e.target;
+    const name = f.elements[0].value;
+    const email = f.elements[1].value;
+    const message = f.elements[2].value;
+    window.open(wa(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`), '_blank');
+    f.reset();
+  }
+
+  // Global search
+  function globalSearch() {
+    const term = ($('home-search').value || '').toLowerCase().trim();
+    if (!term) return;
+    let html = '';
+    const blogs = (DB.blogs || []).filter(b => (b.title || '').toLowerCase().includes(term));
+    const docs = (DB.docs || []).filter(d => (d.name || '').toLowerCase().includes(term));
+    if (blogs.length) {
+      html += `<h4 class="font-bold mb-2">Blogs (${blogs.length})</h4><ul class="space-y-1 mb-4">`;
+      blogs.forEach(b => {
+        html += `<li><a href="#" onclick="viewBlog('${b.id}');closeSearch();return false" class="text-amber-600 hover:underline">${esc(b.title)}</a></li>`;
+      });
+      html += '</ul>';
+    }
+    if (docs.length) {
+      html += `<h4 class="font-bold mb-2">Documents (${docs.length})</h4><ul class="space-y-1">`;
+      docs.forEach(d => {
+        html += `<li>${esc(d.name)} <span class="text-slate-400 text-sm">(${d.price == 0 ? 'Free' : '₹' + d.price})</span></li>`;
+      });
+      html += '</ul>';
+    }
+    if (!html) html = '<p class="text-slate-500">No results found.</p>';
+    $('search-results').innerHTML = html;
+    $('search-title').textContent = `Results for “${term}”`;
+    $('search-modal').classList.remove('hidden');
+  }
+  function closeSearch() { $('search-modal').classList.add('hidden'); }
+
+  // Theme
+  function openThemePanel() {
+    $('theme-accent').value = DB.settings.accent || '#d97706';
+    $('theme-primary').value = DB.settings.primary || '#0f172a';
+    $('theme-hero').value = DB.settings.heroBg || '';
+    $('theme-wa').value = CONFIG.WA;
+    $('theme-title').value = DB.settings.title || document.title;
+    $('theme-desc').value = DB.settings.description || '';
+    $('theme-panel').classList.remove('hidden');
+  }
+  function closeThemePanel() { $('theme-panel').classList.add('hidden'); }
+  function applyTheme() {
+    DB.settings.accent = $('theme-accent').value;
+    DB.settings.primary = $('theme-primary').value;
+    DB.settings.heroBg = $('theme-hero').value.trim() || DB.settings.heroBg;
+    DB.settings.title = $('theme-title').value.trim();
+    DB.settings.description = $('theme-desc').value.trim();
+    const newWA = $('theme-wa').value.replace(/\D/g, '');
+    if (newWA) CONFIG.WA = newWA;
+    applyThemeFromDB();
+    document.title = DB.settings.title;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.content = DB.settings.description;
+    // Update all wa links
+    document.querySelectorAll('[data-wa]').forEach(a => a.href = wa());
+    scheduleSave();
+    closeThemePanel();
+  }
+  function applyThemeFromDB() {
+    document.documentElement.style.setProperty('--accent', DB.settings.accent || '#d97706');
+    document.documentElement.style.setProperty('--primary', DB.settings.primary || '#0f172a');
+    if (DB.settings.heroBg) {
+      const img = $('hero-bg-img');
+      if (img) img.src = DB.settings.heroBg;
+    }
+  }
+
+  // Export / Import
+  function exportSite() {
+    const data = JSON.stringify(DB, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'vivek-tanwar-site-backup.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  function importSite() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          if (!confirm('This will overwrite current site data. Continue?')) return;
+          Object.assign(DB, parsed);
+          renderAll();
+          applyThemeFromDB();
+          scheduleSave();
+          alert('Import successful');
+        } catch (err) {
+          alert('Invalid backup file');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
+  // Auth
+  function openLogin() { $('login-modal').classList.remove('hidden'); }
+  function closeLogin() { $('login-modal').classList.add('hidden'); }
+  function handleLogin(e) {
+    e.preventDefault();
+    const u = $('username').value.trim();
+    const p = $('password').value;
+    if (u === CONFIG.ADMIN_EMAIL && p === CONFIG.ADMIN_PASSWORD) {
+      enableAdminMode();
+      closeLogin();
+    } else {
+      alert('Invalid credentials');
+    }
+  }
+  function enableAdminMode() {
+    isAdmin = true;
+    document.body.classList.add('is-admin');
+    $('admin-toolbar').classList.remove('hidden');
+    enableEditing();
+    renderPractice();
+    renderCoreValues();
+    renderTeam();
+    renderBlogs();
+    renderDocs();
+    setStatus('Edit mode');
+  }
+  function logout() {
+    isAdmin = false;
+    document.body.classList.remove('is-admin');
+    $('admin-toolbar').classList.add('hidden');
+    disableEditing();
+    renderPractice();
+    renderCoreValues();
+    renderTeam();
+    renderBlogs();
+    renderDocs();
+  }
+
+  // Navigation
+  function showPage(id) {
+    document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+    const page = $(id);
+    if (page) {
+      page.classList.remove('hidden');
+      page.classList.add('fade-in');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    $('mobile-menu').classList.add('hidden');
+  }
+
+  // Cookies
+  function cookieSet(val) {
+    document.cookie = 'cookie_consent=' + val + ';expires=Thu, 31 Dec 2027 12:00:00 UTC;path=/';
+    $('cookie-bar').classList.add('hidden');
+  }
+
+  // ========================= BOOT =========================
+  document.addEventListener('DOMContentLoaded', () => {
+    $('year').textContent = new Date().getFullYear();
+    loadLocal();
+    initFirebase();
+    startListeners();
+    renderAll();
+    applyThemeFromDB();
+
+    // Quill
+    if (typeof Quill !== 'undefined') {
+      quill = new Quill('#new-blog-editor-container', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ header: [1, 2, 3, false] }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link', 'clean']
+          ]
+        }
+      });
+    }
+
+    // Mobile menu
+    $('mobile-menu-btn').addEventListener('click', () => {
+      $('mobile-menu').classList.toggle('hidden');
+    });
+
+    // WhatsApp links
+    document.querySelectorAll('[data-wa]').forEach(a => a.href = wa());
+
+    // Cookie
+    if (!document.cookie.includes('cookie_consent')) {
+      setTimeout(() => $('cookie-bar').classList.remove('hidden'), 1800);
+    }
+
+    // Keyboard shortcut for admin
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') openLogin();
+    });
+  });
+  </script>
+</body>
+</html>
