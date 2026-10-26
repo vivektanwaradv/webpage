@@ -585,13 +585,21 @@
     <script>
 // ================= CONFIG =================
 const CONFIG = {
-    WA: '919306456633',          // WhatsApp number (country code + number)
-    RZP_KEY: '',                 // Razorpay Key ID (rzp_live_xxx). Empty = buyers are sent to WhatsApp to pay.
-    ADS_CLIENT: '',              // AdSense publisher id, e.g. 'ca-pub-1234567890123456'
-    ADS_SLOT: '',                // AdSense ad unit slot id
-    ADMIN_EMAIL: 'vivektanwaradv@gmail.com',   // the ONLY account allowed to edit the site (create it in Firebase Authentication)
-    FIREBASE: {   // paste from Firebase Console > Project settings > Your apps > Web app > firebaseConfig
-        apiKey: 'PASTE_API_KEY', authDomain: 'PASTE', projectId: 'PASTE', storageBucket: 'PASTE', messagingSenderId: 'PASTE', appId: 'PASTE'
+    // ================= CONFIG =================
+const CONFIG = {
+    WA: '919306456633',          
+    RZP_KEY: '',                 
+    ADS_CLIENT: '',              
+    ADS_SLOT: '',                
+    ADMIN_EMAIL: 'vivektanwaradv@gmail.com',   
+    FIREBASE: {
+        apiKey: "AIzaSyBaVbANNSRLr376IiTZ46MfoZihdbn6tro",
+        authDomain: "website-vivek.firebaseapp.com",
+        projectId: "website-vivek",
+        storageBucket: "website-vivek.firebasestorage.app",
+        messagingSenderId: "989462065688",
+        appId: "1:989462065688:web:428e988cc35a4a7a22896d",
+        measurementId: "G-93NJ5H9HYF"
     }
 };
 const $ = id => document.getElementById(id);
@@ -935,28 +943,6 @@ if (!localStorage.getItem('vt_cookie')) $('cookie-bar').classList.remove('hidden
     ".write": "now < 1795458600000",  // 2026-11-24
   }
 }
-<script type="module">
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBaVbANNSRLr376IiTZ46MfoZihdbn6tro",
-  authDomain: "website-vivek.firebaseapp.com",
-  databaseURL: "https://website-vivek-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "website-vivek",
-  storageBucket: "website-vivek.firebasestorage.app",
-  messagingSenderId: "989462065688",
-  appId: "1:989462065688:web:428e988cc35a4a7a22896d",
-  measurementId: "G-93NJ5H9HYF"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);</script>
 </body>
 </html>
