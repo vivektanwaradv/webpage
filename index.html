@@ -1,1105 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vivek Tanwar | Advocate</title>
-  <meta name="description" content="Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law.">
-  <meta name="theme-color" content="#0f172a">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
-  <!-- Quill Rich Text Editor -->
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-  <style>
-    /* Custom Styles */
-    body { font-family: 'Lato', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-    h1, h2, h3, h4, .serif { font-family: 'Playfair Display', serif; }
-    
-    /* Smooth Scroll */
-    html { scroll-behavior: smooth; }
-
-    /* Animations */
-    .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
-    /* Glassmorphism Card */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-    }
-
-    /* Editable Highlight */
-    .editable-active[contenteditable="true"] {
-      outline: 2px dashed #d97706;
-      background-color: #fffbeb;
-      padding: 4px;
-      cursor: text;
-      border-radius: 4px;
-    }
-
-    /* Blog Slider Specifics */
-    .blog-slide { display: none; animation: fadeSlide 0.8s ease-in-out; }
-    .blog-slide.active { display: block; }
-    @keyframes fadeSlide { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-    /* Quill Editor Fixes */
-    .ql-editor { min-height: 150px; }
-    .blog-content img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
-    .blog-content video { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
-    
-    /* Team Card Hover */
-    .team-card:hover .team-img { transform: scale(1.05); }
-    .team-img { transition: transform 0.3s ease; }
-
-    body:not(.is-admin) .admin-only { display:none !important; }
-    
-    .blog-content h1{font-size:2rem;font-weight:700;margin:1rem 0}
-    .blog-content h2{font-size:1.6rem;font-weight:700;margin:1rem 0}
-    .blog-content h3{font-size:1.3rem;font-weight:700;margin:.8rem 0}
-    .blog-content p{margin:.8rem 0}
-    .blog-content ul{list-style:disc;padding-left:1.5rem}
-    .blog-content ol{list-style:decimal;padding-left:1.5rem}
-    .blog-content a{color:#1d4ed8;text-decoration:underline}
-    .blog-content iframe{max-width:100%}
-    
-    #wa-float::before{content:"";position:absolute;inset:0;border-radius:9999px;background:#25D366;animation:waPulse 2s infinite;z-index:-1}
-    @keyframes waPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
-    
-    /* Mobile Menu Transition */
-    #mobile-menu { transition: max-height 0.3s ease-out; overflow: hidden; }
-    #mobile-menu.hidden { max-height: 0; }
-    #mobile-menu:not(.hidden) { max-height: 300px; }
-  </style>
-</head>
-<body class="text-slate-800 flex flex-col min-h-screen">
-
-  <!-- Navigation -->
-  <nav class="bg-slate-900 text-white shadow-xl sticky top-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-20 items-center">
-        <div class="flex items-center cursor-pointer" onclick="showPage('home')">
-          <i class="fas fa-balance-scale text-amber-500 text-3xl mr-3"></i>
-          <div>
-            <span class="block font-bold text-xl tracking-wide leading-none">VIVEK TANWAR</span>
-            <span class="block text-xs text-slate-400 tracking-widest uppercase">Advocate</span>
-          </div>
-        </div>
-        
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex space-x-1">
-          <button onclick="showPage('home')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Home</button>
-          <button onclick="showPage('about')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">About</button>
-          <button onclick="showPage('blogs')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Blogs & Media</button>
-          <button onclick="showPage('documents')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Documents</button>
-          <button onclick="showPage('contact')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Contact</button>
-        </div>
-
-        <!-- Mobile Menu Button -->
-        <div class="md:hidden">
-          <button id="mobile-menu-btn" class="text-white hover:text-amber-400 focus:outline-none">
-            <i class="fas fa-bars text-2xl"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-slate-800 pb-4 px-4 shadow-inner">
-      <button onclick="showPage('home')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Home</button>
-      <button onclick="showPage('about')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">About</button>
-      <button onclick="showPage('blogs')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Blogs</button>
-      <button onclick="showPage('documents')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Documents</button>
-      <button onclick="showPage('contact')" class="block w-full text-left py-3 hover:text-amber-400">Contact</button>
-    </div>
-  </nav>
-
-  <!-- Main Content Area -->
-  <main id="app-content" class="flex-grow relative">
-    
-    <!-- HOME PAGE -->
-    <section id="home" class="page-section fade-in">
-      <!-- Hero Section -->
-      <div class="relative bg-slate-900 text-white py-24 lg:py-40 overflow-hidden">
-        <!-- Background Image with Overlay -->
-        <div class="absolute inset-0 z-0">
-          <img id="hero-bg-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Court Background" class="w-full h-full object-cover opacity-30">
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
-        </div>
-
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-8">
-            <img src="" alt="Vivek Tanwar, Advocate" class="profile-img w-full h-full rounded-full object-cover border-4 border-amber-500 shadow-2xl ring-4 ring-white/10">
-            <label class="admin-only hidden absolute bottom-1 right-1 bg-white w-9 h-9 flex items-center justify-center rounded-full shadow cursor-pointer" title="Change photo"><i class="fas fa-camera text-blue-900"></i><input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden"></label>
-          </div>
-          <h1 class="text-5xl md:text-7xl font-bold mb-6 editable-text leading-tight">Justice, Integrity, Results</h1>
-          <p class="text-xl md:text-2xl text-slate-300 mb-10 editable-text max-w-3xl mx-auto">
-            Dedicated legal representation at District Court, Bhiwani.<br>Specializing in Civil, Criminal, Revenue, and Consumer Law.
-          </p>
-          
-          <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <button onclick="showPage('contact')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-8 rounded-lg transition shadow-lg transform hover:-translate-y-1">
-              <i class="fas fa-phone-alt mr-2"></i> Consult Now
-            </button>
-            <button onclick="showPage('about')" class="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-bold py-4 px-8 rounded-lg transition">
-              View Profile
-            </button>
-          </div>
-          <form onsubmit="event.preventDefault();globalSearch()" class="max-w-xl mx-auto mt-10 flex">
-            <input id="home-search" type="search" placeholder="Search blogs, documents, practice areas…" class="flex-1 min-w-0 px-4 py-3 rounded-l-lg text-slate-800 outline-none">
-            <button class="bg-amber-600 hover:bg-amber-700 px-5 rounded-r-lg font-bold"><i class="fas fa-search mr-1"></i> Search</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Advocate Photo Section -->
-      <div class="py-16 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex flex-col md:flex-row items-center gap-12">
-            <!-- Image Column -->
-            <div class="w-full md:w-1/3 relative group">
-              <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-900 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] bg-gray-200">
-                <img src="" alt="Vivek Tanwar" class="profile-img w-full h-full object-cover">
-                <!-- Admin Upload Button for Photo -->
-                <label class="admin-only hidden absolute bottom-4 right-4 bg-white p-2 rounded-full shadow cursor-pointer hover:bg-gray-100">
-                  <i class="fas fa-camera text-blue-900"></i>
-                  <input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden">
-                </label>
-              </div>
-            </div>
-
-            <!-- Text Column -->
-            <div class="w-full md:w-2/3">
-              <h2 class="text-3xl font-bold text-blue-900 mb-6 border-l-4 border-amber-500 pl-4 editable-text">Dedicated to Your Rights</h2>
-              <p class="text-gray-600 text-lg leading-relaxed mb-6 editable-text">
-                With a robust academic foundation and practical courtroom experience, I provide strategic legal solutions tailored to your unique needs. My approach combines thorough research with aggressive advocacy to secure the best possible outcome for my clients.
-              </p>
-              
-              <div class="grid grid-cols-2 gap-4">
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                  <h4 class="font-bold text-blue-900 mb-1 editable-text">LL.M. (Criminal Law)</h4>
-                  <p class="text-sm text-gray-500">Post Graduate Specialization</p>
-                </div>
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                  <h4 class="font-bold text-blue-900 mb-1 editable-text">NET Qualified</h4>
-                  <p class="text-sm text-gray-500">National Eligibility Test</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Services Preview -->
-      <div class="py-16 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Practice Areas</h2>
-            <div class="w-20 h-1 bg-amber-500 mx-auto rounded-full"></div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Card 1 -->
-            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                <i class="fas fa-gavel text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 editable-text">Civil Disputes</h3>
-              <p class="text-gray-500 text-sm leading-relaxed editable-text">Property disputes, contracts, recovery suits, and civil litigation.</p>
-            </div>
-            <!-- Card 2 -->
-            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                <i class="fas fa-user-shield text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 editable-text">Criminal Law</h3>
-              <p class="text-gray-500 text-sm leading-relaxed editable-text">Bail applications, trial defense, appeals, and FIR registration.</p>
-            </div>
-            <!-- Card 3 -->
-            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                <i class="fas fa-landmark text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 editable-text">Revenue Affairs</h3>
-              <p class="text-gray-500 text-sm leading-relaxed editable-text">Land records mutation, revenue court cases, and municipal disputes.</p>
-            </div>
-            <!-- Card 4 -->
-            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                <i class="fas fa-store text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 editable-text">Consumer Cases</h3>
-              <p class="text-gray-500 text-sm leading-relaxed editable-text">Deficiency in services, product liability, and consumer complaints.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT PAGE (Redesigned) -->
-    <section id="about" class="page-section hidden fade-in py-20 bg-white">
-      
-      <!-- Intro Header -->
-      <div class="bg-blue-900 text-white py-16 text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-          <i class="fas fa-balance-scale text-9xl absolute -left-10 -top-10 text-white"></i>
-          <i class="fas fa-gavel text-9xl absolute -right-10 -bottom-10 text-white"></i>
-        </div>
-        <div class="relative z-10 max-w-4xl mx-auto px-4">
-          <h2 class="text-5xl font-bold mb-4 serif">Meet The Legal Expert</h2>
-          <p class="text-xl text-blue-200">Committed to excellence, integrity, and winning your case.</p>
-        </div>
-      </div>
-
-      <!-- Bio Section -->
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="flex flex-col md:flex-row items-start gap-12">
-          <div class="w-full md:w-1/2">
-            <h3 class="text-3xl font-bold text-slate-900 mb-6 editable-text">A Decade of Advocacy</h3>
-            <p class="text-gray-600 text-lg leading-relaxed mb-6 editable-text">
-              Starting from the basics of law to mastering complex litigation, every step in my career has been driven by a passion for justice. I believe in understanding the human side of every case, not just the legal clauses.
-            </p>
-            <p class="text-gray-600 text-lg leading-relaxed editable-text">
-              Whether it's a property dispute or a criminal appeal, I bring the same level of dedication and scrutiny to ensure the best outcome for my clients.
-            </p>
-          </div>
-          <div class="w-full md:w-1/2">
-            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-sm">
-              <h4 class="text-xl font-bold text-blue-900 mb-4 editable-text">Core Values</h4>
-              <ul class="space-y-3">
-                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Client-Centric Approach</li>
-                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Transparent Communication</li>
-                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Strategic Litigation</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Team Section -->
-      <div class="bg-slate-50 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-blue-900 mb-4 serif">Our Legal Team</h2>
-            <p class="text-gray-500">Work together to achieve justice.</p>
-          </div>
-
-          <!-- Admin Control for Team -->
-          <div id="admin-team-controls" class="hidden mb-10 glass-card p-6 rounded-xl border-l-4 border-amber-500 inline-block">
-            <h3 class="font-bold text-lg mb-4">Add Team Member</h3>
-            <div class="flex flex-wrap gap-4">
-              <input type="text" id="member-name" placeholder="Full Name" class="p-2 border rounded-lg w-40">
-              <input type="text" id="member-role" placeholder="Role (e.g., Associate)" class="p-2 border rounded-lg w-40">
-              <input type="file" id="member-photo" accept="image/*" class="w-40 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
-              <button onclick="addTeamMember()" class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Add Member</button>
-            </div>
-          </div>
-
-          <div id="team-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BLOGS PAGE -->
-    <section id="blogs" class="page-section hidden fade-in py-16 bg-slate-50 min-h-screen">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8">
-          <h2 class="text-4xl font-bold text-blue-900 mb-3 serif">Latest Legal Insights</h2>
-          <p class="text-gray-500 max-w-2xl mx-auto">Articles, judgments and practical legal guidance.</p>
-        </div>
-        <form onsubmit="event.preventDefault();blogSearch()" class="max-w-xl mx-auto mb-10 flex">
-          <input id="blog-search" oninput="blogSearch()" type="search" placeholder="Search blogs…" class="flex-1 min-w-0 p-3 border border-gray-300 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500">
-          <button class="bg-blue-900 text-white px-5 rounded-r-lg hover:bg-blue-800"><i class="fas fa-search mr-1"></i> Search</button>
-        </form>
-        <div id="admin-blog-controls" class="hidden mb-10 glass-card p-6 rounded-xl border-l-4 border-amber-500">
-          <h3 class="font-bold text-xl text-blue-900 mb-4"><i class="fas fa-plus-circle mr-2"></i>Add New Blog Post</h3>
-          <input type="text" id="new-blog-title" placeholder="Blog Title" class="w-full p-3 border border-gray-300 rounded-lg mb-3 outline-none">
-          <label class="inline-block mb-3 text-sm cursor-pointer bg-blue-50 text-blue-700 px-4 py-2 rounded-full font-semibold hover:bg-blue-100"><i class="fas fa-image mr-1"></i> Cover image (optional)<input type="file" accept="image/*" class="hidden" onchange="pickCover(this)"></label> <span id="cover-name" class="text-xs text-gray-500"></span>
-          <div id="new-blog-editor-container" style="height:220px;background:#fff"></div>
-          <button onclick="addBlog()" class="mt-4 bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition shadow-md font-semibold">Publish Post</button>
-        </div>
-        <div class="grid lg:grid-cols-3 gap-8">
-          <div id="blog-list" class="lg:col-span-2 space-y-6"></div>
-          <aside class="space-y-6">
-            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-              <h3 class="font-bold text-lg text-blue-900 mb-4 serif border-b pb-2">Recent Posts</h3>
-              <ul id="blog-recent" class="space-y-4"></ul>
-            </div>
-            <div class="bg-blue-900 text-white p-6 rounded-xl text-center">
-              <h3 class="font-bold text-lg mb-2 serif">Need legal advice?</h3>
-              <p class="text-blue-200 text-sm mb-4">Message me directly on WhatsApp.</p>
-              <a href="#" data-wa class="inline-block bg-[#25D366] hover:opacity-90 px-5 py-2 rounded-lg font-semibold" target="_blank" rel="noopener"><i class="fab fa-whatsapp mr-1"></i> Chat Now</a>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <!-- Single Blog View -->
-    <section id="single-blog-view" class="page-section hidden fade-in py-16 bg-white">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <button onclick="showPage('blogs')" class="mb-8 text-blue-600 hover:text-blue-800 font-semibold"><i class="fas fa-arrow-left mr-2"></i> All Blogs</button>
-        <article>
-          <h1 id="single-blog-title" class="text-4xl font-bold text-slate-900 mb-4 serif"></h1>
-          <div id="single-blog-date" class="text-gray-500 mb-8 border-b pb-4"></div>
-          <div id="single-blog-content" class="blog-content text-gray-700 leading-relaxed text-lg"></div>
-        </article>
-        <div class="mt-10 flex flex-wrap gap-3 border-t pt-6">
-          <a id="post-share" target="_blank" rel="noopener" class="bg-[#25D366] text-white px-5 py-2 rounded-lg font-semibold"><i class="fab fa-whatsapp mr-1"></i> Share on WhatsApp</a>
-          <a href="#" data-wa class="bg-blue-900 text-white px-5 py-2 rounded-lg font-semibold" target="_blank" rel="noopener">Consult Advocate</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- DOCUMENTS PAGE -->
-    <section id="documents" class="page-section hidden fade-in py-16 bg-white min-h-screen">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8">
-          <h2 class="text-3xl font-bold text-blue-900 mb-3 serif">Legal Resources</h2>
-          <p class="text-gray-500">Download forms, templates and acts. Free and premium documents.</p>
-        </div>
-        <form onsubmit="event.preventDefault();docSearch()" class="max-w-xl mx-auto mb-10 flex">
-          <input id="doc-search" oninput="docSearch()" type="search" placeholder="Search documents…" class="flex-1 min-w-0 p-3 border border-gray-300 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500">
-          <button class="bg-blue-900 text-white px-5 rounded-r-lg hover:bg-blue-800"><i class="fas fa-search mr-1"></i> Search</button>
-        </form>
-        <div id="admin-doc-controls" class="hidden mb-8 glass-card p-6 rounded-xl border-l-4 border-amber-500">
-          <h3 class="font-bold text-lg mb-4">Upload Document</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="text" id="doc-name" placeholder="Document Name (e.g., Rent Agreement)" class="p-3 border rounded-lg">
-            <input type="number" id="doc-price" min="0" placeholder="Price in ₹ (0 = free)" class="p-3 border rounded-lg">
-            <input type="file" id="doc-file" class="p-2 border rounded-lg">
-            <input type="url" id="doc-link" placeholder="…or file link (Google Drive etc.)" class="p-3 border rounded-lg">
-          </div>
-          <p class="text-xs text-gray-500 mt-2">Uploaded files must be under 650 KB; for bigger files paste a Google Drive link.</p>
-          <button onclick="addDoc()" class="mt-3 bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Add Document</button>
-        </div>
-        <div id="docs-container" class="space-y-4"></div>
-      </div>
-    </section>
-
-    <!-- CONTACT PAGE -->
-    <section id="contact" class="page-section hidden fade-in py-20 bg-slate-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <!-- Contact Info -->
-          <div class="space-y-8">
-            <div>
-              <h2 class="text-4xl font-bold text-blue-900 mb-4 serif">Get in Touch</h2>
-              <p class="text-gray-600 text-lg">Consultation hours: Mon-Sat, 10:00 AM - 6:00 PM.</p>
-            </div>
-            
-            <div class="space-y-6">
-              <div class="flex items-start group">
-                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
-                  <i class="fas fa-map-marker-alt text-white text-xl"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-800 text-lg">Office Address</h4>
-                  <p class="text-gray-600 editable-text">New Litigation Hall,<br>District Courts Complex,<br>Bhiwani, Haryana</p>
-                </div>
-              </div>
-
-              <div class="flex items-start group">
-                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
-                  <i class="fas fa-phone-alt text-white text-xl"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-800 text-lg">Phone Number</h4>
-                  <p class="text-gray-600 editable-text">+91 9671755613</p>
-                  <p class="text-gray-600">WhatsApp: <a data-wa href="#" target="_blank" rel="noopener" class="text-blue-700 underline">+91 93064 56633</a></p>
-                </div>
-              </div>
-
-              <div class="flex items-start group">
-                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
-                  <i class="fas fa-envelope text-white text-xl"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-800 text-lg">Email Address</h4>
-                  <p class="text-gray-600 editable-text">vivektanwaradv@gmail.com</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Contact Form -->
-          <div class="glass-card p-8 rounded-2xl shadow-xl">
-            <form onsubmit="sendContact(event)">
-              <div class="mb-5">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-              </div>
-              <div class="mb-5">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-              </div>
-              <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Your Message</label>
-                <textarea class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" rows="4" required></textarea>
-              </div>
-              <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg"><i class="fab fa-whatsapp mr-2"></i>Send via WhatsApp</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-10 mt-auto border-t border-slate-800 relative">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="flex justify-center space-x-6 mb-4">
-          <a href="#" data-wa target="_blank" rel="noopener" aria-label="WhatsApp" class="text-slate-400 hover:text-amber-500 transition"><i class="fab fa-whatsapp text-2xl"></i></a>
-          <a href="tel:+919671755613" aria-label="Call" class="text-slate-400 hover:text-amber-500 transition"><i class="fas fa-phone text-2xl"></i></a>
-          <a href="mailto:vivektanwaradv@gmail.com" aria-label="Email" class="text-slate-400 hover:text-amber-500 transition"><i class="fas fa-envelope text-2xl"></i></a>
-        </div>
-        <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 mb-4 text-sm text-slate-400">
-          <a href="#privacy" class="hover:text-amber-500">Privacy Policy</a><a href="#terms" class="hover:text-amber-500">Terms &amp; Refund</a><a href="#disclaimer" class="hover:text-amber-500">Disclaimer</a><a href="#contact" class="hover:text-amber-500">Contact</a>
-        </div>
-        <p class="text-slate-400 text-sm">&copy; 2026 Vivek Tanwar, Advocate. All Rights Reserved.</p>
-        
-        <!-- Hidden Lock Icon for About Page Only -->
-        <div id="about-lock-container" class="hidden mt-6">
-          <button id="admin-toggle-btn" onclick="openLogin()" class="text-slate-600 hover:text-slate-400 transition p-2 rounded-full border border-slate-700 hover:border-slate-500">
-            <i class="fas fa-lock text-sm"></i>
-          </button>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Admin Login Modal -->
-    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden flex items-center justify-center">
-      <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md transform transition-all scale-100">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-slate-800">Admin Login</h3>
-          <button onclick="closeLogin()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
-        </div>
-        <form onsubmit="handleLogin(event)">
-          <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Admin Email</label>
-            <input type="text" id="username" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Admin email">
-          </div>
-          <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-            <input type="password" id="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter password">
-          </div>
-          <button type="submit" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition">Login</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Admin Panel Indicator -->
-    <div id="admin-panel-indicator" class="fixed bottom-6 left-6 bg-amber-500 text-blue-900 px-6 py-3 rounded-full shadow-xl hidden z-50 font-bold flex items-center ">
-      <i class="fas fa-edit mr-2"></i> EDIT MODE ON
-      <button onclick="saveChanges()" class="ml-4 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Save</button>
-      <button onclick="logout()" class="ml-1 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Logout</button>
-    </div>
-
-    <!-- Floating WhatsApp -->
-    <a id="wa-float" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:scale-110 transition"><i class="fab fa-whatsapp text-3xl"></i></a>
-
-    <!-- Cookie consent -->
-    <div id="cookie-bar" class="hidden fixed bottom-4 left-4 right-24 md:right-auto md:max-w-md z-[55] bg-white border shadow-xl rounded-xl p-4 text-sm text-gray-700">
-      We use cookies to improve your experience and to show relevant ads. See our <a href="#privacy" class="text-blue-700 underline">Privacy Policy</a>.
-      <div class="mt-3 flex gap-2"><button onclick="cookieSet('yes')" class="bg-blue-900 text-white px-4 py-1 rounded">Accept</button><button onclick="cookieSet('no')" class="border px-4 py-1 rounded">Decline</button></div>
-    </div>
-
-  </main>
-
-  <!-- JavaScript Logic -->
-  <script>
-    // ================= CONFIG =================
-    const CONFIG = {
-      WA: '919306456633', 
-      ADMIN_EMAIL: 'vivektanwaradv@gmail.com', 
-      ADMIN_PASSWORD: 'vivek@76342', // Default password for demo
-      FIREBASE: {
-        apiKey: "AIzaSyCbg-lHPhQ4BeK86zfbK6LZ-ho-Y-LiOZs",
-        authDomain: "vivek-law-site.firebaseapp.com",
-        projectId: "vivek-law-site",
-        storageBucket: "vivek-law-site.firebasestorage.app",
-        messagingSenderId: "759653231300",
-        appId: "1:759653231300:web:a7d40dfb974c21d8787791"
-      }
-    };
-
-    const $ = id => document.getElementById(id);
-    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const AVATAR = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1e3a8a"/><circle cx="50" cy="38" r="18" fill="#f59e0b"/><path d="M14 100c0-24 16-38 36-38s36 14 36 38z" fill="#f59e0b"/></svg>');
-    const wa = t => 'https://wa.me/' + CONFIG.WA + '?text=' + encodeURIComponent(t);
-    
-    // Initialize WhatsApp Links
-    document.querySelectorAll('[data-wa]').forEach(a => a.href = wa('Hello Advocate Vivek Tanwar, I visited your website and would like to consult regarding a legal matter.'));
-
-    // ================= STORAGE & STATE =================
-    const KEY = 'vt_site_v2';
-    const DEFAULT_TEAM = [ 
-      { id: 't1', name: 'Vivek Tanwar', role: 'Advocate', owner: true },
-      { id: 't2', name: 'Priya Sharma', role: 'Legal Consultant', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80' } 
-    ];
-    
-    let DB = { 
-      photo: '', 
-      texts: {}, 
-      blogs: [], 
-      docs: [], 
-      team: [], 
-      teamSeeded: false, 
-      blogsLoaded: false, 
-      teamLoaded: false 
-    };
-
-    // Firebase Setup
-    let fdb, auth;
-    if (CONFIG.FIREBASE.apiKey && !CONFIG.FIREBASE.apiKey.startsWith('PASTE')) {
-      firebase.initializeApp(CONFIG.FIREBASE);
-      fdb = firebase.firestore();
-      auth = firebase.auth();
-    } else {
-      console.warn('Firebase is not configured yet.');
-    }
-
-    const teamList = () => (DB.teamSeeded || DB.team.length) ? DB.team : DEFAULT_TEAM;
-
-    function fail(e) { 
-      alert(e && e.code === 'permission-denied' ? 'Not allowed. Please log in as admin.' : 'Could not save: ' + (e.message || e)); 
-      return false; 
-    }
-
-    async function put(c, o) {
-      if (!fdb) return false; // Fallback to local if no FB
-      if (JSON.stringify(o).length > 950000) return alert('This item is too large.') || false;
-      try { await fdb.collection(c).doc(o.id).set(o); return true; } catch (e) { return fail(e); }
-    }
-
-    async function del(c, id) {
-      if (!fdb) return;
-      try { await fdb.collection(c).doc(id).delete(); return true; } catch (e) { return fail(e); }
-    }
-
-    async function setSite(o) {
-      if (!fdb) return;
-      try { await fdb.doc('site/main').set(o, { merge: true }); return true; } catch (e) { return fail(e); }
-    }
-
-    // ================= INITIALIZATION =================
-    document.addEventListener('DOMContentLoaded', () => {
-      loadFromStorage();
-      initFirebase();
-      renderTeam();
-      renderBlogs();
-      renderDocs();
-      updateEditableTexts();
-      
-      // Mobile Menu Toggle
-      $('mobile-menu-btn').addEventListener('click', () => {
-        $('mobile-menu').classList.toggle('hidden');
-      });
-
-      // Show lock icon only on about page initially
-      checkLockVisibility();
-    });
-
-    function initFirebase() {
-      if (!fdb) return;
-      // Try to load site config from Firebase
-      fdb.doc('site/main').get().then(doc => {
-        if (doc.exists) {
-          const data = doc.data();
-          if (data.photo) DB.photo = data.photo;
-          if (data.texts) DB.texts = data.texts;
-          if (data.blogs) DB.blogs = data.blogs;
-          if (data.docs) DB.docs = data.docs;
-          if (data.team) { DB.team = data.team; DB.teamSeeded = true; }
-          renderAll();
-        }
-      }).catch(err => console.error("Firebase load error:", err));
-    }
-
-    function loadFromStorage() {
-      const saved = localStorage.getItem(KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        Object.assign(DB, parsed);
-      }
-    }
-
-    function saveToStorage() {
-      localStorage.setItem(KEY, JSON.stringify(DB));
-      if (fdb) setSite(DB).catch(console.error);
-    }
-
-    function renderAll() {
-      updateEditableTexts();
-      renderTeam();
-      renderBlogs();
-      renderDocs();
-      updateImages();
-    }
-
-    // ================= NAVIGATION =================
-    function showPage(pageId) {
-      document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
-      $(pageId).classList.remove('hidden');
-      window.scrollTo(0, 0);
-      
-      // Update lock visibility
-      if (pageId === 'about') {
-        $('about-lock-container').classList.remove('hidden');
-      } else {
-        $('about-lock-container').classList.add('hidden');
-      }
-
-      // Close mobile menu if open
-      $('mobile-menu').classList.add('hidden');
-    }
-
-    function checkLockVisibility() {
-      if (document.querySelector('#about:not(.hidden)')) {
-        $('about-lock-container').classList.remove('hidden');
-      }
-    }
-
-    // ================= ADMIN AUTH =================
-    function openLogin() {
-      $('login-modal').classList.remove('hidden');
-    }
-
-    function closeLogin() {
-      $('login-modal').classList.add('hidden');
-    }
-
-    function handleLogin(e) {
-      e.preventDefault();
-      const u = $('username').value;
-      const p = $('password').value;
-      
-      if (u === CONFIG.ADMIN_EMAIL && p === CONFIG.ADMIN_PASSWORD) {
-        enableAdminMode();
-        closeLogin();
-      } else {
-        alert('Invalid credentials');
-      }
-    }
-
-    function enableAdminMode() {
-      document.body.classList.add('is-admin');
-      $('admin-panel-indicator').classList.remove('hidden');
-      $('admin-blog-controls').classList.remove('hidden');
-      $('admin-doc-controls').classList.remove('hidden');
-      $('admin-team-controls').classList.remove('hidden');
-      
-      // Enable editing
-      document.querySelectorAll('.editable-text').forEach(el => {
-        el.contentEditable = "true";
-        el.classList.add('editable-active');
-      });
-      
-      alert('Welcome back, Advocate! You are now in Edit Mode.');
-    }
-
-    function logout() {
-      document.body.classList.remove('is-admin');
-      $('admin-panel-indicator').classList.add('hidden');
-      $('admin-blog-controls').classList.add('hidden');
-      $('admin-doc-controls').classList.add('hidden');
-      $('admin-team-controls').classList.add('hidden');
-      
-      document.querySelectorAll('.editable-text').forEach(el => {
-        el.contentEditable = "false";
-        el.classList.remove('editable-active');
-      });
-    }
-
-    function saveChanges() {
-      // Save editable texts
-      document.querySelectorAll('.editable-text').forEach(el => {
-        DB.texts[el.id || el.innerText.substring(0, 20)] = el.innerHTML;
-      });
-      
-      saveToStorage();
-      alert('Changes saved successfully!');
-    }
-
-    // ================= CONTENT RENDERING =================
-    function updateEditableTexts() {
-      document.querySelectorAll('.editable-text').forEach(el => {
-        const key = el.id || el.innerText.substring(0, 20);
-        if (DB.texts[key]) {
-          el.innerHTML = DB.texts[key];
-        }
-      });
-    }
-
-    function updateImages() {
-      document.querySelectorAll('.profile-img').forEach(img => {
-        if (DB.photo) img.src = DB.photo;
-        else img.src = AVATAR;
-      });
-      // Update hero bg if needed (not implemented in DB for simplicity)
-    }
-
-    function changeProfile(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          DB.photo = e.target.result;
-          updateImages();
-          saveToStorage();
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    // --- TEAM ---
-    function renderTeam() {
-      const container = $('team-container');
-      container.innerHTML = '';
-      teamList().forEach(member => {
-        const div = document.createElement('div');
-        div.className = 'team-card bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center';
-        div.innerHTML = `
-          <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
-            <img src="${member.photo || AVATAR}" class="team-img w-full h-full object-cover">
-          </div>
-          <h3 class="text-lg font-bold text-slate-900">${member.name}</h3>
-          <p class="text-gray-500 text-sm">${member.role}</p>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function addTeamMember() {
-      const name = $('member-name').value;
-      const role = $('member-role').value;
-      const fileInput = $('member-photo');
-      
-      if (!name || !role) return alert('Please enter name and role');
-      
-      const processMember = (photoUrl) => {
-        const newMember = {
-          id: Date.now().toString(),
-          name,
-          role,
-          photo: photoUrl
-        };
-        DB.team.push(newMember);
-        DB.teamSeeded = true;
-        renderTeam();
-        saveToStorage();
-        
-        // Reset form
-        $('member-name').value = '';
-        $('member-role').value = '';
-        fileInput.value = '';
-      };
-
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => processMember(e.target.result);
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        processMember(null);
-      }
-    }
-
-    // --- BLOGS ---
-    let quill;
-    document.addEventListener('DOMContentLoaded', () => {
-      quill = new Quill('#new-blog-editor-container', {
-        theme: 'snow',
-        modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], ['clean']] }
-      });
-    });
-
-    function renderBlogs() {
-      const list = $('blog-list');
-      const recent = $('blog-recent');
-      list.innerHTML = '';
-      recent.innerHTML = '';
-      
-      const sortedBlogs = [...DB.blogs].sort((a, b) => b.date - a.date);
-      
-      sortedBlogs.forEach(blog => {
-        // List Item
-        const div = document.createElement('div');
-        div.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer';
-        div.onclick = () => viewBlog(blog.id);
-        div.innerHTML = `
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs text-gray-400">${new Date(blog.date).toLocaleDateString()}</span>
-            ${isAdmin() ? `<button onclick="event.stopPropagation();deleteBlog('${blog.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>` : ''}
-          </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-2">${esc(blog.title)}</h3>
-          <p class="text-gray-600 text-sm line-clamp-2">${blog.excerpt || 'No excerpt available.'}</p>
-        `;
-        list.appendChild(div);
-        
-        // Recent Sidebar
-        if (recent.children.length < 5) {
-          const li = document.createElement('li');
-          li.innerHTML = `<a href="#" onclick="viewBlog('${blog.id}'); return false;" class="block text-sm text-blue-900 hover:underline font-medium">${esc(blog.title)}</a>`;
-          recent.appendChild(li);
-        }
-      });
-    }
-
-    function isAdmin() {
-      return document.body.classList.contains('is-admin');
-    }
-
-    function pickCover(input) {
-      if (input.files && input.files[0]) {
-        $('cover-name').textContent = input.files[0].name;
-      }
-    }
-
-    function addBlog() {
-      const title = $('new-blog-title').value;
-      const content = quill.root.innerHTML;
-      if (!title) return alert('Please enter a title');
-      
-      const newBlog = {
-        id: Date.now().toString(),
-        title,
-        content,
-        date: Date.now(),
-        excerpt: content.replace(/<[^>]+>/g, '').substring(0, 100) + '...'
-      };
-      
-      DB.blogs.push(newBlog);
-      renderBlogs();
-      saveToStorage();
-      
-      // Reset
-      $('new-blog-title').value = '';
-      quill.setText('');
-      $('cover-name').textContent = '';
-    }
-
-    function deleteBlog(id) {
-      if(!confirm('Delete this blog post?')) return;
-      DB.blogs = DB.blogs.filter(b => b.id !== id);
-      renderBlogs();
-      saveToStorage();
-    }
-
-    function viewBlog(id) {
-      const blog = DB.blogs.find(b => b.id === id);
-      if (!blog) return;
-      
-      $('single-blog-title').innerHTML = blog.title;
-      $('single-blog-date').innerText = new Date(blog.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      $('single-blog-content').innerHTML = blog.content;
-      
-      $('post-share').href = wa(`Check out this article: ${blog.title}`);
-      
-      showPage('single-blog-view');
-    }
-
-    function blogSearch() {
-      const term = $('blog-search').value.toLowerCase();
-      const filtered = DB.blogs.filter(b => 
-        b.title.toLowerCase().includes(term) || 
-        (b.content && b.content.toLowerCase().includes(term))
-      );
-      // Re-render list with filtered items (simplified: just re-render all if empty, else filter)
-      // For this simple version, we'll just re-render the main list based on filter
-      const list = $('blog-list');
-      list.innerHTML = '';
-      
-      if (filtered.length === 0) {
-        list.innerHTML = '<div class="text-center text-gray-500 py-10">No blogs found matching your search.</div>';
-        return;
-      }
-
-      filtered.sort((a, b) => b.date - a.date).forEach(blog => {
-        const div = document.createElement('div');
-        div.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer';
-        div.onclick = () => viewBlog(blog.id);
-        div.innerHTML = `
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs text-gray-400">${new Date(blog.date).toLocaleDateString()}</span>
-          </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-2">${esc(blog.title)}</h3>
-          <p class="text-gray-600 text-sm line-clamp-2">${blog.excerpt || 'No excerpt available.'}</p>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    // --- DOCUMENTS ---
-    function renderDocs() {
-      const container = $('docs-container');
-      container.innerHTML = '';
-      
-      DB.docs.forEach(doc => {
-        const div = document.createElement('div');
-        div.className = 'bg-white p-4 rounded-lg border border-gray-200 flex justify-between items-center';
-        div.innerHTML = `
-          <div class="flex items-center">
-            <div class="bg-blue-100 p-3 rounded-full mr-4">
-              <i class="fas fa-file-pdf text-blue-900 text-xl"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900">${esc(doc.name)}</h4>
-              <p class="text-sm text-gray-500">${doc.price == 0 ? 'Free' : '₹' + doc.price}</p>
-            </div>
-          </div>
-          <a href="${doc.link || '#'}" target="_blank" class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm font-semibold">
-            Download
-          </a>
-          ${isAdmin() ? `<button onclick="deleteDoc('${doc.id}')" class="ml-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>` : ''}
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function addDoc() {
-      const name = $('doc-name').value;
-      const price = $('doc-price').value;
-      const link = $('doc-link').value;
-      const fileInput = $('doc-file');
-      
-      if (!name) return alert('Please enter a document name');
-      
-      const processDoc = (downloadLink) => {
-        const newDoc = {
-          id: Date.now().toString(),
-          name,
-          price,
-          link: downloadLink || link
-        };
-        DB.docs.push(newDoc);
-        renderDocs();
-        saveToStorage();
-        
-        $('doc-name').value = '';
-        $('doc-price').value = '';
-        $('doc-link').value = '';
-        fileInput.value = '';
-      };
-
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => processDoc(e.target.result);
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        processDoc(link);
-      }
-    }
-
-    function deleteDoc(id) {
-      if(!confirm('Delete this document?')) return;
-      DB.docs = DB.docs.filter(d => d.id !== id);
-      renderDocs();
-      saveToStorage();
-    }
-
-    function docSearch() {
-      const term = $('doc-search').value.toLowerCase();
-      const filtered = DB.docs.filter(d => d.name.toLowerCase().includes(term));
-      const container = $('docs-container');
-      container.innerHTML = '';
-      
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="text-center text-gray-500 py-10">No documents found.</div>';
-        return;
-      }
-
-      filtered.forEach(doc => {
-        const div = document.createElement('div');
-        div.className = 'bg-white p-4 rounded-lg border border-gray-200 flex justify-between items-center';
-        div.innerHTML = `
-          <div class="flex items-center">
-            <div class="bg-blue-100 p-3 rounded-full mr-4">
-              <i class="fas fa-file-pdf text-blue-900 text-xl"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900">${esc(doc.name)}</h4>
-              <p class="text-sm text-gray-500">${doc.price == 0 ? 'Free' : '₹' + doc.price}</p>
-            </div>
-          </div>
-          <a href="${doc.link || '#'}" target="_blank" class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm font-semibold">
-            Download
-          </a>
-          ${isAdmin() ? `<button onclick="deleteDoc('${doc.id}')" class="ml-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>` : ''}
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    // --- CONTACT ---
-    function sendContact(e) {
-      e.preventDefault();
-      const form = e.target;
-      const name = form.elements[0].value;
-      const email = form.elements[1].value;
-      const message = form.elements[2].value;
-      
-      const text = `Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`;
-      window.open(wa(text), '_blank');
-      form.reset();
-    }
-
-    // --- SEARCH ---
-    function globalSearch() {
-      const term = $('home-search').value.toLowerCase();
-      if (!term) return;
-      
-      // Simple search across blogs and docs
-      const blogResults = DB.blogs.filter(b => b.title.toLowerCase().includes(term));
-      const docResults = DB.docs.filter(d => d.name.toLowerCase().includes(term));
-      
-      let msg = '';
-      if (blogResults.length) msg += `<h4 class="font-bold mt-4">Blogs (${blogResults.length})</h4><ul class="list-disc pl-5">`;
-      blogResults.forEach(b => {
-        msg += `<li><a href="#" onclick="viewBlog('${b.id}'); return false;" class="text-blue-600 hover:underline">${esc(b.title)}</a></li>`;
-      });
-      if (blogResults.length) msg += '</ul>';
-      
-      if (docResults.length) msg += `<h4 class="font-bold mt-4">Documents (${docResults.length})</h4><ul class="list-disc pl-5">`;
-      docResults.forEach(d => {
-        msg += `<li>${esc(d.name)} (${d.price == 0 ? 'Free' : '₹'+d.price})</li>`;
-      });
-      if (docResults.length) msg += '</ul>';
-      
-      if (!msg) msg = '<p class="text-gray-500 mt-4">No results found.</p>';
-      
-      $('search-results').innerHTML = msg;
-      $('search-title').innerText = `Results for "${term}"`;
-      $('search-modal').classList.remove('hidden');
-    }
-
-    function closeSearch() {
-      $('search-modal').classList.add('hidden');
-    }
-
-    // --- COOKIE CONSENT ---
-    function cookieSet(val) {
-      document.cookie = "cookie_consent=" + val + ";expires=Thu, 18 Dec 2026 12:00:00 UTC;path=/";
-      $('cookie-bar').classList.add('hidden');
-    }
-
-    // Check cookie consent on load
-    if (!document.cookie.includes('cookie_consent')) {
-      setTimeout(() => $('cookie-bar').classList.remove('hidden'), 2000);
-    }
-
-  </script>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vivek Tanwar | Advocate</title>
+<meta name="description" content="Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law.">
+<meta name="theme-color" content="#0f172a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link id="gf" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap">
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+:root{--p:#0f172a;--a:#d97706;--r:14px;--fh:'Playfair Display',serif;--fb:'Lato',sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:400 16px/1.65 var(--fb);color:#1e293b;background:#f8fafc;overflow-x:hidden;transition:padding .3s}
+h1,h2,h3,h4{font-family:var(--fh);line-height:1.15;margin:0 0 .5em;font-weight:700}
+h1{font-size:clamp(2.2rem,6vw,4.2rem)}h2{font-size:clamp(1.7rem,3.5vw,2.5rem)}
+img,iframe,video{max-width:100%;border:0}a{color:inherit}button{font:inherit}
+.w{max-width:var(--mw,1120px);margin:auto;padding:0 22px}
+nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--p) 92%,transparent);backdrop-filter:blur(14px);color:#fff;box-shadow:0 4px 30px #0003}
+nav .w{display:flex;align-items:center;justify-content:space-between;height:72px;max-width:1280px}
+.br{display:flex;align-items:center;gap:12px;text-decoration:none}.br i{color:var(--a);font-size:1.8rem}.br img{height:42px}.br b{display:block;letter-spacing:.08em;font-family:var(--fh)}.br small{display:block;font-size:.65rem;letter-spacing:.2em;color:#94a3b8}
+.nl{display:flex;gap:4px;align-items:center}.nl a,.nl button{color:#e2e8f0;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:.92rem;background:0;border:0;cursor:pointer;transition:.25s}.nl a:hover,.nl a.on,.nl button:hover{background:#ffffff14;color:#fbbf24}
+#bg{display:none;background:0;border:0;color:#fff;font-size:1.5rem;cursor:pointer}
+@media(max-width:820px){#bg{display:block}.nl{display:none;position:absolute;top:72px;left:0;right:0;background:var(--p);flex-direction:column;align-items:stretch;padding:8px 16px 16px}.nl.o{display:flex}}
+.blk{position:relative;padding:var(--pt,64px) 0 var(--pb,64px);text-align:var(--al,left);background-size:cover;background-position:center}
+.blk>.ov{position:absolute;inset:0;background:#000;pointer-events:none}.blk>.w{position:relative}
+.lead{font-size:1.2rem;opacity:.85;max-width:760px;margin:0 auto 1.4rem;white-space:pre-line}
+.btn{display:inline-block;padding:14px 28px;border-radius:10px;background:var(--a);color:#fff;font-weight:700;text-decoration:none;margin:6px;border:2px solid var(--a);transition:.25s;box-shadow:0 8px 20px #0002;cursor:pointer}.btn:hover{transform:translateY(-3px);filter:brightness(1.1)}.btn.o{background:0;border-color:#ffffff77;box-shadow:none}
+.g{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--cw,230px)),1fr))}
+.cd{background:#fff;color:#1e293b;padding:28px;border-radius:var(--r);box-shadow:0 2px 14px #0f172a12;border:1px solid #e2e8f0;transition:.3s;text-align:left}.cd:hover{transform:translateY(-5px);box-shadow:0 18px 40px #0f172a22}
+.cd.quote p{font-style:italic}.cd.team{text-align:center}
+.ic{width:56px;height:56px;border-radius:14px;background:#eff6ff;color:var(--p);display:grid;place-items:center;font-size:1.5rem;margin-bottom:16px;transition:.3s}.cd:hover .ic{background:var(--p);color:#fff}
+.cd.team img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--a);margin-bottom:12px}
+.av{width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid var(--a);box-shadow:0 0 0 6px #ffffff1a;margin-bottom:20px}
+.sp{display:flex;gap:48px;align-items:center;flex-wrap:wrap}.sp>*{flex:1 1 320px}.sp>img{border-radius:var(--r);box-shadow:0 25px 60px #0003;width:100%;max-width:460px;flex:0 1 380px}
+.rt p{margin:.7em 0}.rt ul,.rt ol{padding-left:1.4em}.rt a{color:#1d4ed8}.rt img,.rt iframe{border-radius:12px}.rt i{color:var(--a)}
+.st b{display:block;font:700 2.8rem var(--fh);color:var(--a)}
+details{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;color:#1e293b;text-align:left}summary{cursor:pointer;font-weight:700}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.rv.in{opacity:1;transform:none}
+.vid{position:relative;aspect-ratio:16/9}.vid iframe,.vid video{position:absolute;inset:0;width:100%;height:100%;border-radius:var(--r)}
+.fm input,.fm textarea{width:100%;padding:13px 16px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:14px;font:inherit}.fm input:focus,.fm textarea:focus{outline:2px solid var(--a);border-color:transparent}
+footer{background:var(--p);color:#94a3b8;text-align:center;padding:40px 20px;font-size:.9rem}footer a{margin:0 10px;text-decoration:none}footer a:hover{color:#fbbf24}
+#lk{background:0;border:1px solid #334155;color:#475569;border-radius:50%;width:34px;height:34px;cursor:pointer;margin-top:12px}
+#wf{position:fixed;right:22px;bottom:22px;z-index:40;width:56px;height:56px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;font-size:1.9rem;box-shadow:0 10px 30px #25d36688;transition:.25s}#wf:hover{transform:scale(1.1)}
+#ck{position:fixed;left:16px;bottom:16px;max-width:380px;background:#fff;border-radius:14px;box-shadow:0 12px 40px #0003;padding:16px;font-size:.85rem;z-index:45;display:none}
+.mt{text-align:center;padding:40px;color:#64748b}
+/* ADMIN */
+body.ed [data-f]{cursor:text;border-radius:4px}body.ed [data-f]:hover{outline:1px dashed var(--a)}body.ed [data-f]:focus{outline:2px solid var(--a);background:#fbbf2418}body.ed [data-f]:empty:before{content:'Type here…';opacity:.4}
+body.ed .blk:hover{outline:2px solid #3b82f655;outline-offset:-2px}body.ed .blk.sel{outline:2px solid #3b82f6;outline-offset:-2px}.blk.hid{opacity:.4}
+.bt{display:none;position:absolute;top:8px;right:8px;z-index:20;background:#1e293b;border-radius:10px;padding:4px;gap:2px;box-shadow:0 8px 24px #0006}body.ed .blk:hover>.bt,body.ed .blk.sel>.bt{display:flex}
+.bt button,#ab button,#ftb button{background:0;border:0;color:#fff;min-width:34px;height:34px;border-radius:8px;cursor:pointer;padding:0 8px}.bt button:hover,#ab button:hover,#ftb button:hover{background:#3b82f6}
+#ab{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:90;background:#0f172af2;backdrop-filter:blur(12px);color:#fff;border-radius:16px;padding:6px;display:none;gap:2px;align-items:center;box-shadow:0 12px 40px #0008;font-size:.85rem}#ab.on{display:flex}#ab span{padding:0 10px;opacity:.7}#ab .on2{background:var(--a)}
+#pnl{position:fixed;top:0;right:0;bottom:0;width:360px;max-width:100vw;z-index:95;background:#fff;box-shadow:-10px 0 40px #0003;transform:translateX(100%);transition:.3s;display:flex;flex-direction:column;font-size:14px;color:#1e293b}#pnl.o{transform:none}
+@media(min-width:900px){body.po{padding-right:360px}body.po #ab{left:calc(50% - 180px)}}
+.ph{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#0f172a;color:#fff}.ph button{background:0;border:0;color:#fff;cursor:pointer;font-size:1.1rem}
+#tbs{display:flex;border-bottom:1px solid #e2e8f0}#tbs button{flex:1;padding:10px 0;border:0;background:0;cursor:pointer;font-size:11px;color:#64748b;border-bottom:3px solid transparent}#tbs button.on{color:#d97706;border-color:#d97706}#tbs i{display:block;font-size:15px;margin-bottom:2px}
+#pb{flex:1;overflow:auto;padding:14px}
+.fd label{display:block;font-size:12px;font-weight:700;margin:10px 0 3px;color:#475569}.fd input:not([type=color]),.fd select,.fd textarea{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}.fd details{padding:8px 12px;margin:6px 0;background:#f8fafc}
+.sb{background:#e2e8f0;border:0;border-radius:8px;padding:6px 10px;cursor:pointer;margin:4px 4px 0 0;color:#1e293b}.sb:hover{background:#cbd5e1}.sb.d{background:#fee2e2;color:#b91c1c}.sb.p{background:#0f172a;color:#fff}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ag button{padding:14px 6px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;cursor:pointer;transition:.2s}.ag button:hover{border-color:#d97706;background:#fffbeb;transform:translateY(-2px)}.ag i{display:block;font-size:20px;color:#d97706;margin-bottom:4px}
+#md{position:fixed;inset:0;background:#0009;backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#md.o{display:flex}
+.mc{background:#fff;border-radius:16px;padding:26px;width:100%;max-width:640px;max-height:92vh;overflow:auto;position:relative;color:#1e293b}.mc .x{position:absolute;right:14px;top:10px;border:0;background:0;font-size:1.2rem;cursor:pointer}
+.ce{min-height:220px;border:1px solid #cbd5e1;border-radius:10px;padding:14px;margin:8px 0}.ce:focus{outline:2px solid var(--a)}
+#ftb{position:fixed;z-index:120;display:none;background:#1e293b;border-radius:10px;padding:4px;gap:2px;box-shadow:0 8px 24px #0006}
+#ts{position:fixed;top:20px;left:50%;transform:translate(-50%,-100px);background:#0f172a;color:#fff;padding:12px 22px;border-radius:12px;z-index:200;transition:.35s;box-shadow:0 10px 30px #0006}#ts.o{transform:translate(-50%,0)}#ts.e{background:#b91c1c}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style></head>
+<body>
+<nav id="nv"></nav><main id="mn"></main><footer id="fo"></footer>
+<a id="wf" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+<div id="ck">We use cookies to improve your experience. See our <a href="#/privacy" style="color:#1d4ed8">Privacy Policy</a>.<div style="margin-top:10px"><button class="sb p" onclick="CK('y')">Accept</button><button class="sb" onclick="CK('n')">Decline</button></div></div>
+<div id="ab"><button id="bed" data-a="ted"><i class="fas fa-pen"></i> Edit</button><button onclick="UD(-1)" title="Undo"><i class="fas fa-rotate-left"></i></button><button onclick="UD(1)" title="Redo"><i class="fas fa-rotate-right"></i></button><span id="sts">Ready</span><button onclick="PT()" title="Builder panel"><i class="fas fa-sliders"></i></button><button onclick="SV()" title="Save now"><i class="fas fa-cloud-arrow-up"></i></button><button onclick="LO()" title="Log out"><i class="fas fa-right-from-bracket"></i></button></div>
+<aside id="pnl"><div class="ph"><b>Site Builder</b><button onclick="PT()">✕</button></div><div id="tbs"></div><div id="pb"></div></aside>
+<div id="md" onclick="event.target===this&&MX()"></div>
+<div id="ftb"><button data-x="bold"><b>B</b></button><button data-x="italic"><i>I</i></button><button data-x="underline"><u>U</u></button><button data-x="h2">H2</button><button data-x="h3">H3</button><button data-x="p">¶</button><button data-x="ul"><i class="fas fa-list-ul"></i></button><button data-x="link"><i class="fas fa-link"></i></button><button data-x="unlink"><i class="fas fa-link-slash"></i></button><button data-x="clear"><i class="fas fa-eraser"></i></button></div>
+<div id="ts"></div><style id="cu"></style>
+<script>
+/* ============ CONFIG ============ */
+const CFG={WA:'919306456633',ADMIN:'vivektanwaradv@gmail.com',FB:{apiKey:"AIzaSyCbg-lHPhQ4BeK86zfbK6LZ-ho-Y-LiOZs",authDomain:"vivek-law-site.firebaseapp.com",projectId:"vivek-law-site",storageBucket:"vivek-law-site.firebasestorage.app",messagingSenderId:"759653231300",appId:"1:759653231300:web:a7d40dfb974c21d8787791"}};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gp=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
+const sp=(o,p,v)=>{const a=p.split('.'),l=a.pop();(a.length?gp(o,a.join('.')):o)[l]=v};
+const U=()=>Math.random().toString(36).slice(2,9);
+const AV='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1e3a8a"/><circle cx="50" cy="38" r="18" fill="#f59e0b"/><path d="M14 100c0-24 16-38 36-38s36 14 36 38z" fill="#f59e0b"/></svg>');
+const PX='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+let S,fdb,auth,ED=false,ADM=false,SEL=null,AF=null,TAB='b',cur='home',PID='',hist=[],fut=[],B,CP='',DAT={},MC={},HD='',tm,BE={};
+try{firebase.initializeApp(CFG.FB);fdb=firebase.firestore();auth=firebase.auth()}catch(e){console.warn('Firebase unavailable',e)}
+/* ============ RENDER HELPERS ============ */
+const EA=(p,tag,cls,rich,v)=>{v=v??gp(S,p)??'';return`<${tag} class="${cls||''}" data-f="${p}"${rich?' data-r=1':''}${ED?' contenteditable=true':''}>${rich?v:esc(v)}</${tag}>`};
+const E=(k,tag,cls,rich)=>EA(CP+k,tag,cls,rich);
+const im=s=>!s?'':s.startsWith('fb:')?`data-m="${s.slice(3)}" src="${PX}"`:`src="${esc(s)}"`;
+const L=u=>u==='wa'?`https://wa.me/${S.s.wa}?text=${encodeURIComponent('Hello Advocate Vivek Tanwar, I visited your website and would like to consult regarding a legal matter.')}`:u==='tel'?'tel:'+S.s.phone:u||'#';
+const btn=(k,c)=>{const t=B['b'+k],u=B['l'+k];return t?`<a class="btn ${c||''}" href="${esc(L(u))}"${/^https?:/.test(u)||u==='wa'?' target=_blank rel=noopener':''}>${E('b'+k,'span')}</a>`:''};
+const LI=(k,fn)=>(B[k]||[]).map((it,i)=>fn(it,`${k}.${i}.`)).join('');
+const san=h=>String(h||'').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/ on\w+=("[^"]*"|'[^']*')/gi,'');
+const dt=d=>new Date(d).toLocaleDateString('en-IN',{dateStyle:'long'});
+const emb=u=>{if(!u)return'<p class=mt>Paste a YouTube, Vimeo, Google Maps or video link in the panel.</p>';let m;if(m=u.match(/<iframe[^>]+src="([^"]+)"/i))u=m[1];if(m=u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/))u='https://www.youtube.com/embed/'+m[1];else if(m=u.match(/vimeo\.com\/(\d+)/))u='https://player.vimeo.com/video/'+m[1];return/\.(mp4|webm)(\?|$)/i.test(u)?`<video src="${esc(u)}" controls></video>`:`<iframe src="${esc(u)}" loading=lazy allowfullscreen></iframe>`};
+/* ============ BLOCK LIBRARY (add new block types here) ============ */
+const CF=[['ic','Icon class (FontAwesome)','t'],['img','Photo','i'],['h','Title','t'],['p','Text','a']];
+const BL={
+hero:{n:'Hero banner',i:'fa-image',d:{h:'Justice, Integrity, Results',p:'Dedicated legal representation at District Court, Bhiwani.\nSpecializing in Civil, Criminal, Revenue, and Consumer Law.',ph:'',b1:'Consult Now',l1:'#/contact',b2:'View Profile',l2:'#/about',bg:'#0f172a',c:'#fff',al:'center',pt:110,pb:110,bgi:'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1600&q=70',ov:70},
+ f:[['h','Heading','t'],['p','Sub text','a'],['ph','Profile photo','i'],['b1','Button 1 text','t'],['l1','Button 1 link (#/page, https://, wa, tel)','t'],['b2','Button 2 text','t'],['l2','Button 2 link','t']],
+ r:()=>`<div class=w>${B.ph!==undefined?`<img class=av ${im(B.ph||AV)} alt="">`:''}${E('h','h1')}${E('p','p','lead')}<div>${btn(1)}${btn(2,'o')}</div></div>`},
+text:{n:'Heading + text',i:'fa-align-left',d:{h:'Your heading',p:'<p>Write your content here. Select text to format it.</p>'},f:[['h','Heading','t'],['p','Content (HTML)','h']],r:()=>`<div class=w>${E('h','h2')}${E('p','div','rt',1)}</div>`},
+split:{n:'Image + text',i:'fa-table-columns',d:{img:'',rev:'no',h:'Section title',p:'<p>Describe it here.</p>',b1:'',l1:'',bg:'#fff'},f:[['img','Image','i'],['rev','Image side','s',['left','right']],['h','Heading','t'],['p','Content (HTML)','h'],['b1','Button text','t'],['l1','Button link','t']],
+ r:()=>`<div class="w sp"${B.rev==='right'?' style="flex-direction:row-reverse"':''}>${B.img?`<img ${im(B.img)} loading=lazy alt="">`:''}<div>${E('h','h2')}${E('p','div','rt',1)}${btn(1)}</div></div>`},
+cards:{n:'Cards / Team / Quotes',i:'fa-grip',d:{h:'Section title',p:'',st:'card',cw:230,bg:'#f8fafc',al:'center',items:[{ic:'fas fa-star',img:'',h:'Title',p:'Short description.'}]},f:[['h','Heading','t'],['p','Intro','a'],['st','Style','s',['card','team','quote']],['cw','Min card width (px)','n'],['items','Cards','l',CF]],
+ r:()=>`<div class=w>${E('h','h2')}${E('p','p','lead')}<div class=g style="--cw:${B.cw||230}px">${LI('items',(it,k)=>`<div class="cd ${B.st}">${it.img||B.st==='team'?`<img ${im(it.img||AV)} loading=lazy alt="">`:it.ic?`<div class=ic><i class="${esc(it.ic)}"></i></div>`:''}${E(k+'h','h3')}${E(k+'p','p')}</div>`)}</div></div>`},
+stats:{n:'Numbers / stats',i:'fa-chart-simple',d:{bg:'#0f172a',c:'#fff',al:'center',items:[{n:'10+',l:'Years of practice'},{n:'500+',l:'Cases handled'}]},f:[['items','Stats','l',[['n','Number','t'],['l','Label','t']]]],r:()=>`<div class="w g st" style="--cw:160px">${LI('items',(it,k)=>`<div>${E(k+'n','b')}${E(k+'l','span')}</div>`)}</div>`},
+faq:{n:'FAQ accordion',i:'fa-circle-question',d:{h:'Frequently asked questions',al:'left',items:[{q:'A question?',a:'The answer.'}]},f:[['h','Heading','t'],['items','Questions','l',[['q','Question','t'],['a','Answer','a']]]],r:()=>`<div class=w style="max-width:820px">${E('h','h2')}${LI('items',(it,k)=>`<details${ED?' open':''}><summary>${E(k+'q','span')}</summary>${E(k+'a','p')}</details>`)}</div>`},
+gallery:{n:'Photo gallery',i:'fa-images',d:{h:'Gallery',cw:260,items:[{img:'',c:'Caption'}]},f:[['h','Heading','t'],['cw','Min photo width (px)','n'],['items','Photos','l',[['img','Photo','i'],['c','Caption','t']]]],r:()=>`<div class=w>${E('h','h2')}<div class=g style="--cw:${B.cw||260}px">${LI('items',(it,k)=>`<figure style="margin:0"><img ${im(it.img||AV)} loading=lazy style="width:100%;border-radius:var(--r);aspect-ratio:4/3;object-fit:cover" alt="">${E(k+'c','figcaption')}</figure>`)}</div></div>`},
+image:{n:'Single image',i:'fa-image',d:{img:'',c:'',w:900},f:[['img','Image','i'],['c','Caption','t']],r:()=>`<div class=w style="text-align:center">${B.img?`<img ${im(B.img)} style="border-radius:var(--r)" alt="">`:'<p class=mt>Choose an image in the panel.</p>'}${E('c','p')}</div>`},
+embed:{n:'Video / map / embed',i:'fa-circle-play',d:{url:'',w:900},f:[['url','YouTube, Vimeo, MP4, Google Maps or iframe code','a']],r:()=>`<div class=w><div class=vid>${emb(B.url)}</div></div>`},
+cta:{n:'Call-to-action banner',i:'fa-bullhorn',d:{h:'Need legal advice?',p:'Message me directly on WhatsApp.',b1:'Chat Now',l1:'wa',bg:'#1e3a8a',c:'#fff',al:'center',pt:56,pb:56},f:[['h','Heading','t'],['p','Text','a'],['b1','Button text','t'],['l1','Button link','t']],r:()=>`<div class=w>${E('h','h2')}${E('p','p','lead')}${btn(1)}</div>`},
+html:{n:'Custom HTML / code',i:'fa-code',d:{code:'<p style="text-align:center">Custom HTML</p>'},f:[['code','HTML, CSS or script','h']],r:()=>`<div class=w>${B.code}</div>`},
+spacer:{n:'Spacer',i:'fa-arrows-up-down',d:{pt:30,pb:30},f:[],r:()=>`<div class=w style="text-align:center;opacity:.35">${ED?'— spacer —':''}</div>`},
+blogs:{n:'Blog posts list',i:'fa-newspaper',d:{h:'Latest Legal Insights',p:'Articles, judgments and practical legal guidance.',bg:'#f8fafc',al:'center'},f:[['h','Heading','t'],['p','Intro','a']],
+ r:()=>{LD('blogs');return`<div class=w>${E('h','h2')}${E('p','p','lead')}<div class=fm style="max-width:520px;margin:0 auto"><input type=search placeholder="Search posts…" oninput="BS(this.value)"></div>${ED?'<p><button class=btn data-a=nb>+ New post</button></p>':''}<div id=bls class=g style="--cw:300px">${BLH()}</div></div>`}},
+docs:{n:'Documents / downloads',i:'fa-file-arrow-down',d:{h:'Legal Resources',p:'Download forms, templates and acts. Free and premium documents.',al:'center'},f:[['h','Heading','t'],['p','Intro','a']],
+ r:()=>{LD('docs');return`<div class=w style="max-width:860px">${E('h','h2')}${E('p','p','lead')}${ED?'<p><button class=btn data-a=nd>+ Add document</button></p>':''}<div style="text-align:left">${DCH()}</div></div>`}},
+contact:{n:'Contact + form',i:'fa-envelope',d:{h:'Get in Touch',info:'<p>Consultation hours: Mon-Sat, 10:00 AM - 6:00 PM.</p><p><i class="fas fa-map-marker-alt"></i> New Litigation Hall, District Courts Complex, Bhiwani, Haryana</p><p><i class="fas fa-phone-alt"></i> +91 9671755613</p><p><i class="fab fa-whatsapp"></i> +91 93064 56633</p><p><i class="fas fa-envelope"></i> vivektanwaradv@gmail.com</p>',ft:'Send Message',bg:'#f8fafc'},f:[['h','Heading','t'],['info','Contact details (HTML)','h'],['ft','Button text','t']],
+ r:()=>`<div class="w sp" style="align-items:flex-start"><div>${E('h','h2')}${E('info','div','rt',1)}</div><form class="cd fm" onsubmit="return CS(event)"><input name=n placeholder="Full name" required><input name=e type=email placeholder="Email address" required><textarea name=m rows=4 placeholder="Your message" required></textarea><button class=btn style="width:100%;margin:0">${E('ft','span')}</button></form></div>`}};
+const mk=(t,o={})=>({id:U(),t,...JSON.parse(JSON.stringify(BL[t].d)),...o});
+const STY=[['bg','Background color','c'],['bgi','Background image','i'],['ov','Image darkness (0-90)','n'],['c','Text color','c'],['pt','Padding top (px)','n'],['pb','Padding bottom (px)','n'],['al','Text align','s',['left','center','right']],['w','Content max width (px)','n'],['an','Scroll animation','s',['fade','none']],['hide','Hide section','s',['no','yes']],['aid','Anchor ID (link with #id)','t'],['cls','Custom CSS class','t']];
+/* ============ DEFAULT SITE ============ */
+const P=(id,title,b,o={})=>({id,title,n:'yes',f:'no',st:'',sd:'',b,...o});
+const LG_=(h,p)=>mk('text',{h,p,pt:50});
+const DEF=()=>({t:{p:'#0f172a',a:'#d97706',r:14,fh:'Playfair Display',fb:'Lato',css:''},
+s:{name:'VIVEK TANWAR',tag:'ADVOCATE',icon:'fas fa-balance-scale',logo:'',wa:CFG.WA,email:CFG.ADMIN,phone:'+919671755613',foot:'© 2026 Vivek Tanwar, Advocate. All Rights Reserved.',head:'',social:[{i:'fa-brands fa-whatsapp',u:'wa'},{i:'fas fa-phone',u:'tel'},{i:'fas fa-envelope',u:'mailto:'+CFG.ADMIN}]},
+pages:[
+P('home','Home',[mk('hero'),mk('split',{img:AV,h:'Dedicated to Your Rights',p:'<p>With a robust academic foundation and practical courtroom experience, I provide strategic legal solutions tailored to your needs. My approach combines thorough research with committed advocacy.</p><p><b>LL.M. (Criminal Law)</b> &nbsp;•&nbsp; <b>NET Qualified</b></p>'}),
+ mk('cards',{h:'Practice Areas',bg:'#f1f5f9',items:[{ic:'fas fa-gavel',img:'',h:'Civil Disputes',p:'Property disputes, contracts, recovery suits, and civil litigation.'},{ic:'fas fa-user-shield',img:'',h:'Criminal Law',p:'Bail applications, trial defense, appeals, and FIR registration.'},{ic:'fas fa-landmark',img:'',h:'Revenue Affairs',p:'Land records mutation, revenue court cases, and municipal disputes.'},{ic:'fas fa-store',img:'',h:'Consumer Cases',p:'Deficiency in services, product liability, and consumer complaints.'}]}),mk('cta')],{sd:'Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law.',f:'no'}),
+P('about','About',[mk('hero',{h:'Meet The Legal Expert',p:'Committed to excellence, integrity, and winning your case.',b1:'',b2:'',bgi:'',bg:'#1e3a8a',pt:70,pb:70}),mk('text',{h:'A Decade of Advocacy',p:'<p>Starting from the basics of law to mastering complex litigation, every step in my career has been driven by a passion for justice. I believe in understanding the human side of every case, not just the legal clauses.</p><p>Whether it is a property dispute or a criminal appeal, I bring the same dedication and scrutiny to ensure the best outcome for my clients.</p>'}),
+ mk('cards',{h:'Core Values',bg:'#f1f5f9',items:[{ic:'fas fa-circle-check',img:'',h:'Client-Centric Approach',p:'Your goals shape our strategy.'},{ic:'fas fa-comments',img:'',h:'Transparent Communication',p:'Clear updates at every stage.'},{ic:'fas fa-chess',img:'',h:'Strategic Litigation',p:'Prepared, researched, decisive.'}]}),
+ mk('cards',{h:'Our Legal Team',p:'Working together to achieve justice.',st:'team',bg:'#fff',items:[{ic:'',img:'',h:'Vivek Tanwar',p:'Advocate'},{ic:'',img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=70',h:'Priya Sharma',p:'Legal Consultant'}]})]),
+P('blogs','Blogs',[mk('blogs')]),P('documents','Documents',[mk('docs',{bg:'#fff'})]),P('contact','Contact',[mk('contact')]),
+P('privacy','Privacy Policy',[LG_('Privacy Policy','<p>We collect only the details you submit through the contact form (name, email, message) to respond to your enquiry. We do not sell personal data. Cookies are used to remember your preferences. Contact us to request deletion of your data.</p>')],{n:'no',f:'yes'}),
+P('terms','Terms & Refund',[LG_('Terms & Refund','<p>Information on this site is for general guidance and is not a substitute for legal advice. Paid documents are digital products; refunds are considered only if a file is defective.</p>')],{n:'no',f:'yes'}),
+P('disclaimer','Disclaimer',[LG_('Disclaimer','<p>As per Bar Council of India rules, this website is not advertising or solicitation. Visiting it does not create an advocate-client relationship.</p>')],{n:'no',f:'yes'})]});
+/* ============ FIRESTORE DATA ============ */
+async function LD(c){if(DAT[c]!==undefined||!fdb)return;DAT[c]=null;try{const s=await fdb.collection(c).get();DAT[c]=s.docs.map(d=>d.data())}catch(e){DAT[c]=[]}R()}
+async function put(c,o){if(JSON.stringify(o).length>950000){toast('Too large for one record (max ~900 KB)',1);return false}try{await fdb.collection(c).doc(o.id).set(o);return true}catch(e){toast(e.code==='permission-denied'?'Permission denied: log in as admin and check Firestore rules':e.message,1);return false}}
+async function rm(c,id){try{await fdb.collection(c).doc(id).delete();return true}catch(e){toast(e.message,1);return false}}
+const GM=id=>MC[id]=MC[id]||fdb.collection('media').doc(id).get().then(d=>d.exists?d.data().d:'').catch(()=>'');
+function LM(r=document){r.querySelectorAll('[data-m]').forEach(async el=>{const d=await GM(el.dataset.m);if(d)el.src=d});r.querySelectorAll('[data-mbg]').forEach(async el=>{const d=await GM(el.dataset.mbg);if(d)el.style.backgroundImage=`url(${d})`})}
+const cmp=(f,m)=>new Promise((ok,no)=>{const r=new FileReader();r.onerror=no;r.onload=()=>{const i=new Image();i.onerror=()=>no(Error('Not an image'));i.onload=()=>{let k=Math.min(1,m/Math.max(i.width,i.height)),o,c=document.createElement('canvas'),t=f.type==='image/png'?'image/png':'image/jpeg';do{c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);o=c.toDataURL(t,.82);k*=.8}while(o.length>780000);ok(o)};i.src=r.result};r.readAsDataURL(f)});
+function pick(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{const f=i.files[0];if(!f)return;toast('Uploading image…');try{const d=await cmp(f,1500),id=U()+U();if(fdb)await fdb.collection('media').doc(id).set({d});MC[id]=Promise.resolve(d);cb('fb:'+id);toast('Image uploaded ✓')}catch(e){toast('Upload failed: '+e.message,1)}};i.click()}
+/* ============ BLOGS & DOCS ============ */
+const BLH=(q='')=>{if(DAT.blogs==null)return'<p class=mt>Loading…</p>';q=q.toLowerCase();const a=DAT.blogs.filter(b=>!q||(b.title+b.excerpt).toLowerCase().includes(q)).sort((x,y)=>y.date-x.date);return a.length?a.map(b=>`<div class=cd style="padding:0;overflow:hidden;cursor:pointer" onclick="if(!ED)location.hash='#/post/${b.id}'">${b.cover?`<img ${im(b.cover)} style="width:100%;height:170px;object-fit:cover" alt="">`:''}<div style="padding:22px"><small style="color:#94a3b8">${dt(b.date)}</small><h3 style="margin-top:6px">${esc(b.title)}</h3><p style="color:#64748b;font-size:.92rem">${esc(b.excerpt)}…</p>${ED?`<button class=sb data-a=eb data-id=${b.id}>Edit</button><button class="sb d" data-a=xb data-id=${b.id}>Delete</button>`:''}</div></div>`).join(''):'<p class=mt>No posts yet.</p>'};
+function BS(q){$('#bls').innerHTML=BLH(q);LM($('#bls'))}
+const DCH=()=>{if(DAT.docs==null)return'<p class=mt>Loading…</p>';return DAT.docs.length?DAT.docs.map(d=>`<div class=cd style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;padding:18px 22px"><div><b>${esc(d.name)}</b><br><small style="color:#64748b">${+d.price?'₹'+esc(d.price):'Free'}</small></div><div><a class=btn style="padding:10px 18px;margin:0" href="${esc(d.link)}" ${String(d.link).startsWith('data:')?`download="${esc(d.name)}"`:'target=_blank rel=noopener'}>Download</a>${ED?`<button class=sb data-a=ed data-id=${d.id}>Edit</button><button class="sb d" data-a=xd data-id=${d.id}>✕</button>`:''}</div></div>`).join(''):'<p class=mt>No documents yet.</p>'};
+const postH=()=>{const b=(DAT.blogs||[]).find(x=>x.id===PID);if(DAT.blogs==null){LD('blogs');return'<p class=mt>Loading…</p>'}if(!b)return'<p class=mt>Post not found. <a href="#/blogs">Back to posts</a></p>';return`<div class=blk><div class=w style="max-width:820px"><a href="#/blogs" style="color:#1d4ed8">← All posts</a><h1 style="font-size:clamp(2rem,5vw,3rem);margin-top:14px">${esc(b.title)}</h1><p style="color:#94a3b8">${dt(b.date)}</p>${b.cover?`<img ${im(b.cover)} style="width:100%;border-radius:var(--r);margin-bottom:20px" alt="">`:''}<div class=rt style="font-size:1.1rem">${san(b.content)}</div><p style="margin-top:30px"><a class=btn target=_blank rel=noopener href="https://wa.me/?text=${encodeURIComponent(b.title+' '+location.href)}" style="background:#25d366;border-color:#25d366"><i class="fab fa-whatsapp"></i> Share</a><a class=btn target=_blank rel=noopener href="${esc(L('wa'))}">Consult Advocate</a></p></div></div>`};
+function blogEd(id){const b=(DAT.blogs||[]).find(x=>x.id===id)||{};BE={...b};M(`<h3>${id?'Edit':'New'} post</h3><input id=bt class=fm style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px" placeholder="Title" value="${esc(b.title||'')}"><p><button class=sb onclick="pick(v=>{BE.cover=v;toast('Cover set')})"><i class="fas fa-image"></i> Cover image</button><button class=sb onclick="pick(v=>{const i=U();document.execCommand('insertHTML',false,'<img data-m=&quot;'+v.slice(3)+'&quot; src=&quot;${PX}&quot;>');LM($('#be'))})"><i class="fas fa-photo-film"></i> Insert image</button><button class=sb onclick="const u=prompt('YouTube / Vimeo / iframe link');if(u)$('#be').focus(),document.execCommand('insertHTML',false,'<div class=vid>'+emb(u)+'</div><p></p>')"><i class="fab fa-youtube"></i> Insert video</button></p><div id=be class="ce rt" contenteditable=true>${b.content||''}</div><button class="btn" style="margin:0" onclick="BSV()">Publish post</button>`);LM($('#be'))}
+async function BSV(){const t=$('#bt').value.trim();if(!t)return toast('Enter a title',1);const o={id:BE.id||U(),title:t,content:$('#be').innerHTML.replace(/(<img[^>]*data-m="[^"]+"[^>]*?) src="[^"]*"/g,'$1'),cover:BE.cover||'',date:BE.date||Date.now(),excerpt:$('#be').innerText.replace(/\s+/g,' ').slice(0,140)};if(!await put('blogs',o))return;DAT.blogs=(DAT.blogs||[]).filter(x=>x.id!==o.id).concat(o);MX();R();toast('Post published ✓')}
+function docEd(id){const d=(DAT.docs||[]).find(x=>x.id===id)||{};M(`<h3>${id?'Edit':'Add'} document</h3><div class=fm><input id=dn placeholder="Document name" value="${esc(d.name||'')}"><input id=dp type=number min=0 placeholder="Price in ₹ (0 = free)" value="${esc(d.price||'')}"><input id=dl placeholder="Link (Google Drive etc.)" value="${esc(String(d.link||'').startsWith('data:')?'':d.link||'')}"><label style="font-size:.85rem">…or upload a file (max 650 KB)</label><input id=df type=file></div><button class=btn style="margin:0" onclick="DSV('${id||''}')">Save document</button>`)}
+function DSV(id){const n=$('#dn').value.trim(),f=$('#df').files[0];if(!n)return toast('Enter a name',1);const go=async l=>{const o={id:id||U(),name:n,price:+$('#dp').value||0,link:l||$('#dl').value||'#'};if(!await put('docs',o))return;DAT.docs=(DAT.docs||[]).filter(x=>x.id!==o.id).concat(o);MX();R();toast('Saved ✓')};if(f){if(f.size>650000)return toast('File too large (max 650 KB). Paste a Drive link instead.',1);const r=new FileReader();r.onload=()=>go(r.result);r.readAsDataURL(f)}else go()}
+function CS(e){e.preventDefault();if(ED)return false;const f=e.target,v={n:f.n.value,e:f.e.value,m:f.m.value,t:Date.now()};fdb&&fdb.collection('messages').add(v).catch(()=>{});window.open(L('wa').split('?')[0]+'?text='+encodeURIComponent(`Name: ${v.n}\nEmail: ${v.e}\nMessage: ${v.m}`),'_blank');f.reset();toast('Message sent ✓');return false}
+async function INB(){M('<h3>Messages</h3><div id=ib>Loading…</div>');try{const s=await fdb.collection('messages').get(),a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>y.t-x.t);$('#ib').innerHTML=a.length?a.map(m=>`<div class=cd style="margin-bottom:10px;padding:14px"><b>${esc(m.n)}</b> · <a href="mailto:${esc(m.e)}">${esc(m.e)}</a><br><small>${new Date(m.t).toLocaleString()}</small><p>${esc(m.m)}</p><button class="sb d" data-a=xm data-id=${m.id}>Delete</button></div>`).join(''):'No messages yet.'}catch(e){$('#ib').textContent='Could not load: '+e.message}}
+/* ============ SITE RENDER ============ */
+const cp=()=>S.pages.find(p=>p.id===cur);
+const LC=id=>{const a=cp().b,bi=a.findIndex(b=>b.id===id);return{pi:S.pages.indexOf(cp()),bi,a,b:a[bi]}};
+const TB=b=>`<div class=bt><button data-a=mu data-id=${b.id} title="Move up"><i class="fas fa-arrow-up"></i></button><button data-a=mdn data-id=${b.id} title="Move down"><i class="fas fa-arrow-down"></i></button><button data-a=dup data-id=${b.id} title="Duplicate"><i class="fas fa-clone"></i></button><button data-a=addb data-id=${b.id} title="Add section below"><i class="fas fa-plus"></i></button><button data-a=del data-id=${b.id} title="Delete"><i class="fas fa-trash"></i></button></div>`;
+function W(b,x){const s=[];if(b.pt!==''&&b.pt!=null)s.push('--pt:'+b.pt+'px');if(b.pb!==''&&b.pb!=null)s.push('--pb:'+b.pb+'px');b.bg&&s.push('background-color:'+b.bg);b.c&&s.push('color:'+b.c);b.al&&s.push('--al:'+b.al);b.w&&s.push('--mw:'+b.w+'px');if(b.bgi&&!b.bgi.startsWith('fb:'))s.push(`background-image:url(${esc(b.bgi)})`);
+return`<section class="blk ${b.an==='none'||ED?'':'rv'} ${esc(b.cls||'')} ${SEL===b.id?'sel':''} ${b.hide==='yes'?'hid':''}"${b.aid?` id="${esc(b.aid)}"`:''} data-bid=${b.id} style="${s.join(';')}"${b.bgi&&b.bgi.startsWith('fb:')?` data-mbg="${b.bgi.slice(3)}"`:''}>${b.bgi?`<div class=ov style="opacity:${(b.ov||0)/100}"></div>`:''}${x}${ED?TB(b):''}</section>`}
+function R(){const pg=cp();if(cur!=='post'&&!pg){location.hash='#/home';return}let h='';
+if(cur==='post')h=postH();else{const pi=S.pages.indexOf(pg);document.title=pg.st||(pg.title+' | '+S.s.name);const md=$('meta[name=description]');md&&md.setAttribute('content',pg.sd||'');
+h=pg.b.map((b,bi)=>{if(b.hide==='yes'&&!ED)return'';B=b;CP=`pages.${pi}.b.${bi}.`;return W(b,BL[b.t].r())}).join('')+(ED?'<div style="text-align:center;padding:30px"><button class=btn data-a=add>+ Add section</button></div>':'')}
+const y=scrollY;$('#mn').innerHTML=h;scrollTo(0,y);LM($('#mn'));if(!window._io)window._io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&(e.target.classList.add('in'),_io.unobserve(e.target))),{threshold:.08});$$('.rv').forEach(e=>_io.observe(e))}
+function N(){const s=S.s;$('#nv').innerHTML=`<div class=w><a class=br href="#/home">${s.logo?`<img ${im(s.logo)} alt="">`:`<i class="${esc(s.icon)}"></i>`}<div><b>${esc(s.name)}</b><small>${esc(s.tag)}</small></div></a><button id=bg onclick="$('.nl').classList.toggle('o')" aria-label=Menu><i class="fas fa-bars"></i></button><div class=nl>${S.pages.filter(p=>p.n!=='no').map(p=>`<a href="#/${p.id}" class="${p.id===cur?'on':''}">${esc(p.title)}</a>`).join('')}<button onclick="SQ()" aria-label=Search><i class="fas fa-magnifying-glass"></i></button></div></div>`;LM($('#nv'));$('#wf').href=L('wa')}
+function FT(){$('#fo').innerHTML=`<div>${S.pages.filter(p=>p.f==='yes').map(p=>`<a href="#/${p.id}">${esc(p.title)}</a>`).join('')}</div><div style="margin:16px 0">${(S.s.social||[]).map(x=>`<a href="${esc(L(x.u))}" target=_blank rel=noopener style="font-size:1.4rem"><i class="${esc(x.i)}"></i></a>`).join('')}</div>${EA('s.foot','p')}<button id=lk onclick="LK()" aria-label="Admin"><i class="fas fa-lock"></i></button>`}
+function TH(){const t=S.t,r=document.documentElement.style,f=n=>n.replace(/ /g,'+');r.setProperty('--p',t.p);r.setProperty('--a',t.a);r.setProperty('--r',t.r+'px');r.setProperty('--fh',`'${t.fh}',serif`);r.setProperty('--fb',`'${t.fb}',sans-serif`);const u=`https://fonts.googleapis.com/css2?family=${f(t.fh)}:wght@400;600;700&family=${f(t.fb)}:wght@300;400;700&display=swap`;if($('#gf').getAttribute('href')!==u)$('#gf').href=u;$('#cu').textContent=t.css||'';
+if(HD!==S.s.head){HD=S.s.head;$$('[data-ih]').forEach(e=>e.remove());if(HD){const f=document.createRange().createContextualFragment(HD);[...f.children].forEach(c=>c.dataset.ih=1);document.head.appendChild(f)}}}
+const ref=()=>{TH();N();R();FT()};
+function route(){const h=location.hash.slice(2).split('/');if(h[0]==='post'){cur='post';PID=h[1]}else cur=h[0]||'home';if(cur!=='post'&&!cp())cur='home';SEL=null;N();R();FT();scrollTo(0,0);IN();$('.nl')&&$('.nl').classList.remove('o')}
+/* ============ SAVE / HISTORY ============ */
+const ST=t=>$('#sts').textContent=t;
+function snap(){const j=JSON.stringify(S);if(hist[hist.length-1]!==j){hist.push(j);if(hist.length>50)hist.shift();fut.length=0}}
+function UD(d){const a=d<0?hist:fut,b=d<0?fut:hist;if(!a.length)return toast('Nothing to '+(d<0?'undo':'redo'));b.push(JSON.stringify(S));S=JSON.parse(a.pop());ref();IN();touch()}
+function touch(){ST('Unsaved…');clearTimeout(tm);tm=setTimeout(SV,1800)}
+async function SV(){if(!ADM||!fdb)return toast('Log in as admin to save',1);clearTimeout(tm);ST('Saving…');try{const d=JSON.stringify(S);if(d.length>900000)throw Error('Site data too large — upload images instead of pasting them');await fdb.doc('site/main').set({d,u:Date.now()});localStorage.setItem('vt3',d);ST('Saved ✓')}catch(e){ST('Save failed');toast(e.code==='permission-denied'?'Permission denied: check admin login & Firestore rules':e.message,1)}}
+addEventListener('beforeunload',e=>{if($('#sts').textContent.startsWith('Unsaved'))e.preventDefault()});
+/* ============ ADMIN ACTIONS ============ */
+const chg=()=>{ref();IN();touch()};
+const goB=id=>setTimeout(()=>{const e=$(`[data-bid="${id}"]`);e&&e.scrollIntoView({block:'center',behavior:'smooth'})},60);
+function addB(t){if(cur==='post')return toast('Open a normal page first',1);snap();const a=cp().b,n=mk(t),i=AF?a.findIndex(x=>x.id===AF)+1:a.length;a.splice(i,0,n);SEL=n.id;AF=null;TAB='b';chg();goB(n.id)}
+function mv(id,d){const l=LC(id),j=l.bi+d;if(j<0||j>=l.a.length)return;snap();[l.a[l.bi],l.a[j]]=[l.a[j],l.a[l.bi]];chg();goB(id)}
+function pm(i,d){const j=i+d;if(j<0||j>=S.pages.length)return;snap();[S.pages[i],S.pages[j]]=[S.pages[j],S.pages[i]];chg()}
+function act(a,id,el){const d=el.dataset,z={
+ted:()=>setEd(!ED),mu:()=>mv(id,-1),mdn:()=>mv(id,1),
+dup:()=>{snap();const l=LC(id),c=JSON.parse(JSON.stringify(l.b));c.id=U();l.a.splice(l.bi+1,0,c);SEL=c.id;chg()},
+del:()=>{if(!confirm('Delete this section?'))return;snap();const l=LC(id);l.a.splice(l.bi,1);SEL=null;chg()},
+add:()=>{AF=null;tab('add')},addb:()=>{AF=id;tab('add')},ab:()=>addB(d.t),tb:()=>tab(id),
+cc:()=>{snap();sp(S,d.p,'');chg()},ul:()=>pick(v=>{snap();sp(S,d.p,v);chg()}),
+li:()=>{snap();const arr=gp(S,d.p),i=+d.i;if(d.d==='add'){const l=arr[arr.length-1];arr.push(l?JSON.parse(JSON.stringify(l)):{})}else if(d.d==='rm')arr.splice(i,1);else{const j=i+(d.d==='up'?-1:1);if(j>=0&&j<arr.length)[arr[i],arr[j]]=[arr[j],arr[i]]}chg()},
+go:()=>{location.hash='#/'+id},pmu:()=>pm(+d.i,-1),pmd:()=>pm(+d.i,1),
+pn:()=>{snap();const p=P('page-'+U(),'New page',[mk('hero',{h:'New page',p:'',b1:'',b2:'',pt:70,pb:70,bgi:'',bg:'#1e3a8a'}),mk('text')]);S.pages.push(p);chg();location.hash='#/'+p.id},
+pd:()=>{snap();const c=JSON.parse(JSON.stringify(S.pages[+d.i]));c.id='page-'+U();c.title+=' copy';c.b.forEach(b=>b.id=U());S.pages.splice(+d.i+1,0,c);chg()},
+px:()=>{if(S.pages.length<2||!confirm('Delete this page?'))return;snap();const p=S.pages.splice(+d.i,1)[0];if(p.id===cur)location.hash='#/'+S.pages[0].id;chg()},
+nb:()=>blogEd(),eb:()=>blogEd(id),xb:async()=>{if(confirm('Delete post?')&&await rm('blogs',id)){DAT.blogs=DAT.blogs.filter(b=>b.id!==id);R()}},
+nd:()=>docEd(),ed:()=>docEd(id),xd:async()=>{if(confirm('Delete document?')&&await rm('docs',id)){DAT.docs=DAT.docs.filter(b=>b.id!==id);R()}},
+xm:async()=>{if(await rm('messages',id))INB()},inb:INB,
+exp:()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='site-backup.json';a.click()},
+imp:()=>{const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>i.files[0].text().then(t=>{const n=JSON.parse(t);if(!n.pages)throw 0;snap();S=n;chg();toast('Backup restored')}).catch(()=>toast('Invalid backup file',1));i.click()},
+rst:()=>{if(confirm('Reset the whole site design & content to the original default?')){snap();S=DEF();chg();location.hash='#/home'}}};z[a]&&z[a]()}
+function setEd(on){ED=on;document.body.classList.toggle('ed',on);$('#bed').classList.toggle('on2',on);$('#bed').innerHTML=on?'<i class="fas fa-eye"></i> Preview':'<i class="fas fa-pen"></i> Edit';if(on)PT(1);R();FT();IN()}
+function PT(o){const p=$('#pnl'),v=o??!p.classList.contains('o');p.classList.toggle('o',!!v);document.body.classList.toggle('po',!!v);IN()}
+function tab(t){TAB=t;PT(1)}
+function selB(id){SEL=id;$$('.blk').forEach(e=>e.classList.toggle('sel',e.dataset.bid===id));TAB='b';if(!$('#pnl').classList.contains('o'))PT(1);IN()}
+/* ============ PANEL ============ */
+const FONTS=['Playfair Display','Cormorant Garamond','Merriweather','Lora','Poppins','Inter','Lato','Montserrat','Roboto','Open Sans'];
+function FI([k,l,t,o],base){const p=base+k,v=gp(S,p)??'';let x;
+if(t==='a'||t==='h')x=`<textarea data-p="${p}" rows=${t==='h'?7:3}${t==='h'?' style="font-family:monospace"':''}>${esc(v)}</textarea>`;
+else if(t==='s')x=`<select data-p="${p}">${o.map(z=>`<option${z==v?' selected':''}>${z}</option>`).join('')}</select>`;
+else if(t==='c')x=`<input type=color data-p="${p}" value="${/^#[0-9a-f]{6}$/i.test(v)?v:'#ffffff'}"> <button class=sb data-a=cc data-p="${p}">Clear</button> <small>${esc(v)}</small>`;
+else if(t==='i')x=`${v?`<img ${im(v)} style="height:46px;border-radius:6px;display:block;margin-bottom:4px" alt="">`:''}<input data-p="${p}" value="${String(v).length>150||String(v).startsWith('fb:')?'(uploaded image)':esc(v)}" placeholder="Image URL"><button class="sb p" data-a=ul data-p="${p}"><i class="fas fa-upload"></i> Upload</button><button class=sb data-a=cc data-p="${p}">Remove</button>`;
+else if(t==='l')x=(v||[]).map((it,i)=>`<details><summary>${esc(String(it[o[0][0]]||'').replace(/<[^>]+>/g,'').slice(0,28)||'Item '+(i+1))}</summary>${o.map(f=>FI(f,p+'.'+i+'.')).join('')}<button class=sb data-a=li data-d=up data-p="${p}" data-i=${i}>↑</button><button class=sb data-a=li data-d=dn data-p="${p}" data-i=${i}>↓</button><button class="sb d" data-a=li data-d=rm data-p="${p}" data-i=${i}>Remove</button></details>`).join('')+`<button class="sb p" data-a=li data-d=add data-p="${p}">+ Add item</button>`;
+else x=`<input data-p="${p}" type="${t==='n'?'number':'text'}" value="${esc(v)}">`;
+return`<div class=fd><label>${l}</label>${x}</div>`}
+const TABS=[['b','Section','fa-square-pen'],['add','Add','fa-plus'],['pg','Pages','fa-file'],['ds','Design','fa-palette'],['st','Site','fa-gear'],['dt','Data','fa-database']];
+function IN(){if(!ADM)return;$('#tbs').innerHTML=TABS.map(t=>`<button data-a=tb data-id=${t[0]} class="${TAB===t[0]?'on':''}"><i class="fas ${t[2]}"></i>${t[1]}</button>`).join('');const pb=$('#pb');
+const T={
+b:()=>{if(cur==='post'||!SEL)return'<p class=mt>Switch on <b>Edit</b>, then click any section to change its content, colors, images and spacing. You can also type directly on the page.</p>';const l=LC(SEL);if(!l.b)return'';const base=`pages.${l.pi}.b.${l.bi}.`;return`<h3 style="margin:0">${BL[l.b.t].n}</h3>`+BL[l.b.t].f.map(f=>FI(f,base)).join('')+'<hr><b>Style</b>'+STY.map(f=>FI(f,base)).join('')},
+add:()=>`<p>${AF?'New section goes <b>below the selected one</b>.':'New section goes at the <b>end of the page</b>.'}</p><div class=ag>${Object.entries(BL).map(([k,v])=>`<button data-a=ab data-t=${k}><i class="fas ${v.i}"></i>${v.n}</button>`).join('')}</div>`,
+pg:()=>S.pages.map((p,i)=>`<details${p.id===cur?' open':''}><summary>${esc(p.title)}</summary>${[['title','Page title','t'],['id','URL slug','t'],['n','Show in menu','s',['yes','no']],['f','Show in footer','s',['no','yes']],['st','SEO title','t'],['sd','SEO description','a']].map(f=>FI(f,`pages.${i}.`)).join('')}<button class=sb data-a=go data-id=${p.id}>Open</button><button class=sb data-a=pmu data-i=${i}>↑</button><button class=sb data-a=pmd data-i=${i}>↓</button><button class=sb data-a=pd data-i=${i}>Duplicate</button><button class="sb d" data-a=px data-i=${i}>Delete</button></details>`).join('')+'<button class="sb p" data-a=pn>+ New page</button>',
+ds:()=>[['p','Primary (nav, footer) color','c'],['a','Accent color','c'],['r','Corner radius (px)','n'],['fh','Heading font','s',FONTS],['fb','Body font','s',FONTS],['css','Custom CSS (applies site-wide)','h']].map(f=>FI(f,'t.')).join(''),
+st:()=>[['name','Site name','t'],['tag','Tagline','t'],['icon','Logo icon (FontAwesome class)','t'],['logo','Logo image (replaces icon)','i'],['wa','WhatsApp number (with country code)','t'],['phone','Phone (for tel links)','t'],['email','Email','t'],['foot','Footer text','t'],['social','Footer social links','l',[['i','Icon class','t'],['u','Link (wa, tel, https://…)','t']]],['head','Head code: analytics, ads, scripts','h']].map(f=>FI(f,'s.')).join(''),
+dt:()=>'<button class="sb p" data-a=inb>Inbox: contact messages</button><button class=sb data-a=exp>Download backup</button><button class=sb data-a=imp>Restore backup</button><button class="sb d" data-a=rst>Reset to default</button><p style="color:#64748b;font-size:12px">Every change autosaves to Firebase. Blogs, documents, images and messages are stored as separate records.</p>'};
+pb.innerHTML=T[TAB]();$$('#pb [data-m]').forEach(e=>LM(e.parentNode))}
+$('#pb').addEventListener('input',e=>{const t=e.target,p=t.dataset.p;if(!p)return;let v=t.type==='number'?(t.value===''?'':+t.value):t.value;if(/^pages\.\d+\.id$/.test(p)){v=v.toLowerCase().replace(/[^a-z0-9-]/g,'-');if(gp(S,p)===cur){cur=v;history.replaceState(null,'','#/'+v)}}sp(S,p,v);ref();touch()});
+$('#pb').addEventListener('focusin',snap);
+/* ============ GLOBAL EVENTS ============ */
+document.addEventListener('click',e=>{const a=e.target.closest('[data-a]');if(a){e.preventDefault();e.stopPropagation();act(a.dataset.a,a.dataset.id,a);return}
+if(ED){const k=e.target.closest('#mn a');if(k)e.preventDefault();const s=e.target.closest('.blk');if(s&&s.dataset.bid&&!e.target.closest('.bt'))selB(s.dataset.bid)}
+if(!e.target.closest('#nv'))$('.nl')&&$('.nl').classList.remove('o')});
+document.addEventListener('focusin',e=>{if(ED&&e.target.closest('[data-f]'))snap()});
+document.addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('[data-f]');if(!el||!ED)return;const p=el.dataset.f,v=el.dataset.r?el.innerHTML:el.innerText.trim();if(gp(S,p)!==v){sp(S,p,v);touch();if(p.startsWith('s.'))N()}});
+document.addEventListener('paste',e=>{if(ED&&e.target.closest&&e.target.closest('[contenteditable]')){e.preventDefault();document.execCommand('insertText',false,e.clipboardData.getData('text/plain'))}});
+$('#ftb').addEventListener('mousedown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();const x=b.dataset.x,c=document.execCommand.bind(document);if(x==='h2'||x==='h3'||x==='p')c('formatBlock',false,x);else if(x==='ul')c('insertUnorderedList');else if(x==='clear')c('removeFormat');else if(x==='link'){const u=prompt('Link URL (https://…, #/page, wa, tel)');if(u)c('createLink',false,u==='wa'?L('wa'):u)}else c(x)});
+document.addEventListener('selectionchange',()=>{const s=getSelection(),f=$('#ftb');if(!ED||!s.rangeCount||s.isCollapsed){f.style.display='none';return}const n=s.anchorNode&&(s.anchorNode.nodeType===3?s.anchorNode.parentElement:s.anchorNode),el=n&&n.closest&&n.closest('[data-r],#be');if(!el){f.style.display='none';return}const r=s.getRangeAt(0).getBoundingClientRect();f.style.display='flex';f.style.top=Math.max(8,r.top-48)+'px';f.style.left=Math.max(8,Math.min(innerWidth-330,r.left))+'px'});
+addEventListener('hashchange',route);
+/* ============ MODAL / TOAST / SEARCH / AUTH ============ */
+const M=h=>{$('#md').innerHTML=`<div class=mc><button class=x onclick=MX()>✕</button>${h}</div>`;$('#md').classList.add('o')};
+const MX=()=>$('#md').classList.remove('o');
+function toast(m,e){const t=$('#ts');t.textContent=m;t.className='o'+(e?' e':'');clearTimeout(t._t);t._t=setTimeout(()=>t.className='',e?4500:2200)}
+function CK(v){localStorage.setItem('ck',v);$('#ck').style.display='none'}
+function SQ(){LD('blogs');LD('docs');M('<h3>Search</h3><div class=fm><input id=sq placeholder="Search pages, blogs, documents…" oninput="SR(this.value)" autofocus></div><div id=sr></div>');setTimeout(()=>$('#sq')&&$('#sq').focus(),50)}
+function SR(q){q=q.toLowerCase().trim();if(!q)return $('#sr').innerHTML='';const r=[];S.pages.forEach(p=>{if(p.n!=='no'&&(p.title+JSON.stringify(p.b).replace(/<[^>]+>/g,' ')).toLowerCase().includes(q))r.push(`<a href="#/${p.id}">📄 ${esc(p.title)}</a>`)});(DAT.blogs||[]).filter(b=>(b.title+b.excerpt).toLowerCase().includes(q)).forEach(b=>r.push(`<a href="#/post/${b.id}">📰 ${esc(b.title)}</a>`));(DAT.docs||[]).filter(d=>d.name.toLowerCase().includes(q)).forEach(d=>r.push(`<a href="#/documents">⬇ ${esc(d.name)}</a>`));$('#sr').innerHTML=r.length?r.map(x=>`<p onclick=MX()>${x}</p>`).join(''):'<p class=mt>No results.</p>'}
+function LK(){if(ADM)return setEd(!ED);if(!auth)return toast('Firebase is not available',1);M('<h3>Admin login</h3><form onsubmit="return LG(this)" class=fm><input name=e type=email placeholder="Admin email" required><input name=p type=password placeholder=Password required><button class=btn style="width:100%;margin:0">Log in</button></form>')}
+function LG(f){auth.signInWithEmailAndPassword(f.e.value.trim(),f.p.value).then(()=>{MX();toast('Welcome back, Advocate!')}).catch(e=>toast('Login failed: '+(e.code||e.message).replace('auth/',''),1));return false}
+function LO(){auth.signOut();setEd(false);PT(0)}
+/* ============ START ============ */
+addEventListener('DOMContentLoaded',()=>{
+try{S=JSON.parse(localStorage.getItem('vt3'))}catch(e){}if(!S||!S.pages)S=DEF();
+$('#wf').href=L('wa');if(!localStorage.ck)setTimeout(()=>$('#ck').style.display='block',2500);
+TH();route();
+if(fdb)fdb.doc('site/main').get().then(d=>{if(d.exists&&!ED){const n=JSON.parse(d.data().d);if(JSON.stringify(n)!==JSON.stringify(S)){S=n;localStorage.setItem('vt3',d.data().d);ref()}}}).catch(e=>console.warn('Load failed',e));
+if(auth)auth.onAuthStateChanged(u=>{if(u&&u.email.toLowerCase()!==CFG.ADMIN.toLowerCase()){auth.signOut();return toast('This account is not an admin',1)}const was=ADM;ADM=!!u;$('#ab').classList.toggle('on',ADM);if(ADM&&!was)IN();if(ADM&&!was&&$('#md').classList.contains('o')){setEd(true)}})});
+</script></body></html>
