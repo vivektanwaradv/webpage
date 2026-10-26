@@ -605,6 +605,21 @@
   // ========================= CONFIG =========================
   const CONFIG = {
     WA: '919306456633',
+    function handleLogin(e) {
+  e.preventDefault();
+  const u = $('username').value.trim();
+  const p = $('password').value;
+
+  // Authenticate directly with Firebase
+  firebase.auth().signInWithEmailAndPassword(u, p)
+    .then((userCredential) => {
+      enableAdminMode();
+      closeLogin();
+    })
+    .catch((error) => {
+      alert('Login failed: ' + error.message);
+    });
+}
     FIREBASE: {
       apiKey: "AIzaSyCbg-lHPhQ4BeK86zfbK6LZ-ho-Y-LiOZs",
       authDomain: "vivek-law-site.firebaseapp.com",
