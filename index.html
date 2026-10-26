@@ -1,946 +1,1105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vivek Tanwar | Advocate</title>
+  <meta name="description" content="Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law.">
+  <meta name="theme-color" content="#0f172a">
   
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <title>Vivek Tanwar | Advocate</title>
-    <meta name="description" content="Vivek Tanwar, Advocate at District Court, Bhiwani, Haryana. Civil, Criminal, Revenue and Consumer law. Legal articles, downloadable legal documents and consultation.">
-    <meta name="theme-color" content="#0f172a">
-    <meta property="og:title" content="Vivek Tanwar | Advocate, Bhiwani">
-    <meta property="og:description" content="Justice, Integrity, Results. Legal insights, documents and consultation.">
-    <meta property="og:type" content="website">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%96%EF%B8%8F%3C/text%3E%3C/svg%3E">
-    <!-- GOOGLE ADSENSE: after approval paste your AdSense <script> and <meta name="google-adsense-account"> here, OR just fill ADS_CLIENT / ADS_SLOT in CONFIG below. -->
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Attorney","name":"Vivek Tanwar, Advocate","telephone":"+91-9671755613","email":"vivektanwaradv@gmail.com","address":{"@type":"PostalAddress","streetAddress":"New Litigation Hall, District Courts Complex","addressLocality":"Bhiwani","addressRegion":"Haryana","addressCountry":"IN"}}</script>
+  <!-- Quill Rich Text Editor -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <style>
+    /* Custom Styles */
+    body { font-family: 'Lato', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+    h1, h2, h3, h4, .serif { font-family: 'Playfair Display', serif; }
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    /* Smooth Scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Animations */
+    .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* Glassmorphism Card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
+
+    /* Editable Highlight */
+    .editable-active[contenteditable="true"] {
+      outline: 2px dashed #d97706;
+      background-color: #fffbeb;
+      padding: 4px;
+      cursor: text;
+      border-radius: 4px;
+    }
+
+    /* Blog Slider Specifics */
+    .blog-slide { display: none; animation: fadeSlide 0.8s ease-in-out; }
+    .blog-slide.active { display: block; }
+    @keyframes fadeSlide { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    /* Quill Editor Fixes */
+    .ql-editor { min-height: 150px; }
+    .blog-content img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
+    .blog-content video { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    /* Team Card Hover */
+    .team-card:hover .team-img { transform: scale(1.05); }
+    .team-img { transition: transform 0.3s ease; }
+
+    body:not(.is-admin) .admin-only { display:none !important; }
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googles.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
-    <!-- Quill Rich Text Editor -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
-    <style>
-        /* Custom Styles */
-        body { font-family: 'Lato', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-        h1, h2, h3, h4, .serif { font-family: 'Playfair Display', serif; }
-        
-        /* Smooth Scroll */
-        html { scroll-behavior: smooth; }
-
-        /* Animations */
-        .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
-        /* Glassmorphism Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-        }
-
-        /* Editable Highlight */
-        .editable-active[contenteditable="true"] {
-            outline: 2px dashed #d97706;
-            background-color: #fffbeb;
-            padding: 4px;
-            cursor: text;
-            border-radius: 4px;
-        }
-
-        /* Blog Slider Specifics */
-        .blog-slide {
-            display: none;
-            animation: fadeSlide 0.8s ease-in-out;
-        }
-        .blog-slide.active {
-            display: block;
-        }
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Theme Overlay Container */
-        #theme-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            display: none;
-        }
-
-        /* Quill Editor Fixes */
-        .ql-editor { min-height: 150px; }
-        .blog-content img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
-        .blog-content video { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
-        
-        /* Team Card Hover */
-        .team-card:hover .team-img { transform: scale(1.05); }
-        .team-img { transition: transform 0.3s ease; }
-
-        body:not(.is-admin) .admin-only { display:none !important; }
-        .blog-content h1{font-size:2rem;font-weight:700;margin:1rem 0}.blog-content h2{font-size:1.6rem;font-weight:700;margin:1rem 0}.blog-content h3{font-size:1.3rem;font-weight:700;margin:.8rem 0}
-        .blog-content p{margin:.8rem 0}.blog-content ul{list-style:disc;padding-left:1.5rem}.blog-content ol{list-style:decimal;padding-left:1.5rem}.blog-content a{color:#1d4ed8;text-decoration:underline}.blog-content iframe{max-width:100%}
-        #wa-float::before{content:"";position:absolute;inset:0;border-radius:9999px;background:#25D366;animation:waPulse 2s infinite;z-index:-1}
-        @keyframes waPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
-    </style>
+    .blog-content h1{font-size:2rem;font-weight:700;margin:1rem 0}
+    .blog-content h2{font-size:1.6rem;font-weight:700;margin:1rem 0}
+    .blog-content h3{font-size:1.3rem;font-weight:700;margin:.8rem 0}
+    .blog-content p{margin:.8rem 0}
+    .blog-content ul{list-style:disc;padding-left:1.5rem}
+    .blog-content ol{list-style:decimal;padding-left:1.5rem}
+    .blog-content a{color:#1d4ed8;text-decoration:underline}
+    .blog-content iframe{max-width:100%}
+    
+    #wa-float::before{content:"";position:absolute;inset:0;border-radius:9999px;background:#25D366;animation:waPulse 2s infinite;z-index:-1}
+    @keyframes waPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+    
+    /* Mobile Menu Transition */
+    #mobile-menu { transition: max-height 0.3s ease-out; overflow: hidden; }
+    #mobile-menu.hidden { max-height: 0; }
+    #mobile-menu:not(.hidden) { max-height: 300px; }
+  </style>
 </head>
 <body class="text-slate-800 flex flex-col min-h-screen">
 
-    <!-- Navigation -->
-    <nav class="bg-slate-900 text-white shadow-xl sticky top-0 z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center cursor-pointer" onclick="showPage('home')">
-                    <i class="fas fa-balance-scale text-amber-500 text-3xl mr-3"></i>
-                    <div>
-                        <span class="block font-bold text-xl tracking-wide leading-none">VIVEK TANWAR</span>
-                        <span class="block text-xs text-slate-400 tracking-widest uppercase">Advocate</span>
-                    </div>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-1">
-                    <button onclick="showPage('home')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Home</button>
-                    <button onclick="showPage('about')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">About</button>
-                    <button onclick="showPage('blogs')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Blogs & Media</button>
-                    <button onclick="showPage('documents')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Documents</button>
-                    <button onclick="showPage('contact')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Contact</button>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-white hover:text-amber-400 focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
+  <!-- Navigation -->
+  <nav class="bg-slate-900 text-white shadow-xl sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-20 items-center">
+        <div class="flex items-center cursor-pointer" onclick="showPage('home')">
+          <i class="fas fa-balance-scale text-amber-500 text-3xl mr-3"></i>
+          <div>
+            <span class="block font-bold text-xl tracking-wide leading-none">VIVEK TANWAR</span>
+            <span class="block text-xs text-slate-400 tracking-widest uppercase">Advocate</span>
+          </div>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 pb-4 px-4 shadow-inner">
-            <button onclick="showPage('home')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Home</button>
-            <button onclick="showPage('about')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">About</button>
-            <button onclick="showPage('blogs')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Blogs</button>
-            <button onclick="showPage('documents')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Documents</button>
-            <button onclick="showPage('contact')" class="block w-full text-left py-3 hover:text-amber-400">Contact</button>
-        </div>
-    </nav>
-
-    <!-- Main Content Area -->
-    <main id="app-content" class="flex-grow relative">
         
-        <!-- HOME PAGE -->
-        <section id="home" class="page-section fade-in">
-            <!-- Hero Section -->
-            <div class="relative bg-slate-900 text-white py-24 lg:py-40 overflow-hidden">
-                <!-- Background Image with Overlay -->
-                <div class="absolute inset-0 z-0">
-                    <img id="hero-bg-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Court Background" class="w-full h-full object-cover opacity-30">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
-                </div>
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-1">
+          <button onclick="showPage('home')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Home</button>
+          <button onclick="showPage('about')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">About</button>
+          <button onclick="showPage('blogs')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Blogs & Media</button>
+          <button onclick="showPage('documents')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Documents</button>
+          <button onclick="showPage('contact')" class="hover:bg-slate-800 hover:text-amber-400 transition px-4 py-2 rounded-md text-sm font-medium">Contact</button>
+        </div>
 
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-8">
-                        <img src="" alt="Vivek Tanwar, Advocate" class="profile-img w-full h-full rounded-full object-cover border-4 border-amber-500 shadow-2xl ring-4 ring-white/10">
-                        <label class="admin-only hidden absolute bottom-1 right-1 bg-white w-9 h-9 flex items-center justify-center rounded-full shadow cursor-pointer" title="Change photo"><i class="fas fa-camera text-blue-900"></i><input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden"></label>
-                    </div>
-                    <h1 class="text-5xl md:text-7xl font-bold mb-6 editable-text leading-tight">Justice, Integrity, Results</h1>
-                    <p class="text-xl md:text-2xl text-slate-300 mb-10 editable-text max-w-3xl mx-auto">
-                        Dedicated legal representation at District Court, Bhiwani.<br>Specializing in Civil, Criminal, Revenue, and Consumer Law.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="showPage('contact')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-8 rounded-lg transition shadow-lg transform hover:-translate-y-1">
-                            <i class="fas fa-phone-alt mr-2"></i> Consult Now
-                        </button>
-                        <button onclick="showPage('about')" class="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-bold py-4 px-8 rounded-lg transition">
-                            View Profile
-                        </button>
-                    </div>
-                    <form onsubmit="event.preventDefault();globalSearch()" class="max-w-xl mx-auto mt-10 flex">
-                        <input id="home-search" type="search" placeholder="Search blogs, documents, practice areas…" class="flex-1 min-w-0 px-4 py-3 rounded-l-lg text-slate-800 outline-none">
-                        <button class="bg-amber-600 hover:bg-amber-700 px-5 rounded-r-lg font-bold"><i class="fas fa-search mr-1"></i> Search</button>
-                    </form>
-                </div>
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" class="text-white hover:text-amber-400 focus:outline-none">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-800 pb-4 px-4 shadow-inner">
+      <button onclick="showPage('home')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Home</button>
+      <button onclick="showPage('about')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">About</button>
+      <button onclick="showPage('blogs')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Blogs</button>
+      <button onclick="showPage('documents')" class="block w-full text-left py-3 hover:text-amber-400 border-b border-slate-700">Documents</button>
+      <button onclick="showPage('contact')" class="block w-full text-left py-3 hover:text-amber-400">Contact</button>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main id="app-content" class="flex-grow relative">
+    
+    <!-- HOME PAGE -->
+    <section id="home" class="page-section fade-in">
+      <!-- Hero Section -->
+      <div class="relative bg-slate-900 text-white py-24 lg:py-40 overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+          <img id="hero-bg-img" src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Court Background" class="w-full h-full object-cover opacity-30">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-8">
+            <img src="" alt="Vivek Tanwar, Advocate" class="profile-img w-full h-full rounded-full object-cover border-4 border-amber-500 shadow-2xl ring-4 ring-white/10">
+            <label class="admin-only hidden absolute bottom-1 right-1 bg-white w-9 h-9 flex items-center justify-center rounded-full shadow cursor-pointer" title="Change photo"><i class="fas fa-camera text-blue-900"></i><input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden"></label>
+          </div>
+          <h1 class="text-5xl md:text-7xl font-bold mb-6 editable-text leading-tight">Justice, Integrity, Results</h1>
+          <p class="text-xl md:text-2xl text-slate-300 mb-10 editable-text max-w-3xl mx-auto">
+            Dedicated legal representation at District Court, Bhiwani.<br>Specializing in Civil, Criminal, Revenue, and Consumer Law.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button onclick="showPage('contact')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-8 rounded-lg transition shadow-lg transform hover:-translate-y-1">
+              <i class="fas fa-phone-alt mr-2"></i> Consult Now
+            </button>
+            <button onclick="showPage('about')" class="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-bold py-4 px-8 rounded-lg transition">
+              View Profile
+            </button>
+          </div>
+          <form onsubmit="event.preventDefault();globalSearch()" class="max-w-xl mx-auto mt-10 flex">
+            <input id="home-search" type="search" placeholder="Search blogs, documents, practice areas…" class="flex-1 min-w-0 px-4 py-3 rounded-l-lg text-slate-800 outline-none">
+            <button class="bg-amber-600 hover:bg-amber-700 px-5 rounded-r-lg font-bold"><i class="fas fa-search mr-1"></i> Search</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Advocate Photo Section -->
+      <div class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row items-center gap-12">
+            <!-- Image Column -->
+            <div class="w-full md:w-1/3 relative group">
+              <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-900 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+              <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] bg-gray-200">
+                <img src="" alt="Vivek Tanwar" class="profile-img w-full h-full object-cover">
+                <!-- Admin Upload Button for Photo -->
+                <label class="admin-only hidden absolute bottom-4 right-4 bg-white p-2 rounded-full shadow cursor-pointer hover:bg-gray-100">
+                  <i class="fas fa-camera text-blue-900"></i>
+                  <input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden">
+                </label>
+              </div>
             </div>
 
-            <!-- Advocate Photo Section -->
-            <div class="py-16 bg-white">
-                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex flex-col md:flex-row items-center gap-12">
-                        <!-- Image Column -->
-                        <div class="w-full md:w-1/3 relative group">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-900 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] bg-gray-200">
-                                <img src="" alt="Vivek Tanwar" class="profile-img w-full h-full object-cover">
-                                <!-- Admin Upload Button for Photo -->
-                                <label class="admin-only hidden absolute bottom-4 right-4 bg-white p-2 rounded-full shadow cursor-pointer hover:bg-gray-100">
-                                    <i class="fas fa-camera text-blue-900"></i>
-                                    <input type="file" accept="image/*" onchange="changeProfile(this)" class="hidden">
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Text Column -->
-                        <div class="w-full md:w-2/3">
-                            <h2 class="text-3xl font-bold text-blue-900 mb-6 border-l-4 border-amber-500 pl-4 editable-text">Dedicated to Your Rights</h2>
-                            <p class="text-gray-600 text-lg leading-relaxed mb-6 editable-text">
-                                With a robust academic foundation and practical courtroom experience, I provide strategic legal solutions tailored to your unique needs. My approach combines thorough research with aggressive advocacy to secure the best possible outcome for my clients.
-                            </p>
-                            
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                    <h4 class="font-bold text-blue-900 mb-1 editable-text">LL.M. (Criminal Law)</h4>
-                                    <p class="text-sm text-gray-500">Post Graduate Specialization</p>
-                                </div>
-                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                    <h4 class="font-bold text-blue-900 mb-1 editable-text">NET Qualified</h4>
-                                    <p class="text-sm text-gray-500">National Eligibility Test</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Text Column -->
+            <div class="w-full md:w-2/3">
+              <h2 class="text-3xl font-bold text-blue-900 mb-6 border-l-4 border-amber-500 pl-4 editable-text">Dedicated to Your Rights</h2>
+              <p class="text-gray-600 text-lg leading-relaxed mb-6 editable-text">
+                With a robust academic foundation and practical courtroom experience, I provide strategic legal solutions tailored to your unique needs. My approach combines thorough research with aggressive advocacy to secure the best possible outcome for my clients.
+              </p>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                  <h4 class="font-bold text-blue-900 mb-1 editable-text">LL.M. (Criminal Law)</h4>
+                  <p class="text-sm text-gray-500">Post Graduate Specialization</p>
                 </div>
-            </div>
-
-            <!-- Services Preview -->
-            <div class="py-16 bg-slate-50">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-16">
-                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Practice Areas</h2>
-                        <div class="w-20 h-1 bg-amber-500 mx-auto rounded-full"></div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <!-- Card 1 -->
-                        <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-                            <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                                <i class="fas fa-gavel text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-                            </div>
-                            <h3 class="text-xl font-bold mb-3 editable-text">Civil Disputes</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed editable-text">Property disputes, contracts, recovery suits, and civil litigation.</p>
-                        </div>
-                        <!-- Card 2 -->
-                        <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-                            <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                                <i class="fas fa-user-shield text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-                            </div>
-                            <h3 class="text-xl font-bold mb-3 editable-text">Criminal Law</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed editable-text">Bail applications, trial defense, appeals, and FIR registration.</p>
-                        </div>
-                        <!-- Card 3 -->
-                        <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-                            <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                                <i class="fas fa-landmark text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-                            </div>
-                            <h3 class="text-xl font-bold mb-3 editable-text">Revenue Affairs</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed editable-text">Land records mutation, revenue court cases, and municipal disputes.</p>
-                        </div>
-                        <!-- Card 4 -->
-                        <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
-                            <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
-                                <i class="fas fa-store text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
-                            </div>
-                            <h3 class="text-xl font-bold mb-3 editable-text">Consumer Cases</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed editable-text">Deficiency in services, product liability, and consumer complaints.</p>
-                        </div>
-                    </div>
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                  <h4 class="font-bold text-blue-900 mb-1 editable-text">NET Qualified</h4>
+                  <p class="text-sm text-gray-500">National Eligibility Test</p>
                 </div>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </div>
 
-        <!-- ABOUT PAGE (Redesigned) -->
-        <section id="about" class="page-section hidden fade-in py-20 bg-white">
+      <!-- Services Preview -->
+      <div class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Practice Areas</h2>
+            <div class="w-20 h-1 bg-amber-500 mx-auto rounded-full"></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
+              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
+                <i class="fas fa-gavel text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 editable-text">Civil Disputes</h3>
+              <p class="text-gray-500 text-sm leading-relaxed editable-text">Property disputes, contracts, recovery suits, and civil litigation.</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
+              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
+                <i class="fas fa-user-shield text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 editable-text">Criminal Law</h3>
+              <p class="text-gray-500 text-sm leading-relaxed editable-text">Bail applications, trial defense, appeals, and FIR registration.</p>
+            </div>
+            <!-- Card 3 -->
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
+              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
+                <i class="fas fa-landmark text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 editable-text">Revenue Affairs</h3>
+              <p class="text-gray-500 text-sm leading-relaxed editable-text">Land records mutation, revenue court cases, and municipal disputes.</p>
+            </div>
+            <!-- Card 4 -->
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
+              <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-900 transition duration-300">
+                <i class="fas fa-store text-blue-900 text-2xl group-hover:text-white transition duration-300"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 editable-text">Consumer Cases</h3>
+              <p class="text-gray-500 text-sm leading-relaxed editable-text">Deficiency in services, product liability, and consumer complaints.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT PAGE (Redesigned) -->
+    <section id="about" class="page-section hidden fade-in py-20 bg-white">
+      
+      <!-- Intro Header -->
+      <div class="bg-blue-900 text-white py-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+          <i class="fas fa-balance-scale text-9xl absolute -left-10 -top-10 text-white"></i>
+          <i class="fas fa-gavel text-9xl absolute -right-10 -bottom-10 text-white"></i>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4">
+          <h2 class="text-5xl font-bold mb-4 serif">Meet The Legal Expert</h2>
+          <p class="text-xl text-blue-200">Committed to excellence, integrity, and winning your case.</p>
+        </div>
+      </div>
+
+      <!-- Bio Section -->
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex flex-col md:flex-row items-start gap-12">
+          <div class="w-full md:w-1/2">
+            <h3 class="text-3xl font-bold text-slate-900 mb-6 editable-text">A Decade of Advocacy</h3>
+            <p class="text-gray-600 text-lg leading-relaxed mb-6 editable-text">
+              Starting from the basics of law to mastering complex litigation, every step in my career has been driven by a passion for justice. I believe in understanding the human side of every case, not just the legal clauses.
+            </p>
+            <p class="text-gray-600 text-lg leading-relaxed editable-text">
+              Whether it's a property dispute or a criminal appeal, I bring the same level of dedication and scrutiny to ensure the best outcome for my clients.
+            </p>
+          </div>
+          <div class="w-full md:w-1/2">
+            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-sm">
+              <h4 class="text-xl font-bold text-blue-900 mb-4 editable-text">Core Values</h4>
+              <ul class="space-y-3">
+                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Client-Centric Approach</li>
+                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Transparent Communication</li>
+                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Strategic Litigation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Section -->
+      <div class="bg-slate-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4 serif">Our Legal Team</h2>
+            <p class="text-gray-500">Work together to achieve justice.</p>
+          </div>
+
+          <!-- Admin Control for Team -->
+          <div id="admin-team-controls" class="hidden mb-10 glass-card p-6 rounded-xl border-l-4 border-amber-500 inline-block">
+            <h3 class="font-bold text-lg mb-4">Add Team Member</h3>
+            <div class="flex flex-wrap gap-4">
+              <input type="text" id="member-name" placeholder="Full Name" class="p-2 border rounded-lg w-40">
+              <input type="text" id="member-role" placeholder="Role (e.g., Associate)" class="p-2 border rounded-lg w-40">
+              <input type="file" id="member-photo" accept="image/*" class="w-40 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+              <button onclick="addTeamMember()" class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Add Member</button>
+            </div>
+          </div>
+
+          <div id="team-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOGS PAGE -->
+    <section id="blogs" class="page-section hidden fade-in py-16 bg-slate-50 min-h-screen">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-4xl font-bold text-blue-900 mb-3 serif">Latest Legal Insights</h2>
+          <p class="text-gray-500 max-w-2xl mx-auto">Articles, judgments and practical legal guidance.</p>
+        </div>
+        <form onsubmit="event.preventDefault();blogSearch()" class="max-w-xl mx-auto mb-10 flex">
+          <input id="blog-search" oninput="blogSearch()" type="search" placeholder="Search blogs…" class="flex-1 min-w-0 p-3 border border-gray-300 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500">
+          <button class="bg-blue-900 text-white px-5 rounded-r-lg hover:bg-blue-800"><i class="fas fa-search mr-1"></i> Search</button>
+        </form>
+        <div id="admin-blog-controls" class="hidden mb-10 glass-card p-6 rounded-xl border-l-4 border-amber-500">
+          <h3 class="font-bold text-xl text-blue-900 mb-4"><i class="fas fa-plus-circle mr-2"></i>Add New Blog Post</h3>
+          <input type="text" id="new-blog-title" placeholder="Blog Title" class="w-full p-3 border border-gray-300 rounded-lg mb-3 outline-none">
+          <label class="inline-block mb-3 text-sm cursor-pointer bg-blue-50 text-blue-700 px-4 py-2 rounded-full font-semibold hover:bg-blue-100"><i class="fas fa-image mr-1"></i> Cover image (optional)<input type="file" accept="image/*" class="hidden" onchange="pickCover(this)"></label> <span id="cover-name" class="text-xs text-gray-500"></span>
+          <div id="new-blog-editor-container" style="height:220px;background:#fff"></div>
+          <button onclick="addBlog()" class="mt-4 bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition shadow-md font-semibold">Publish Post</button>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div id="blog-list" class="lg:col-span-2 space-y-6"></div>
+          <aside class="space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+              <h3 class="font-bold text-lg text-blue-900 mb-4 serif border-b pb-2">Recent Posts</h3>
+              <ul id="blog-recent" class="space-y-4"></ul>
+            </div>
+            <div class="bg-blue-900 text-white p-6 rounded-xl text-center">
+              <h3 class="font-bold text-lg mb-2 serif">Need legal advice?</h3>
+              <p class="text-blue-200 text-sm mb-4">Message me directly on WhatsApp.</p>
+              <a href="#" data-wa class="inline-block bg-[#25D366] hover:opacity-90 px-5 py-2 rounded-lg font-semibold" target="_blank" rel="noopener"><i class="fab fa-whatsapp mr-1"></i> Chat Now</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Single Blog View -->
+    <section id="single-blog-view" class="page-section hidden fade-in py-16 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <button onclick="showPage('blogs')" class="mb-8 text-blue-600 hover:text-blue-800 font-semibold"><i class="fas fa-arrow-left mr-2"></i> All Blogs</button>
+        <article>
+          <h1 id="single-blog-title" class="text-4xl font-bold text-slate-900 mb-4 serif"></h1>
+          <div id="single-blog-date" class="text-gray-500 mb-8 border-b pb-4"></div>
+          <div id="single-blog-content" class="blog-content text-gray-700 leading-relaxed text-lg"></div>
+        </article>
+        <div class="mt-10 flex flex-wrap gap-3 border-t pt-6">
+          <a id="post-share" target="_blank" rel="noopener" class="bg-[#25D366] text-white px-5 py-2 rounded-lg font-semibold"><i class="fab fa-whatsapp mr-1"></i> Share on WhatsApp</a>
+          <a href="#" data-wa class="bg-blue-900 text-white px-5 py-2 rounded-lg font-semibold" target="_blank" rel="noopener">Consult Advocate</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCUMENTS PAGE -->
+    <section id="documents" class="page-section hidden fade-in py-16 bg-white min-h-screen">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-blue-900 mb-3 serif">Legal Resources</h2>
+          <p class="text-gray-500">Download forms, templates and acts. Free and premium documents.</p>
+        </div>
+        <form onsubmit="event.preventDefault();docSearch()" class="max-w-xl mx-auto mb-10 flex">
+          <input id="doc-search" oninput="docSearch()" type="search" placeholder="Search documents…" class="flex-1 min-w-0 p-3 border border-gray-300 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500">
+          <button class="bg-blue-900 text-white px-5 rounded-r-lg hover:bg-blue-800"><i class="fas fa-search mr-1"></i> Search</button>
+        </form>
+        <div id="admin-doc-controls" class="hidden mb-8 glass-card p-6 rounded-xl border-l-4 border-amber-500">
+          <h3 class="font-bold text-lg mb-4">Upload Document</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="doc-name" placeholder="Document Name (e.g., Rent Agreement)" class="p-3 border rounded-lg">
+            <input type="number" id="doc-price" min="0" placeholder="Price in ₹ (0 = free)" class="p-3 border rounded-lg">
+            <input type="file" id="doc-file" class="p-2 border rounded-lg">
+            <input type="url" id="doc-link" placeholder="…or file link (Google Drive etc.)" class="p-3 border rounded-lg">
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Uploaded files must be under 650 KB; for bigger files paste a Google Drive link.</p>
+          <button onclick="addDoc()" class="mt-3 bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Add Document</button>
+        </div>
+        <div id="docs-container" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT PAGE -->
+    <section id="contact" class="page-section hidden fade-in py-20 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <!-- Contact Info -->
+          <div class="space-y-8">
+            <div>
+              <h2 class="text-4xl font-bold text-blue-900 mb-4 serif">Get in Touch</h2>
+              <p class="text-gray-600 text-lg">Consultation hours: Mon-Sat, 10:00 AM - 6:00 PM.</p>
+            </div>
             
-            <!-- Intro Header -->
-            <div class="bg-blue-900 text-white py-16 text-center relative overflow-hidden">
-                <div class="absolute inset-0 opacity-10">
-                    <i class="fas fa-balance-scale text-9xl absolute -left-10 -top-10 text-white"></i>
-                    <i class="fas fa-gavel text-9xl absolute -right-10 -bottom-10 text-white"></i>
+            <div class="space-y-6">
+              <div class="flex items-start group">
+                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
+                  <i class="fas fa-map-marker-alt text-white text-xl"></i>
                 </div>
-                <div class="relative z-10 max-w-4xl mx-auto px-4">
-                    <h2 class="text-5xl font-bold mb-4 serif">Meet The Legal Expert</h2>
-                    <p class="text-xl text-blue-200">Committed to excellence, integrity, and winning your case.</p>
+                <div>
+                  <h4 class="font-bold text-gray-800 text-lg">Office Address</h4>
+                  <p class="text-gray-600 editable-text">New Litigation Hall,<br>District Courts Complex,<br>Bhiwani, Haryana</p>
                 </div>
+              </div>
+
+              <div class="flex items-start group">
+                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
+                  <i class="fas fa-phone-alt text-white text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 text-lg">Phone Number</h4>
+                  <p class="text-gray-600 editable-text">+91 9671755613</p>
+                  <p class="text-gray-600">WhatsApp: <a data-wa href="#" target="_blank" rel="noopener" class="text-blue-700 underline">+91 93064 56633</a></p>
+                </div>
+              </div>
+
+              <div class="flex items-start group">
+                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
+                  <i class="fas fa-envelope text-white text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 text-lg">Email Address</h4>
+                  <p class="text-gray-600 editable-text">vivektanwaradv@gmail.com</p>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <!-- Bio Section -->
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div class="flex flex-col md:flex-row items-start gap-12">
-                    <div class="w-full md:w-1/2">
-                        <h3 class="text-3xl font-bold text-slate-900 mb-6 editable-text">A Decade of Advocacy</h3>
-                        <p class="text-gray-600 text-lg leading-relaxed mb-6 editable-text">
-                            Starting from the basics of law to mastering complex litigation, every step in my career has been driven by a passion for justice. I believe in understanding the human side of every case, not just the legal clauses.
-                        </p>
-                        <p class="text-gray-600 text-lg leading-relaxed editable-text">
-                            Whether it's a property dispute or a criminal appeal, I bring the same level of dedication and scrutiny to ensure the best outcome for my clients.
-                        </p>
-                    </div>
-                    <div class="w-full md:w-1/2">
-                        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-sm">
-                            <h4 class="text-xl font-bold text-blue-900 mb-4 editable-text">Core Values</h4>
-                            <ul class="space-y-3">
-                                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Client-Centric Approach</li>
-                                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Transparent Communication</li>
-                                <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-green-500 mr-3"></i> Strategic Litigation</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Team Section -->
-            <div class="bg-slate-50 py-16">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-blue-900 mb-4 serif">Our Legal Team</h2>
-                        <p class="text-gray-500">Work together to achieve justice.</p>
-                    </div>
-
-                    <!-- Admin Control for Team -->
-                    <div id="admin-team-controls" class="hidden mb-10 glass-card p-6 rounded-xl border-l-4 border-amber-500 inline-block">
-                        <h3 class="font-bold text-lg mb-4">Add Team Member</h3>
-                        <div class="flex flex-wrap gap-4">
-                            <input type="text" id="member-name" placeholder="Full Name" class="p-2 border rounded-lg w-40">
-                            <input type="text" id="member-role" placeholder="Role (e.g., Associate)" class="p-2 border rounded-lg w-40">
-                            <input type="file" id="member-photo" accept="image/*" class="w-40 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
-                            <button onclick="addTeamMember()" class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Add Member</button>
-                        </div>
-                    </div>
-
-                    <div id="team-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- BLOGS PAGE -->
-        <section id="blogs" class="page-section hidden fade-in py-16 bg-slate-50 min-h-screen">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-4xl font-bold text-blue-900 mb-3 serif">Latest Legal Insights</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">Articles, judgments and practical legal guidance.</p>
-                </div>
-                <form onsubmit="event.preventDefault();blogSearch()" class="max-w-xl mx-auto mb-10 flex">
-                    <input id="blog-search" oninput="blogSearch()" type="search" placeholder="Search blogs…" class="flex-1 min-w-0 p-3 border border-gray-300 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500">
-                    <button class="bg-blue-900 text-white px-5 rounded-r-lg hover:bg-blue-800"><i class="fas fa-search mr-1"></i> Search</button>
-                </form>
-                <div id="admin-blog-controls" class="hidden mb-10 glass-card p-6 rounded-xl border-l-4 border-amber-500">
-                    <h3 class="font-bold text-xl text-blue-900 mb-4"><i class="fas fa-plus-circle mr-2"></i>Add New Blog Post</h3>
-                    <input type="text" id="new-blog-title" placeholder="Blog Title" class="w-full p-3 border border-gray-300 rounded-lg mb-3 outline-none">
-                    <label class="inline-block mb-3 text-sm cursor-pointer bg-blue-50 text-blue-700 px-4 py-2 rounded-full font-semibold hover:bg-blue-100"><i class="fas fa-image mr-1"></i> Cover image (optional)<input type="file" accept="image/*" class="hidden" onchange="pickCover(this)"></label> <span id="cover-name" class="text-xs text-gray-500"></span>
-                    <div id="new-blog-editor-container" style="height:220px;background:#fff"></div>
-                    <button onclick="addBlog()" class="mt-4 bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition shadow-md font-semibold">Publish Post</button>
-                </div>
-                <div class="grid lg:grid-cols-3 gap-8">
-                    <div id="blog-list" class="lg:col-span-2 space-y-6"></div>
-                    <aside class="space-y-6">
-                        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                            <h3 class="font-bold text-lg text-blue-900 mb-4 serif border-b pb-2">Recent Posts</h3>
-                            <ul id="blog-recent" class="space-y-4"></ul>
-                        </div>
-                        <div class="bg-blue-900 text-white p-6 rounded-xl text-center">
-                            <h3 class="font-bold text-lg mb-2 serif">Need legal advice?</h3>
-                            <p class="text-blue-200 text-sm mb-4">Message me directly on WhatsApp.</p>
-                            <a href="#" data-wa class="inline-block bg-[#25D366] hover:opacity-90 px-5 py-2 rounded-lg font-semibold" target="_blank" rel="noopener"><i class="fab fa-whatsapp mr-1"></i> Chat Now</a>
-                        </div>
-                        <div id="blog-ad"></div>
-                    </aside>
-                </div>
-            </div>
-        </section>
-
-        <!-- Single Blog View -->
-        <section id="single-blog-view" class="page-section hidden fade-in py-16 bg-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <button onclick="showPage('blogs')" class="mb-8 text-blue-600 hover:text-blue-800 font-semibold"><i class="fas fa-arrow-left mr-2"></i> All Blogs</button>
-                <article>
-                    <h1 id="single-blog-title" class="text-4xl font-bold text-slate-900 mb-4 serif"></h1>
-                    <div id="single-blog-date" class="text-gray-500 mb-8 border-b pb-4"></div>
-                    <div id="single-blog-content" class="blog-content text-gray-700 leading-relaxed text-lg"></div>
-                </article>
-                <div id="post-ad" class="my-8"></div>
-                <div class="mt-10 flex flex-wrap gap-3 border-t pt-6">
-                    <a id="post-share" target="_blank" rel="noopener" class="bg-[#25D366] text-white px-5 py-2 rounded-lg font-semibold"><i class="fab fa-whatsapp mr-1"></i> Share on WhatsApp</a>
-                    <a href="#" data-wa class="bg-blue-900 text-white px-5 py-2 rounded-lg font-semibold" target="_blank" rel="noopener">Consult Advocate</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- DOCUMENTS PAGE -->
-        <section id="documents" class="page-section hidden fade-in py-16 bg-white min-h-screen">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-blue-900 mb-3 serif">Legal Resources</h2>
-                    <p class="text-gray-500">Download forms, templates and acts. Free and premium documents.</p>
-                </div>
-                <form onsubmit="event.preventDefault();docSearch()" class="max-w-xl mx-auto mb-10 flex">
-                    <input id="doc-search" oninput="docSearch()" type="search" placeholder="Search documents…" class="flex-1 min-w-0 p-3 border border-gray-300 rounded-l-lg outline-none focus:ring-2 focus:ring-blue-500">
-                    <button class="bg-blue-900 text-white px-5 rounded-r-lg hover:bg-blue-800"><i class="fas fa-search mr-1"></i> Search</button>
-                </form>
-                <div id="admin-doc-controls" class="hidden mb-8 glass-card p-6 rounded-xl border-l-4 border-amber-500">
-                    <h3 class="font-bold text-lg mb-4">Upload Document</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="doc-name" placeholder="Document Name (e.g., Rent Agreement)" class="p-3 border rounded-lg">
-                        <input type="number" id="doc-price" min="0" placeholder="Price in ₹ (0 = free)" class="p-3 border rounded-lg">
-                        <input type="file" id="doc-file" class="p-2 border rounded-lg">
-                        <input type="url" id="doc-link" placeholder="…or file link (Google Drive etc.)" class="p-3 border rounded-lg">
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">Uploaded files must be under 650 KB; for bigger files paste a Google Drive link.</p>
-                    <button onclick="addDoc()" class="mt-3 bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Add Document</button>
-                </div>
-                <div id="docs-container" class="space-y-4"></div>
-            </div>
-        </section>
-
-        <!-- CONTACT PAGE -->
-        <section id="contact" class="page-section hidden fade-in py-20 bg-slate-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <!-- Contact Info -->
-                    <div class="space-y-8">
-                        <div>
-                            <h2 class="text-4xl font-bold text-blue-900 mb-4 serif">Get in Touch</h2>
-                            <p class="text-gray-600 text-lg">Consultation hours: Mon-Sat, 10:00 AM - 6:00 PM.</p>
-                        </div>
-                        
-                        <div class="space-y-6">
-                            <div class="flex items-start group">
-                                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
-                                    <i class="fas fa-map-marker-alt text-white text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-lg">Office Address</h4>
-                                    <p class="text-gray-600 editable-text">New Litigation Hall,<br>District Courts Complex,<br>Bhiwani, Haryana</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start group">
-                                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
-                                    <i class="fas fa-phone-alt text-white text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-lg">Phone Number</h4>
-                                    <p class="text-gray-600 editable-text">+91 9671755613</p>
-                                    <p class="text-gray-600">WhatsApp: <a data-wa href="#" target="_blank" rel="noopener" class="text-blue-700 underline">+91 93064 56633</a></p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start group">
-                                <div class="bg-blue-900 p-4 rounded-lg mr-5 shadow-lg group-hover:bg-amber-600 transition duration-300">
-                                    <i class="fas fa-envelope text-white text-xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-lg">Email Address</h4>
-                                    <p class="text-gray-600 editable-text">vivektanwaradv@gmail.com</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Contact Form -->
-                    <div class="glass-card p-8 rounded-2xl shadow-xl">
-                        <form onsubmit="sendContact(event)">
-                            <div class="mb-5">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-                            </div>
-                            <div class="mb-5">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-                                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
-                            </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Your Message</label>
-                                <textarea class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg"><i class="fab fa-whatsapp mr-2"></i>Send via WhatsApp</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-<section id="privacy" class="page-section hidden fade-in py-16 bg-white"><div class="max-w-3xl mx-auto px-4 blog-content text-gray-700"><h1 class="serif">Privacy Policy</h1><p class="text-sm text-gray-400">Last updated: 25 October 2026</p><p>This website is operated by Vivek Tanwar, Advocate, District Courts Complex, Bhiwani, Haryana, India (“we”). This policy explains how information is handled when you visit the site.</p>
-<h2>Information we collect</h2><p>We do not require you to register. If you contact us through the contact form or WhatsApp, we receive the details you choose to send (name, email, phone number, message). When you buy a document, payment is processed by Razorpay; we do not see or store your card or bank details.</p>
-<h2>Cookies and advertising</h2><p>We use cookies and similar technology to remember your preferences. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites. Google’s use of advertising cookies enables it and its partners to serve ads based on your visit to this site and/or other sites on the Internet. You may opt out of personalised advertising at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener">aboutads.info</a>.</p>
-<h2>How we use information</h2><p>To reply to your enquiries, deliver purchased documents, improve the website and comply with law. We do not sell your personal information.</p>
-<h2>Your rights</h2><p>You may ask us to access, correct or delete the personal information you have sent us by writing to vivektanwaradv@gmail.com.</p>
-<h2>Contact</h2><p>vivektanwaradv@gmail.com | +91 9671755613</p></div></section>
-        <section id="terms" class="page-section hidden fade-in py-16 bg-white"><div class="max-w-3xl mx-auto px-4 blog-content text-gray-700"><h1 class="serif">Terms, Refund &amp; Cancellation</h1><p class="text-sm text-gray-400">Last updated: 25 October 2026</p><h2>Use of website</h2><p>Content on this website is for general information only and is protected by copyright. You may not copy or republish it commercially without written permission.</p>
-<h2>Digital documents</h2><p>Documents and templates are general formats. They are not a substitute for legal advice on your specific facts and must be reviewed before use. Prices are in Indian Rupees (₹).</p>
-<h2>Refund and cancellation</h2><p>Because documents are delivered digitally and immediately, purchases are generally non-refundable. If you were charged but could not download the file, or received the wrong or a corrupted file, write to vivektanwaradv@gmail.com within 7 days with your payment reference and we will resolve it or refund you.</p>
-<h2>Limitation of liability</h2><p>We are not liable for any loss arising from reliance on the website content or documents.</p>
-<h2>Governing law</h2><p>These terms are governed by the laws of India; courts at Bhiwani, Haryana have jurisdiction.</p></div></section>
-        <section id="disclaimer" class="page-section hidden fade-in py-16 bg-white"><div class="max-w-3xl mx-auto px-4 blog-content text-gray-700"><h1 class="serif">Disclaimer</h1><p class="text-sm text-gray-400">Last updated: 25 October 2026</p><p>As per the rules of the Bar Council of India, advocates are not permitted to solicit work or advertise. This website is meant only to provide information about Vivek Tanwar, Advocate. By using it you acknowledge that you are seeking this information of your own accord and that there has been no advertisement, solicitation, invitation or inducement of any kind from us.</p>
-<p>Nothing on this website is legal advice or creates an advocate–client relationship. Content may not reflect the latest changes in law. Please consult a qualified advocate before acting on any information here. We are not responsible for the content of external links or advertisements shown by third parties.</p></div></section>
-            </main>
+          <!-- Contact Form -->
+          <div class="glass-card p-8 rounded-2xl shadow-xl">
+            <form onsubmit="sendContact(event)">
+              <div class="mb-5">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
+              </div>
+              <div class="mb-5">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" required>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Your Message</label>
+                <textarea class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" rows="4" required></textarea>
+              </div>
+              <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg"><i class="fab fa-whatsapp mr-2"></i>Send via WhatsApp</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-white py-10 mt-auto border-t border-slate-800 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex justify-center space-x-6 mb-4">
-                <a href="#" data-wa target="_blank" rel="noopener" aria-label="WhatsApp" class="text-slate-400 hover:text-amber-500 transition"><i class="fab fa-whatsapp text-2xl"></i></a>
-                <a href="tel:+919671755613" aria-label="Call" class="text-slate-400 hover:text-amber-500 transition"><i class="fas fa-phone text-2xl"></i></a>
-                <a href="mailto:vivektanwaradv@gmail.com" aria-label="Email" class="text-slate-400 hover:text-amber-500 transition"><i class="fas fa-envelope text-2xl"></i></a>
-            </div>
-            <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 mb-4 text-sm text-slate-400">
-                <a href="#privacy" class="hover:text-amber-500">Privacy Policy</a><a href="#terms" class="hover:text-amber-500">Terms &amp; Refund</a><a href="#disclaimer" class="hover:text-amber-500">Disclaimer</a><a href="#contact" class="hover:text-amber-500">Contact</a>
-            </div>
-            <p class="text-slate-400 text-sm">&copy; 2026 Vivek Tanwar, Advocate. All Rights Reserved.</p>
-            
-            <!-- Hidden Lock Icon for About Page Only -->
-            <div id="about-lock-container" class="hidden mt-6">
-                <button id="admin-toggle-btn" onclick="openLogin()" class="text-slate-600 hover:text-slate-400 transition p-2 rounded-full border border-slate-700 hover:border-slate-500">
-                    <i class="fas fa-lock text-sm"></i>
-                </button>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="flex justify-center space-x-6 mb-4">
+          <a href="#" data-wa target="_blank" rel="noopener" aria-label="WhatsApp" class="text-slate-400 hover:text-amber-500 transition"><i class="fab fa-whatsapp text-2xl"></i></a>
+          <a href="tel:+919671755613" aria-label="Call" class="text-slate-400 hover:text-amber-500 transition"><i class="fas fa-phone text-2xl"></i></a>
+          <a href="mailto:vivektanwaradv@gmail.com" aria-label="Email" class="text-slate-400 hover:text-amber-500 transition"><i class="fas fa-envelope text-2xl"></i></a>
         </div>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 mb-4 text-sm text-slate-400">
+          <a href="#privacy" class="hover:text-amber-500">Privacy Policy</a><a href="#terms" class="hover:text-amber-500">Terms &amp; Refund</a><a href="#disclaimer" class="hover:text-amber-500">Disclaimer</a><a href="#contact" class="hover:text-amber-500">Contact</a>
+        </div>
+        <p class="text-slate-400 text-sm">&copy; 2026 Vivek Tanwar, Advocate. All Rights Reserved.</p>
+        
+        <!-- Hidden Lock Icon for About Page Only -->
+        <div id="about-lock-container" class="hidden mt-6">
+          <button id="admin-toggle-btn" onclick="openLogin()" class="text-slate-600 hover:text-slate-400 transition p-2 rounded-full border border-slate-700 hover:border-slate-500">
+            <i class="fas fa-lock text-sm"></i>
+          </button>
+        </div>
+      </div>
     </footer>
 
     <!-- Admin Login Modal -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden flex items-center justify-center">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md transform transition-all scale-100">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-slate-800">Admin Login</h3>
-                <button onclick="closeLogin()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <form onsubmit="handleLogin(event)">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Admin Email</label>
-                    <input type="text" id="username" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Admin email">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <input type="password" id="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter password">
-                </div>
-                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition">Login</button>
-            </form>
+      <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md transform transition-all scale-100">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold text-slate-800">Admin Login</h3>
+          <button onclick="closeLogin()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
         </div>
+        <form onsubmit="handleLogin(event)">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Admin Email</label>
+            <input type="text" id="username" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Admin email">
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+            <input type="password" id="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter password">
+          </div>
+          <button type="submit" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition">Login</button>
+        </form>
+      </div>
     </div>
 
     <!-- Admin Panel Indicator -->
     <div id="admin-panel-indicator" class="fixed bottom-6 left-6 bg-amber-500 text-blue-900 px-6 py-3 rounded-full shadow-xl hidden z-50 font-bold flex items-center ">
-        <i class="fas fa-edit mr-2"></i> EDIT MODE ON
-        <button onclick="saveChanges()" class="ml-4 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Save</button>
-        <button onclick="openThemeManager()" class="ml-1 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Theme</button>
-        <button onclick="logout()" class="ml-1 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Logout</button>
+      <i class="fas fa-edit mr-2"></i> EDIT MODE ON
+      <button onclick="saveChanges()" class="ml-4 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Save</button>
+      <button onclick="logout()" class="ml-1 text-xs bg-white/40 hover:bg-white/70 px-2 py-1 rounded">Logout</button>
     </div>
 
-    <!-- Theme Manager Modal -->
-    <div id="theme-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden flex items-center justify-center">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-slate-800">Theme Manager</h3>
-                <button onclick="closeThemeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Apply External Theme URL</label>
-                <input type="text" id="theme-url" placeholder="https://example.com/theme.css" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                <button onclick="applyExternalTheme()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Apply URL Theme</button>
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Or Upload Local CSS File</label>
-                <input type="file" id="theme-file" accept=".css" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
-                <button onclick="applyLocalTheme()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Apply File Theme</button>
-            </div>
-
-            <button onclick="resetTheme()" class="w-full mt-4 border border-gray-300 text-gray-600 py-2 rounded-lg hover:bg-gray-50">Reset to Default Theme</button>
-        </div>
-    </div>
-
-    
     <!-- Floating WhatsApp -->
     <a id="wa-float" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:scale-110 transition"><i class="fab fa-whatsapp text-3xl"></i></a>
 
-    <!-- Search results -->
-    <div id="search-modal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-start justify-center p-4 pt-24" onclick="if(event.target===this)closeSearch()">
-        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[70vh] overflow-y-auto">
-            <div class="flex justify-between mb-3"><h3 id="search-title" class="font-bold text-lg text-blue-900"></h3><button onclick="closeSearch()" aria-label="Close"><i class="fas fa-times text-gray-400"></i></button></div>
-            <div id="search-results"></div>
-        </div>
-    </div>
-
     <!-- Cookie consent -->
     <div id="cookie-bar" class="hidden fixed bottom-4 left-4 right-24 md:right-auto md:max-w-md z-[55] bg-white border shadow-xl rounded-xl p-4 text-sm text-gray-700">
-        We use cookies to improve your experience and to show relevant ads. See our <a href="#privacy" class="text-blue-700 underline">Privacy Policy</a>.
-        <div class="mt-3 flex gap-2"><button onclick="cookieSet('yes')" class="bg-blue-900 text-white px-4 py-1 rounded">Accept</button><button onclick="cookieSet('no')" class="border px-4 py-1 rounded">Decline</button></div>
+      We use cookies to improve your experience and to show relevant ads. See our <a href="#privacy" class="text-blue-700 underline">Privacy Policy</a>.
+      <div class="mt-3 flex gap-2"><button onclick="cookieSet('yes')" class="bg-blue-900 text-white px-4 py-1 rounded">Accept</button><button onclick="cookieSet('no')" class="border px-4 py-1 rounded">Decline</button></div>
     </div>
 
-    <!-- JavaScript Logic -->
-  
-      <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-      import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-      </scriipt>
+  </main>
+
+  <!-- JavaScript Logic -->
   <script>
-// ================= CONFIG =================
-const CONFIG = {
-       WA: '919306456633',          
-    RZP_KEY: '',                 
-    ADS_CLIENT: '',              
-    ADS_SLOT: '',                
-    ADMIN_EMAIL: 'vivektanwaradv@gmail.com',   
-    const firebaseConfig = {
-  apiKey: "AIzaSyCbg-lHPhQ4BeK86zfbK6LZ-ho-Y-LiOZs",
-  authDomain: "vivek-law-site.firebaseapp.com",
-  projectId: "vivek-law-site",
-  storageBucket: "vivek-law-site.firebasestorage.app",
-  messagingSenderId: "759653231300",
-  appId: "1:759653231300:web:a7d40dfb974c21d8787791"
-}
-};
-const $ = id => document.getElementById(id);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const AVATAR = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1e3a8a"/><circle cx="50" cy="38" r="18" fill="#f59e0b"/><path d="M14 100c0-24 16-38 36-38s36 14 36 38z" fill="#f59e0b"/></svg>');
-const wa = t => 'https://wa.me/' + CONFIG.WA + '?text=' + encodeURIComponent(t);
-document.querySelectorAll('[data-wa]').forEach(a => a.href = wa('Hello Advocate Vivek Tanwar, I visited your website and would like to consult regarding a legal matter.'));
+    // ================= CONFIG =================
+    const CONFIG = {
+      WA: '919306456633', 
+      ADMIN_EMAIL: 'vivektanwaradv@gmail.com', 
+      ADMIN_PASSWORD: 'admin123', // Default password for demo
+      FIREBASE: {
+        apiKey: "AIzaSyCbg-lHPhQ4BeK86zfbK6LZ-ho-Y-LiOZs",
+        authDomain: "vivek-law-site.firebaseapp.com",
+        projectId: "vivek-law-site",
+        storageBucket: "vivek-law-site.firebasestorage.app",
+        messagingSenderId: "759653231300",
+        appId: "1:759653231300:web:a7d40dfb974c21d8787791"
+      }
+    };
 
-// ================= STORAGE =================
-const KEY = 'vt_site_v2';
-const DEFAULT_TEAM = [ { id: 't1', name: 'Vivek Tanwar', role: 'Advocate', owner: true },
-    { id: 't2', name: 'Priya Sharma', role: 'Legal Consultant', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80' } ];
-let DB = { photo: '', texts: {}, blogs: [], docs: [], team: [], teamSeeded: false, blogsLoaded: false, teamLoaded: false };
-const FB_OK = !CONFIG.FIREBASE.apiKey.startsWith('PASTE');
-let fdb, auth;
-if (FB_OK) { firebase.initializeApp(CONFIG.FIREBASE); fdb = firebase.firestore(); auth = firebase.auth(); }
-else console.warn('Firebase is not configured yet: paste your firebaseConfig in CONFIG.FIREBASE');
-const teamList = () => (DB.teamSeeded || DB.team.length) ? DB.team : DEFAULT_TEAM;
-function fail(e) { alert(e && e.code === 'permission-denied' ? 'Not allowed. Please log in as admin.' : 'Could not save: ' + (e.message || e)); return false; }
-async function put(c, o) {
-    if (!FB_OK) return alert('Firebase is not configured yet.') || false;
-    if (JSON.stringify(o).length > 950000) return alert('This item is too large (limit about 1 MB). Use smaller images or a file link.') || false;
-    try { await fdb.collection(c).doc(o.id).set(o); return true; } catch (e) { return fail(e); }
-}
-async function del(c, id) { try { await fdb.collection(c).doc(id).delete(); return true; } catch (e) { return fail(e); } }
-async function setSite(o) { if (!FB_OK) return alert('Firebase is not configured yet.') || false; try { await fdb.doc('site/main').set(o, { merge: true }); return true; } catch (e) { return fail(e); } }
-function applyTexts() { document.querySelectorAll('.editable-text').forEach(el => { if (DB.texts[el.dataset.eid] != null) el.innerHTML = DB.texts[el.dataset.eid]; }); }
-function refresh() {
-    const h = location.hash.slice(1);
-    if (h === 'blogs') renderBlogs(); if (h === 'documents') renderDocs(); if (h.startsWith('post/')) renderPost(h.slice(5));
-}
-async function maybeSeed() {
-    if (!isAdmin || !DB.teamLoaded || DB.teamSeeded || DB.team.length) return;
-    for (const m of DEFAULT_TEAM) await put('team', Object.assign({ order: Date.now() + DEFAULT_TEAM.indexOf(m) }, m));
-    setSite({ teamSeeded: true });
-}
-function listen() {
-    if (!FB_OK) return;
-    fdb.doc('site/main').onSnapshot(s => { const d = s.data() || {}; DB.photo = d.photo || ''; DB.texts = d.texts || {}; DB.teamSeeded = !!d.teamSeeded; if (!isAdmin) applyTexts(); paintProfile(); renderTeam(); maybeSeed(); });
-    fdb.collection('blogs').orderBy('date', 'desc').onSnapshot(s => { DB.blogs = s.docs.map(d => d.data()); DB.blogsLoaded = true; refresh(); });
-    fdb.collection('docs').orderBy('created', 'desc').onSnapshot(s => { DB.docs = s.docs.map(d => d.data()); refresh(); });
-    fdb.collection('team').orderBy('order').onSnapshot(s => { DB.team = s.docs.map(d => d.data()); DB.teamLoaded = true; renderTeam(); maybeSeed(); });
-    auth.onAuthStateChanged(u => { if (u && u.email === CONFIG.ADMIN_EMAIL) enableAdminMode(); else if (isAdmin) disableAdminMode(); });
-}
-function logout() { if (FB_OK) auth.signOut(); else disableAdminMode(); }
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const AVATAR = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1e3a8a"/><circle cx="50" cy="38" r="18" fill="#f59e0b"/><path d="M14 100c0-24 16-38 36-38s36 14 36 38z" fill="#f59e0b"/></svg>');
+    const wa = t => 'https://wa.me/' + CONFIG.WA + '?text=' + encodeURIComponent(t);
+    
+    // Initialize WhatsApp Links
+    document.querySelectorAll('[data-wa]').forEach(a => a.href = wa('Hello Advocate Vivek Tanwar, I visited your website and would like to consult regarding a legal matter.'));
 
-function img(file, max = 700, q = 0.8) {
-    return new Promise(res => {
-        const r = new FileReader();
-        r.onload = () => { const i = new Image(); i.onload = () => {
-            const s = Math.min(1, max / Math.max(i.width, i.height)), c = document.createElement('canvas');
-            c.width = i.width * s; c.height = i.height * s;
-            const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(i, 0, 0, c.width, c.height);
-            res(c.toDataURL('image/jpeg', q)); };
-            i.src = r.result; };
-        r.readAsDataURL(file);
-    });
-}
-function clean(h) {
-    const d = new DOMParser().parseFromString(h, 'text/html');
-    d.querySelectorAll('script,style,object,embed,link,meta').forEach(e => e.remove());
-    d.querySelectorAll('*').forEach(e => [...e.attributes].forEach(a => { if (/^on/i.test(a.name) || /^\s*javascript:/i.test(a.value)) e.removeAttribute(a.name); }));
-    return d.body.innerHTML;
-}
-
-// ================= ROUTER =================
-const PAGES = ['home','about','blogs','documents','contact','privacy','terms','disclaimer'];
-function showPage(p) { const h = '#' + p; if (location.hash === h) route(); else location.hash = h; }
-function route() {
-    const h = location.hash.slice(1), isPost = h.startsWith('post/');
-    const id = isPost ? 'single-blog-view' : (PAGES.includes(h) ? h : 'home');
-    document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
-    $(id).classList.remove('hidden');
-    window.scrollTo(0, 0);
-    $('about-lock-container').classList.toggle('hidden', id !== 'about');
-    $('mobile-menu').classList.add('hidden');
-    document.title = (id === 'home' ? '' : id.charAt(0).toUpperCase() + id.slice(1).replace('-blog-view','') + ' | ') + 'Vivek Tanwar | Advocate';
-    if (id === 'blogs') renderBlogs();
-    if (id === 'documents') renderDocs();
-    if (isPost) renderPost(h.slice(5));
-    pushAds();
-}
-window.addEventListener('hashchange', route);
-$('mobile-menu-btn').addEventListener('click', () => $('mobile-menu').classList.toggle('hidden'));
-
-// ================= ADMIN =================
-let isAdmin = false;
-function openLogin() { $('login-modal').classList.remove('hidden'); }
-function closeLogin() { $('login-modal').classList.add('hidden'); }
-async function handleLogin(e) {
-    e.preventDefault();
-    if (!FB_OK) return alert('Firebase is not configured yet.');
-    try { await auth.signInWithEmailAndPassword($('username').value.trim(), $('password').value); closeLogin(); $('username').value = ''; $('password').value = ''; alert('Admin Mode Active: edit text, change photos, add blogs, documents and team members. Click Save for text edits.'); }
-    catch (x) { alert('Login failed. Check email and password.'); }
-}
-const ADMIN_BOXES = ['admin-blog-controls', 'admin-doc-controls', 'admin-team-controls'];
-function enableAdminMode() {
-    isAdmin = true; document.body.classList.add('is-admin');
-    $('admin-toggle-btn').innerHTML = '<i class="fas fa-unlock"></i>'; $('admin-toggle-btn').onclick = logout;
-    $('admin-panel-indicator').classList.remove('hidden');
-    document.querySelectorAll('.editable-text').forEach(el => el.setAttribute('contenteditable', 'true'));
-    document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-    ADMIN_BOXES.forEach(i => $(i).classList.remove('hidden'));
-    maybeSeed();
-}
-function disableAdminMode() {
-    isAdmin = false; document.body.classList.remove('is-admin');
-    $('admin-toggle-btn').innerHTML = '<i class="fas fa-lock"></i>'; $('admin-toggle-btn').onclick = openLogin;
-    $('admin-panel-indicator').classList.add('hidden');
-    document.querySelectorAll('.editable-text').forEach(el => el.removeAttribute('contenteditable'));
-    ADMIN_BOXES.forEach(i => $(i).classList.add('hidden'));
-}
-async function saveChanges() {
-    document.querySelectorAll('.editable-text').forEach(el => DB.texts[el.dataset.eid] = el.innerHTML);
-    if (await setSite({ texts: DB.texts })) { alert('Saved to Firebase. Changes are live.'); disableAdminMode(); }
-}
-
-// ================= PHOTOS & TEAM =================
-function paintProfile() { document.querySelectorAll('.profile-img').forEach(i => i.src = DB.photo || AVATAR); }
-async function changeProfile(inp) {
-    if (!inp.files[0]) return;
-    const d = await img(inp.files[0], 600);
-    if (await setSite({ photo: d })) { DB.photo = d; paintProfile(); renderTeam(); }
-}
-function renderTeam() {
-    $('team-container').innerHTML = teamList().map(m => `
-        <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden border border-gray-100 team-card relative">
-            <div class="aspect-square overflow-hidden bg-gray-200"><img src="${m.owner ? (DB.photo || AVATAR) : (m.photo || AVATAR)}" alt="${esc(m.name)}" class="w-full h-full object-cover team-img"></div>
-            <div class="p-6 text-center"><h4 class="font-bold text-lg text-slate-800">${esc(m.name)}</h4><p class="text-amber-600 text-sm font-semibold mt-1">${esc(m.role)}</p></div>
-            <label class="admin-only absolute top-4 left-4 bg-white w-10 h-10 flex items-center justify-center rounded-full shadow cursor-pointer" title="Change photo"><i class="fas fa-camera text-blue-900"></i><input type="file" accept="image/*" class="hidden" onchange="teamPhoto('${m.id}',this)"></label>
-            <button class="admin-only absolute top-4 right-4 bg-red-500 text-white w-10 h-10 rounded-full shadow hover:bg-red-600" onclick="delTeam('${m.id}')" title="Delete"><i class="fas fa-trash"></i></button>
-        </div>`).join('');
-    paintProfile();
-}
-async function teamPhoto(id, inp) {
-    if (!inp.files[0]) return;
-    const m = teamList().find(x => x.id === id), d = await img(inp.files[0], 600);
-    if (m.owner) { if (await setSite({ photo: d })) { DB.photo = d; renderTeam(); } } else await put('team', Object.assign({}, m, { photo: d }));
-}
-async function delTeam(id) { if (confirm('Delete this team member?')) await del('team', id); }
-async function addTeamMember() {
-    const n = $('member-name').value.trim(), r = $('member-role').value.trim(), f = $('member-photo').files[0];
-    if (!n || !r) return alert('Please fill name and role.');
-    if (await put('team', { id: 't' + Date.now().toString(36), name: n, role: r, photo: f ? await img(f, 600) : '', order: Date.now() })) $('member-name').value = $('member-role').value = $('member-photo').value = '';
-}
-
-// ================= ADS =================
-function adUnit() { return CONFIG.ADS_CLIENT && CONFIG.ADS_SLOT ? `<ins class="adsbygoogle" style="display:block" data-ad-client="${CONFIG.ADS_CLIENT}" data-ad-slot="${CONFIG.ADS_SLOT}" data-ad-format="auto" data-full-width-responsive="true"></ins>` : ''; }
-function pushAds() {
-    if (!CONFIG.ADS_CLIENT) return;
-    document.querySelectorAll('ins.adsbygoogle:not([data-done])').forEach(e => { e.dataset.done = 1; try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (x) {} });
-}
-function cookieSet(v) {
-    localStorage.setItem('vt_cookie', v); $('cookie-bar').classList.add('hidden');
-    if (v === 'no') (window.adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
-}
-if (localStorage.getItem('vt_cookie') === 'no') (window.adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
-if (CONFIG.ADS_CLIENT && !document.querySelector('script[src*="adsbygoogle"]')) {
-    const s = document.createElement('script'); s.async = true; s.crossOrigin = 'anonymous';
-    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + CONFIG.ADS_CLIENT; document.head.appendChild(s);
-}
-
-// ================= BLOGS =================
-const quill = new Quill('#new-blog-editor-container', { theme: 'snow', modules: { toolbar: [
-    [{ header: [1, 2, 3, false] }], ['bold', 'italic', 'underline'], [{ color: [] }, { background: [] }],
-    [{ list: 'ordered' }, { list: 'bullet' }], ['link', 'image', 'video'], ['clean'] ] } });
-quill.getModule('toolbar').addHandler('image', () => {   // compress inserted images so storage doesn't fill up
-    const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*';
-    i.onchange = async () => { if (!i.files[0]) return; const u = await img(i.files[0], 900, 0.75); quill.insertEmbed((quill.getSelection(true) || { index: 0 }).index, 'image', u); };
-    i.click();
-});
-let bq = '', dq = '', coverData = '';
-const fmt = d => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-function excerpt(b) { const t = document.createElement('div'); t.innerHTML = clean(b.html); const s = t.textContent.trim(); return s.length > 180 ? s.slice(0, 180) + '…' : s; }
-function cover(b, cls) { return b.cover ? `<img src="${b.cover}" alt="${esc(b.title)}" class="${cls} object-cover">` : `<div class="${cls} bg-gradient-to-br from-blue-900 to-slate-800 flex items-center justify-center min-h-[10rem]"><i class="fas fa-balance-scale text-amber-500 text-5xl"></i></div>`; }
-function blogSearch() { bq = $('blog-search').value.trim(); renderBlogs(); }
-function renderBlogs() {
-    const q = bq.toLowerCase(), list = DB.blogs.filter(b => !q || (b.title + ' ' + excerpt(b)).toLowerCase().includes(q));
-    $('blog-list').innerHTML = list.length ? list.map(b => `
-        <article class="bg-white rounded-xl shadow-sm hover:shadow-lg transition border border-gray-100 overflow-hidden flex flex-col sm:flex-row relative">
-            ${cover(b, 'w-full sm:w-56 h-44 sm:h-auto shrink-0')}
-            <div class="p-6 flex flex-col">
-                <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">${fmt(b.date)}</div>
-                <h3 class="text-xl font-bold text-blue-900 mb-2 serif">${esc(b.title)}</h3>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-3">${esc(excerpt(b))}</p>
-                <a href="#post/${b.id}" target="_blank" rel="noopener" class="mt-auto self-start bg-blue-900 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition text-sm font-semibold">Read <i class="fas fa-arrow-right ml-1"></i></a>
-            </div>
-            <button class="admin-only absolute top-2 right-2 bg-red-500 text-white w-9 h-9 rounded-full" onclick="delBlog('${b.id}')" title="Delete"><i class="fas fa-trash"></i></button>
-        </article>`).join('') : `<p class="text-gray-400 text-center py-16 bg-white rounded-xl">${DB.blogs.length ? 'No posts match your search.' : 'No blogs published yet.'}</p>`;
-    $('blog-recent').innerHTML = DB.blogs.slice(0, 6).map(b => `<li><a href="#post/${b.id}" target="_blank" rel="noopener" class="block hover:text-amber-600"><span class="font-semibold text-blue-900 block leading-snug">${esc(b.title)}</span><span class="text-xs text-gray-400">${fmt(b.date)}</span></a></li>`).join('') || '<li class="text-gray-400 text-sm">Nothing yet.</li>';
-    $('blog-ad').innerHTML = DB.blogs.length ? adUnit() : '';
-    pushAds();
-}
-async function pickCover(inp) { if (inp.files[0]) { coverData = await img(inp.files[0], 900); $('cover-name').textContent = inp.files[0].name; } }
-async function addBlog() {
-    const t = $('new-blog-title').value.trim();
-    if (!t || quill.getText().trim().length < 2) return alert('Please fill both title and content.');
-    if (!await put('blogs', { id: 'b' + Date.now().toString(36), title: t, html: clean(quill.root.innerHTML), cover: coverData, date: new Date().toISOString() })) return;
-    $('new-blog-title').value = ''; quill.setText(''); coverData = ''; $('cover-name').textContent = '';
-    bq = ''; $('blog-search').value = ''; alert('Blog published! It is now live on the Blogs page and sidebar.');
-}
-async function delBlog(id) { if (confirm('Delete this blog post?')) await del('blogs', id); }
-function renderPost(id) {
-    const b = DB.blogs.find(x => x.id === id);
-    if (!b) { $('single-blog-title').textContent = DB.blogsLoaded ? 'Post not found' : 'Loading…'; $('single-blog-date').textContent = ''; $('single-blog-content').innerHTML = '<p>This post may have been removed.</p>'; return; }
-    $('single-blog-title').textContent = b.title;
-    $('single-blog-date').textContent = fmt(b.date) + ' • By Vivek Tanwar, Advocate';
-    $('single-blog-content').innerHTML = (b.cover ? `<img src="${b.cover}" alt="">` : '') + clean(b.html);
-    $('post-share').href = 'https://wa.me/?text=' + encodeURIComponent(b.title + ' ' + location.href.split('#')[0] + '#post/' + id);
-    $('post-ad').innerHTML = adUnit();
-    document.title = b.title + ' | Vivek Tanwar, Advocate';
-}
-
-// ================= DOCUMENTS =================
-const sz = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.ceil(n / 1024) + ' KB';
-const paid = () => { try { return JSON.parse(localStorage.getItem('vt_paid')) || {}; } catch (e) { return {}; } };
-function docSearch() { dq = $('doc-search').value.trim(); renderDocs(); }
-function renderDocs() {
-    const q = dq.toLowerCase(), P = paid(), l = DB.docs.filter(d => !q || d.name.toLowerCase().includes(q));
-    $('docs-container').innerHTML = l.length ? l.map(d => {
-        const ext = (d.fileName || 'link').split('.').pop().toLowerCase();
-        const ic = ext === 'pdf' ? ['fa-file-pdf', 'red'] : /docx?/.test(ext) ? ['fa-file-word', 'blue'] : /xlsx?|csv/.test(ext) ? ['fa-file-excel', 'green'] : ['fa-file', 'gray'];
-        const locked = d.price > 0 && !P[d.id];
-        return `<div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-wrap items-center justify-between gap-3 hover:bg-gray-50 transition relative">
-            <div class="flex items-center"><div class="bg-${ic[1]}-50 p-3 rounded-lg mr-4"><i class="fas ${ic[0]} text-${ic[1]}-500 text-2xl"></i></div>
-            <div><h4 class="font-bold text-gray-800">${esc(d.name)}</h4><p class="text-xs text-gray-500">${esc(ext.toUpperCase())}${d.size ? ' • ' + sz(d.size) : ''} • ${d.price > 0 ? '<b class="text-amber-600">₹' + d.price + '</b>' : '<b class="text-green-600">Free</b>'}</p></div></div>
-            <button onclick="getDoc('${d.id}')" class="${locked ? 'bg-amber-600 text-white hover:bg-amber-700' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'} px-4 py-2 rounded-lg transition font-medium"><i class="fas ${locked ? 'fa-lock' : 'fa-download'} mr-2"></i>${locked ? 'Buy ₹' + d.price + ' &amp; Download' : 'Download'}</button>
-            <button class="admin-only absolute -top-2 -right-2 bg-red-500 text-white w-8 h-8 rounded-full shadow" onclick="delDoc('${d.id}')"><i class="fas fa-trash text-xs"></i></button></div>`;
-    }).join('') : `<p class="text-gray-400 text-center py-12">${DB.docs.length ? 'No documents match your search.' : 'No documents available yet.'}</p>`;
-}
-function addDoc() {
-    const name = $('doc-name').value.trim(), price = Math.max(0, parseInt($('doc-price').value) || 0), f = $('doc-file').files[0], link = $('doc-link').value.trim();
-    if (!name || (!f && !link)) return alert('Enter a name and choose a file or paste a link.');
-    const push = async o => { if (await put('docs', Object.assign({ id: 'd' + Date.now().toString(36), name, price, created: Date.now() }, o))) $('doc-name').value = $('doc-price').value = $('doc-file').value = $('doc-link').value = ''; };
-    if (f) { if (f.size > 650000) return alert('File is over 650 KB. Upload it to Google Drive and paste the share link instead.'); const r = new FileReader(); r.onload = () => push({ data: r.result, fileName: f.name, size: f.size }); r.readAsDataURL(f); }
-    else push({ link });
-}
-async function delDoc(id) { if (confirm('Delete this document?')) await del('docs', id); }
-function sendFile(d) {
-    if (d.link) return window.open(d.link, '_blank', 'noopener');
-    if (!d.data) return alert('File not available.');
-    const a = document.createElement('a'); a.href = d.data; a.download = d.fileName || d.name; a.click();
-}
-function getDoc(id) {
-    const d = DB.docs.find(x => x.id === id);
-    if (!d.price || paid()[id]) return sendFile(d);
-    if (!CONFIG.RZP_KEY) return window.open(wa(`Hello, I would like to purchase the document "${d.name}" (₹${d.price}). Please share payment details.`), '_blank');
-    const s = document.createElement('script'); s.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    s.onload = () => new Razorpay({ key: CONFIG.RZP_KEY, amount: d.price * 100, currency: 'INR', name: 'Vivek Tanwar, Advocate', description: d.name, theme: { color: '#1e3a8a' },
-        handler: r => { const P = paid(); P[id] = r.razorpay_payment_id; localStorage.setItem('vt_paid', JSON.stringify(P)); renderDocs(); sendFile(d); } }).open();
-    document.head.appendChild(s);
-}
-
-// ================= SEARCH & CONTACT =================
-function globalSearch() {
-    const raw = $('home-search').value.trim(), q = raw.toLowerCase(); if (!q) return;
-    const has = s => s.toLowerCase().includes(q);
-    const items = [
-        ...DB.blogs.filter(b => has(b.title + ' ' + excerpt(b))).map(b => ({ t: b.title, s: 'Blog • ' + fmt(b.date), h: '#post/' + b.id })),
-        ...DB.docs.filter(d => has(d.name)).map(d => ({ t: d.name, s: 'Document • ' + (d.price ? '₹' + d.price : 'Free'), h: '#documents' })),
-        ...[['Civil Disputes', 'Property disputes, contracts, recovery suits'], ['Criminal Law', 'Bail, trial defense, appeals, FIR'], ['Revenue Affairs', 'Land records mutation, revenue court'], ['Consumer Cases', 'Deficiency in services, product liability']].filter(a => has(a.join(' '))).map(a => ({ t: a[0], s: 'Practice area — ' + a[1], h: '#contact' })),
-        ...[['About', 'about'], ['Blogs', 'blogs'], ['Documents', 'documents'], ['Contact', 'contact']].filter(p => has(p[0])).map(p => ({ t: p[0] + ' page', s: 'Page', h: '#' + p[1] }))
+    // ================= STORAGE & STATE =================
+    const KEY = 'vt_site_v2';
+    const DEFAULT_TEAM = [ 
+      { id: 't1', name: 'Vivek Tanwar', role: 'Advocate', owner: true },
+      { id: 't2', name: 'Priya Sharma', role: 'Legal Consultant', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80' } 
     ];
-    $('search-title').textContent = 'Results for “' + raw + '”';
-    $('search-results').innerHTML = items.length ? items.map(i => `<a href="${i.h}" onclick="closeSearch()" class="block p-3 rounded-lg hover:bg-blue-50"><div class="font-semibold text-blue-900">${esc(i.t)}</div><div class="text-xs text-gray-500">${esc(i.s)}</div></a>`).join('') : '<p class="text-gray-500 p-3">No results found.</p>';
-    $('search-modal').classList.remove('hidden');
-}
-function closeSearch() { $('search-modal').classList.add('hidden'); }
-function sendContact(e) {
-    e.preventDefault(); const f = e.target.elements;
-    window.open(wa(`Hello Advocate Vivek Tanwar,\nName: ${f[0].value}\nEmail: ${f[1].value}\n\n${f[2].value}`), '_blank');
-}
+    
+    let DB = { 
+      photo: '', 
+      texts: {}, 
+      blogs: [], 
+      docs: [], 
+      team: [], 
+      teamSeeded: false, 
+      blogsLoaded: false, 
+      teamLoaded: false 
+    };
 
-// --- Theme Management ---
-        let currentThemeStyle = null;
+    // Firebase Setup
+    let fdb, auth;
+    if (CONFIG.FIREBASE.apiKey && !CONFIG.FIREBASE.apiKey.startsWith('PASTE')) {
+      firebase.initializeApp(CONFIG.FIREBASE);
+      fdb = firebase.firestore();
+      auth = firebase.auth();
+    } else {
+      console.warn('Firebase is not configured yet.');
+    }
 
-        function openThemeManager() {
-            document.getElementById('theme-modal').classList.remove('hidden');
+    const teamList = () => (DB.teamSeeded || DB.team.length) ? DB.team : DEFAULT_TEAM;
+
+    function fail(e) { 
+      alert(e && e.code === 'permission-denied' ? 'Not allowed. Please log in as admin.' : 'Could not save: ' + (e.message || e)); 
+      return false; 
+    }
+
+    async function put(c, o) {
+      if (!fdb) return false; // Fallback to local if no FB
+      if (JSON.stringify(o).length > 950000) return alert('This item is too large.') || false;
+      try { await fdb.collection(c).doc(o.id).set(o); return true; } catch (e) { return fail(e); }
+    }
+
+    async function del(c, id) {
+      if (!fdb) return;
+      try { await fdb.collection(c).doc(id).delete(); return true; } catch (e) { return fail(e); }
+    }
+
+    async function setSite(o) {
+      if (!fdb) return;
+      try { await fdb.doc('site/main').set(o, { merge: true }); return true; } catch (e) { return fail(e); }
+    }
+
+    // ================= INITIALIZATION =================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      initFirebase();
+      renderTeam();
+      renderBlogs();
+      renderDocs();
+      updateEditableTexts();
+      
+      // Mobile Menu Toggle
+      $('mobile-menu-btn').addEventListener('click', () => {
+        $('mobile-menu').classList.toggle('hidden');
+      });
+
+      // Show lock icon only on about page initially
+      checkLockVisibility();
+    });
+
+    function initFirebase() {
+      if (!fdb) return;
+      // Try to load site config from Firebase
+      fdb.doc('site/main').get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.photo) DB.photo = data.photo;
+          if (data.texts) DB.texts = data.texts;
+          if (data.blogs) DB.blogs = data.blogs;
+          if (data.docs) DB.docs = data.docs;
+          if (data.team) { DB.team = data.team; DB.teamSeeded = true; }
+          renderAll();
         }
+      }).catch(err => console.error("Firebase load error:", err));
+    }
 
-        function closeThemeModal() {
-            document.getElementById('theme-modal').classList.add('hidden');
+    function loadFromStorage() {
+      const saved = localStorage.getItem(KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        Object.assign(DB, parsed);
+      }
+    }
+
+    function saveToStorage() {
+      localStorage.setItem(KEY, JSON.stringify(DB));
+      if (fdb) setSite(DB).catch(console.error);
+    }
+
+    function renderAll() {
+      updateEditableTexts();
+      renderTeam();
+      renderBlogs();
+      renderDocs();
+      updateImages();
+    }
+
+    // ================= NAVIGATION =================
+    function showPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+      $(pageId).classList.remove('hidden');
+      window.scrollTo(0, 0);
+      
+      // Update lock visibility
+      if (pageId === 'about') {
+        $('about-lock-container').classList.remove('hidden');
+      } else {
+        $('about-lock-container').classList.add('hidden');
+      }
+
+      // Close mobile menu if open
+      $('mobile-menu').classList.add('hidden');
+    }
+
+    function checkLockVisibility() {
+      if (document.querySelector('#about:not(.hidden)')) {
+        $('about-lock-container').classList.remove('hidden');
+      }
+    }
+
+    // ================= ADMIN AUTH =================
+    function openLogin() {
+      $('login-modal').classList.remove('hidden');
+    }
+
+    function closeLogin() {
+      $('login-modal').classList.add('hidden');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = $('username').value;
+      const p = $('password').value;
+      
+      if (u === CONFIG.ADMIN_EMAIL && p === CONFIG.ADMIN_PASSWORD) {
+        enableAdminMode();
+        closeLogin();
+      } else {
+        alert('Invalid credentials');
+      }
+    }
+
+    function enableAdminMode() {
+      document.body.classList.add('is-admin');
+      $('admin-panel-indicator').classList.remove('hidden');
+      $('admin-blog-controls').classList.remove('hidden');
+      $('admin-doc-controls').classList.remove('hidden');
+      $('admin-team-controls').classList.remove('hidden');
+      
+      // Enable editing
+      document.querySelectorAll('.editable-text').forEach(el => {
+        el.contentEditable = "true";
+        el.classList.add('editable-active');
+      });
+      
+      alert('Welcome back, Advocate! You are now in Edit Mode.');
+    }
+
+    function logout() {
+      document.body.classList.remove('is-admin');
+      $('admin-panel-indicator').classList.add('hidden');
+      $('admin-blog-controls').classList.add('hidden');
+      $('admin-doc-controls').classList.add('hidden');
+      $('admin-team-controls').classList.add('hidden');
+      
+      document.querySelectorAll('.editable-text').forEach(el => {
+        el.contentEditable = "false";
+        el.classList.remove('editable-active');
+      });
+    }
+
+    function saveChanges() {
+      // Save editable texts
+      document.querySelectorAll('.editable-text').forEach(el => {
+        DB.texts[el.id || el.innerText.substring(0, 20)] = el.innerHTML;
+      });
+      
+      saveToStorage();
+      alert('Changes saved successfully!');
+    }
+
+    // ================= CONTENT RENDERING =================
+    function updateEditableTexts() {
+      document.querySelectorAll('.editable-text').forEach(el => {
+        const key = el.id || el.innerText.substring(0, 20);
+        if (DB.texts[key]) {
+          el.innerHTML = DB.texts[key];
         }
+      });
+    }
 
-        function applyExternalTheme() {
-            const url = document.getElementById('theme-url').value;
-            if(url) {
-                removeExistingTheme();
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = url;
-                link.id = 'external-theme';
-                document.head.appendChild(link);
-                closeThemeModal();
-                alert('Theme applied from URL.');
-            }
-        }
+    function updateImages() {
+      document.querySelectorAll('.profile-img').forEach(img => {
+        if (DB.photo) img.src = DB.photo;
+        else img.src = AVATAR;
+      });
+      // Update hero bg if needed (not implemented in DB for simplicity)
+    }
 
-        function applyLocalTheme() {
-            const fileInput = document.getElementById('theme-file');
-            if(fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    removeExistingTheme();
-                    const style = document.createElement('style');
-                    style.id = 'local-theme';
-                    style.innerHTML = e.target.result;
-                    document.head.appendChild(style);
-                    closeThemeModal();
-                    alert('Local theme applied.');
-                };
-                reader.readAsText(file);
-            }
-        }
+    function changeProfile(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          DB.photo = e.target.result;
+          updateImages();
+          saveToStorage();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
 
-        function resetTheme() {
-            removeExistingTheme();
-            closeThemeModal();
-            alert('Theme reset to default.');
-        }
+    // --- TEAM ---
+    function renderTeam() {
+      const container = $('team-container');
+      container.innerHTML = '';
+      teamList().forEach(member => {
+        const div = document.createElement('div');
+        div.className = 'team-card bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center';
+        div.innerHTML = `
+          <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
+            <img src="${member.photo || AVATAR}" class="team-img w-full h-full object-cover">
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">${member.name}</h3>
+          <p class="text-gray-500 text-sm">${member.role}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
 
-        function removeExistingTheme() {
-            if(document.getElementById('external-theme')) {
-                document.getElementById('external-theme').remove();
-            }
-            if(document.getElementById('local-theme')) {
-                document.getElementById('local-theme').remove();
-            }
-        }
-
+    function addTeamMember() {
+      const name = $('member-name').value;
+      const role = $('member-role').value;
+      const fileInput = $('member-photo');
+      
+      if (!name || !role) return alert('Please enter name and role');
+      
+      const processMember = (photoUrl) => {
+        const newMember = {
+          id: Date.now().toString(),
+          name,
+          role,
+          photo: photoUrl
+        };
+        DB.team.push(newMember);
+        DB.teamSeeded = true;
+        renderTeam();
+        saveToStorage();
         
-// ================= INIT =================
-document.querySelectorAll('.editable-text').forEach((el, i) => el.dataset.eid = i);
-renderTeam(); route(); listen();
-if (!localStorage.getItem('vt_cookie')) $('cookie-bar').classList.remove('hidden');
-</script>
+        // Reset form
+        $('member-name').value = '';
+        $('member-role').value = '';
+        fileInput.value = '';
+      };
 
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => processMember(e.target.result);
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        processMember(null);
+      }
+    }
 
+    // --- BLOGS ---
+    let quill;
+    document.addEventListener('DOMContentLoaded', () => {
+      quill = new Quill('#new-blog-editor-container', {
+        theme: 'snow',
+        modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], ['clean']] }
+      });
+    });
+
+    function renderBlogs() {
+      const list = $('blog-list');
+      const recent = $('blog-recent');
+      list.innerHTML = '';
+      recent.innerHTML = '';
+      
+      const sortedBlogs = [...DB.blogs].sort((a, b) => b.date - a.date);
+      
+      sortedBlogs.forEach(blog => {
+        // List Item
+        const div = document.createElement('div');
+        div.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer';
+        div.onclick = () => viewBlog(blog.id);
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-400">${new Date(blog.date).toLocaleDateString()}</span>
+            ${isAdmin() ? `<button onclick="event.stopPropagation();deleteBlog('${blog.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>` : ''}
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">${esc(blog.title)}</h3>
+          <p class="text-gray-600 text-sm line-clamp-2">${blog.excerpt || 'No excerpt available.'}</p>
+        `;
+        list.appendChild(div);
+        
+        // Recent Sidebar
+        if (recent.children.length < 5) {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="#" onclick="viewBlog('${blog.id}'); return false;" class="block text-sm text-blue-900 hover:underline font-medium">${esc(blog.title)}</a>`;
+          recent.appendChild(li);
+        }
+      });
+    }
+
+    function isAdmin() {
+      return document.body.classList.contains('is-admin');
+    }
+
+    function pickCover(input) {
+      if (input.files && input.files[0]) {
+        $('cover-name').textContent = input.files[0].name;
+      }
+    }
+
+    function addBlog() {
+      const title = $('new-blog-title').value;
+      const content = quill.root.innerHTML;
+      if (!title) return alert('Please enter a title');
+      
+      const newBlog = {
+        id: Date.now().toString(),
+        title,
+        content,
+        date: Date.now(),
+        excerpt: content.replace(/<[^>]+>/g, '').substring(0, 100) + '...'
+      };
+      
+      DB.blogs.push(newBlog);
+      renderBlogs();
+      saveToStorage();
+      
+      // Reset
+      $('new-blog-title').value = '';
+      quill.setText('');
+      $('cover-name').textContent = '';
+    }
+
+    function deleteBlog(id) {
+      if(!confirm('Delete this blog post?')) return;
+      DB.blogs = DB.blogs.filter(b => b.id !== id);
+      renderBlogs();
+      saveToStorage();
+    }
+
+    function viewBlog(id) {
+      const blog = DB.blogs.find(b => b.id === id);
+      if (!blog) return;
+      
+      $('single-blog-title').innerHTML = blog.title;
+      $('single-blog-date').innerText = new Date(blog.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      $('single-blog-content').innerHTML = blog.content;
+      
+      $('post-share').href = wa(`Check out this article: ${blog.title}`);
+      
+      showPage('single-blog-view');
+    }
+
+    function blogSearch() {
+      const term = $('blog-search').value.toLowerCase();
+      const filtered = DB.blogs.filter(b => 
+        b.title.toLowerCase().includes(term) || 
+        (b.content && b.content.toLowerCase().includes(term))
+      );
+      // Re-render list with filtered items (simplified: just re-render all if empty, else filter)
+      // For this simple version, we'll just re-render the main list based on filter
+      const list = $('blog-list');
+      list.innerHTML = '';
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="text-center text-gray-500 py-10">No blogs found matching your search.</div>';
+        return;
+      }
+
+      filtered.sort((a, b) => b.date - a.date).forEach(blog => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer';
+        div.onclick = () => viewBlog(blog.id);
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-400">${new Date(blog.date).toLocaleDateString()}</span>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">${esc(blog.title)}</h3>
+          <p class="text-gray-600 text-sm line-clamp-2">${blog.excerpt || 'No excerpt available.'}</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // --- DOCUMENTS ---
+    function renderDocs() {
+      const container = $('docs-container');
+      container.innerHTML = '';
+      
+      DB.docs.forEach(doc => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-4 rounded-lg border border-gray-200 flex justify-between items-center';
+        div.innerHTML = `
+          <div class="flex items-center">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <i class="fas fa-file-pdf text-blue-900 text-xl"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">${esc(doc.name)}</h4>
+              <p class="text-sm text-gray-500">${doc.price == 0 ? 'Free' : '₹' + doc.price}</p>
+            </div>
+          </div>
+          <a href="${doc.link || '#'}" target="_blank" class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm font-semibold">
+            Download
+          </a>
+          ${isAdmin() ? `<button onclick="deleteDoc('${doc.id}')" class="ml-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addDoc() {
+      const name = $('doc-name').value;
+      const price = $('doc-price').value;
+      const link = $('doc-link').value;
+      const fileInput = $('doc-file');
+      
+      if (!name) return alert('Please enter a document name');
+      
+      const processDoc = (downloadLink) => {
+        const newDoc = {
+          id: Date.now().toString(),
+          name,
+          price,
+          link: downloadLink || link
+        };
+        DB.docs.push(newDoc);
+        renderDocs();
+        saveToStorage();
+        
+        $('doc-name').value = '';
+        $('doc-price').value = '';
+        $('doc-link').value = '';
+        fileInput.value = '';
+      };
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => processDoc(e.target.result);
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        processDoc(link);
+      }
+    }
+
+    function deleteDoc(id) {
+      if(!confirm('Delete this document?')) return;
+      DB.docs = DB.docs.filter(d => d.id !== id);
+      renderDocs();
+      saveToStorage();
+    }
+
+    function docSearch() {
+      const term = $('doc-search').value.toLowerCase();
+      const filtered = DB.docs.filter(d => d.name.toLowerCase().includes(term));
+      const container = $('docs-container');
+      container.innerHTML = '';
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="text-center text-gray-500 py-10">No documents found.</div>';
+        return;
+      }
+
+      filtered.forEach(doc => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-4 rounded-lg border border-gray-200 flex justify-between items-center';
+        div.innerHTML = `
+          <div class="flex items-center">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <i class="fas fa-file-pdf text-blue-900 text-xl"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">${esc(doc.name)}</h4>
+              <p class="text-sm text-gray-500">${doc.price == 0 ? 'Free' : '₹' + doc.price}</p>
+            </div>
+          </div>
+          <a href="${doc.link || '#'}" target="_blank" class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm font-semibold">
+            Download
+          </a>
+          ${isAdmin() ? `<button onclick="deleteDoc('${doc.id}')" class="ml-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // --- CONTACT ---
+    function sendContact(e) {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.elements[0].value;
+      const email = form.elements[1].value;
+      const message = form.elements[2].value;
+      
+      const text = `Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`;
+      window.open(wa(text), '_blank');
+      form.reset();
+    }
+
+    // --- SEARCH ---
+    function globalSearch() {
+      const term = $('home-search').value.toLowerCase();
+      if (!term) return;
+      
+      // Simple search across blogs and docs
+      const blogResults = DB.blogs.filter(b => b.title.toLowerCase().includes(term));
+      const docResults = DB.docs.filter(d => d.name.toLowerCase().includes(term));
+      
+      let msg = '';
+      if (blogResults.length) msg += `<h4 class="font-bold mt-4">Blogs (${blogResults.length})</h4><ul class="list-disc pl-5">`;
+      blogResults.forEach(b => {
+        msg += `<li><a href="#" onclick="viewBlog('${b.id}'); return false;" class="text-blue-600 hover:underline">${esc(b.title)}</a></li>`;
+      });
+      if (blogResults.length) msg += '</ul>';
+      
+      if (docResults.length) msg += `<h4 class="font-bold mt-4">Documents (${docResults.length})</h4><ul class="list-disc pl-5">`;
+      docResults.forEach(d => {
+        msg += `<li>${esc(d.name)} (${d.price == 0 ? 'Free' : '₹'+d.price})</li>`;
+      });
+      if (docResults.length) msg += '</ul>';
+      
+      if (!msg) msg = '<p class="text-gray-500 mt-4">No results found.</p>';
+      
+      $('search-results').innerHTML = msg;
+      $('search-title').innerText = `Results for "${term}"`;
+      $('search-modal').classList.remove('hidden');
+    }
+
+    function closeSearch() {
+      $('search-modal').classList.add('hidden');
+    }
+
+    // --- COOKIE CONSENT ---
+    function cookieSet(val) {
+      document.cookie = "cookie_consent=" + val + ";expires=Thu, 18 Dec 2026 12:00:00 UTC;path=/";
+      $('cookie-bar').classList.add('hidden');
+    }
+
+    // Check cookie consent on load
+    if (!document.cookie.includes('cookie_consent')) {
+      setTimeout(() => $('cookie-bar').classList.remove('hidden'), 2000);
+    }
+
+  </script>
 </body>
 </html>
