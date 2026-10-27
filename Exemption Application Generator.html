@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exemption Application Generator</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f1ea;--card:#fffdf8;--ink:#1d1b17;--mute:#6b665c;--line:#d9d3c5;--acc:#7a1f1f;--acc-ink:#fff;--ok:#1f6b3a;--bad:#a12626;--field:#fff;--paper:#fff;--paper-ink:#000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17150f;--card:#211e17;--ink:#efeadd;--mute:#a39d8e;--line:#3a3629;--acc:#d98a7a;--acc-ink:#1a0e0b;--ok:#6fcf91;--bad:#ff8c8c;--field:#2a261d}}
+:root[data-theme="dark"]{--bg:#17150f;--card:#211e17;--ink:#efeadd;--mute:#a39d8e;--line:#3a3629;--acc:#d98a7a;--acc-ink:#1a0e0b;--ok:#6fcf91;--bad:#ff8c8c;--field:#2a261d}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+h1{font:600 24px/1.2 Georgia,"Times New Roman",serif;margin:8px 0 4px}
+.sub{color:var(--mute);margin:0 0 18px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 14px}
+.card h2{font:600 15px/1.3 system-ui,sans-serif;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em;color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.f{grid-column:span 6;display:flex;flex-direction:column;gap:4px}
+@media(min-width:640px){.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}}
+label{font-size:13px;color:var(--mute)}
+label.bd:after{content:"B";display:inline-block;margin-left:6px;padding:0 5px;font:700 10px/16px Georgia,serif;border-radius:3px;background:var(--acc);color:var(--acc-ink);vertical-align:1px}
+input,textarea{font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+textarea{resize:vertical;min-height:64px}
+input:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:0}
+.err{border-color:var(--bad)!important}
+.hint{font-size:13px;color:var(--mute);margin:0 0 10px}
+.modes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.modes label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:8px 12px;color:var(--ink);cursor:pointer;font-size:14px}
+.modes input{width:auto}
+button{font:600 15px system-ui,sans-serif;border-radius:8px;padding:10px 18px;border:1px solid var(--acc);background:var(--acc);color:var(--acc-ink);cursor:pointer}
+button.sec{background:transparent;color:var(--acc)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msg{font-size:14px;margin:10px 0 0}
+.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.pvw{overflow:hidden;border:1px solid var(--line);border-radius:6px;background:#8884;padding:0}
+.paper{position:relative;width:595.28px;height:841.89px;background:var(--paper);color:var(--paper-ink);transform-origin:0 0;font-family:"Times New Roman",Times,serif;font-size:14px;line-height:1}
+.paper span{position:absolute;white-space:pre;transform:translateY(-.8em)}
+.paper i{position:absolute;height:0;border-top:.8px solid var(--paper-ink)}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:14px 0;font-size:15px}
+.chk input{width:auto;margin-top:5px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Exemption Application Generator</h1>
+<p class="sub">Application for exemption from personal appearance. Fill the form, review the preview, and download a one-page PDF (Times New Roman, 14 pt, A4). Fields marked <b style="font-family:Georgia,serif">B</b> print in bold.</p>
+
+<div id="vForm">
+  <div id="cards"></div>
+
+  <div class="card">
+    <h2>Application body</h2>
+    <div class="modes">
+      <label><input type="radio" name="mode" value="std" checked> Standard template</label>
+      <label><input type="radio" name="mode" value="cus"> Fully custom contents</label>
+    </div>
+    <div id="stdBody">
+      <p class="hint">The wording stays as in the original; only the bold parts (marked B) are editable here. Switch to custom contents to change any sentence.</p>
+      <div class="grid" id="stdGrid"></div>
+    </div>
+    <div id="cusBody" hidden>
+      <p class="hint">Write anything. Put <b>**double asterisks**</b> around text you want in bold. Each line under “Numbered points” becomes one numbered point.</p>
+      <div class="grid">
+        <div class="f"><label for="c_head">Heading (underlined)</label><textarea id="c_head" rows="2"></textarea></div>
+        <div class="f s3"><label for="c_sal">Salutation</label><input id="c_sal"></div>
+        <div class="f s3"><label for="c_intro">Introductory line</label><input id="c_intro"></div>
+        <div class="f"><label for="c_pts">Numbered points (one per line)</label><textarea id="c_pts" rows="7"></textarea></div>
+        <div class="f"><label for="c_pray">Closing prayer</label><textarea id="c_pray" rows="3"></textarea></div>
+      </div>
+      <div class="row" style="margin-top:10px"><button class="sec" id="reload" type="button">Reload from template</button></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <button id="btnReview" type="button">Review application →</button>
+    <button class="sec" id="btnReset" type="button">Restore sample values</button>
+    <button class="sec" id="btnClear" type="button">Clear all</button>
+  </div>
+  <p class="msg bad" id="formMsg" hidden></p>
+</div>
+
+<div id="vReview" hidden>
+  <div class="card">
+    <h2>Review &amp; verify</h2>
+    <div class="pvw" id="pvw"><div class="paper" id="paper"></div></div>
+    <p class="msg" id="fitMsg"></p>
+    <label class="chk"><input type="checkbox" id="verify"><span>I have read the application above and confirm every detail (names, FIR number, sections, dates) is correct.</span></label>
+    <div class="row">
+      <button class="sec" id="btnBack" type="button">← Edit details</button>
+      <button id="btnPdf" type="button" disabled>Download PDF</button>
+    </div>
+    <p class="msg" id="dlMsg"></p>
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+// [id,label,default,bold,type,span]
+const SECTIONS=[
+ ['Court',[['judge','Judge name','SH. MANISH KUMAR',1,'text','s3'],['desig','Designation','A.S.J.',1,'text','s2'],['court','Court place','BHIWANI',1,'text','s2']]],
+ ['Case details',[['state','Complainant / State','State',1,'text','s3'],['accused','Accused name','Virender',1,'text','s3'],
+  ['fir','FIR No.','434',1,'text','s2'],['year','FIR year','2021',1,'text','s2'],['pend','Pending for (date)','2026-10-14',1,'date','s2'],
+  ['sec','U/S (sections)','328, 381, 120B & 511 of I.P.C',1,'text','s4'],['ps','Police station','Bhiwani Sadar',1,'text','s2']]],
+ ['Signature block',[['place','Place','Bhiwani',0,'text','s3'],['date','Date','2026-10-14',0,'date','s3'],
+  ['father','Accused’s father’s name','Narender Bahadur',1,'text','s3'],['addr','Accused’s address (R/o)','Betri Patan, Ward no. 3, Nepal.',1,'text','s3'],
+  ['advocate','Through (advocate)','Suresh Kumar, Advocate, Bhiwani',1,'text','s4']]]
+];
+const BODY=[['purpose','Case fixed today for','Prosecution Evidence',1,'text','s3'],
+ ['reason','Reason for absence','applicant/accused telephonically informed that he is present in Nepal due to some urgent work',1,'textarea','f'],
+ ['obj','Point 4 (statement about witnesses)','That the applicant/accused has no objection if prosecution witnesses present today will be examined in his absence.',1,'textarea','f']];
+const ALL=[...SECTIONS.flatMap(s=>s[1]),...BODY];
+function mk(c){const[id,l,v,b,t,sp]=c;const d=document.createElement('div');d.className='f '+(sp==='f'?'':sp);
+ d.innerHTML=`<label for="${id}" class="${b?'bd':''}">${l}</label>`+(t==='textarea'?`<textarea id="${id}" rows="3"></textarea>`:`<input id="${id}" type="${t}">`);return d}
+SECTIONS.forEach(([h,cs])=>{const c=document.createElement('div');c.className='card';c.innerHTML=`<h2>${h}</h2>`;const g=document.createElement('div');g.className='grid';cs.forEach(x=>g.appendChild(mk(x)));c.appendChild(g);$('cards').appendChild(c)});
+BODY.forEach(c=>$('stdGrid').appendChild(mk(c)));
+const setAll=blank=>ALL.forEach(c=>{$(c[0]).value=blank?'':c[2]});
+setAll(false);
+
+const fmt=iso=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(iso||'');return m?`${m[3]}.${m[2]}.${m[1]}`:(iso||'')};
+const clean=s=>String(s||'').replace(/\s+/g,' ').trim();
+const nb=s=>clean(s).replace(/\*\*/g,'');
+function val(id){return nb($(id).value)}
+function mode(){return document.querySelector('input[name=mode]:checked').value}
+
+function stdText(){
+ const a=val('accused');
+ return {head:`Application for seeking exemption from personal appearance of the **Accused ${a}** for today`,
+  sal:'Respected Sir,',intro:'Applicant/Accused submits as under:-',
+  pts:[`That the above titled case is fixed for today for **${val('purpose')}**.`,
+   `That the **${val('reason')}** and due to the reason he is not able to attend the Hon'ble court for today.`,
+   'That the absence of accused is not intentional one but due to the reason mentioned above.',
+   `**${val('obj')}**`],
+  pray:`It is therefore, prayed that exemption from personal appearance for today to the **accused ${a}** may kindly be granted in the interest of justice.`};
+}
+function fillCustom(){const t=stdText();$('c_head').value=t.head;$('c_sal').value=t.sal;$('c_intro').value=t.intro;$('c_pts').value=t.pts.join('\n');$('c_pray').value=t.pray}
+function body(){
+ if(mode()==='std')return stdText();
+ return {head:clean($('c_head').value),sal:clean($('c_sal').value),intro:clean($('c_intro').value),
+  pts:$('c_pts').value.split('\n').map(clean).filter(Boolean),pray:clean($('c_pray').value)};
+}
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{
+ const c=mode()==='cus';$('stdBody').hidden=c;$('cusBody').hidden=!c;if(c&&!$('c_head').value)fillCustom()}));
+$('reload').onclick=fillCustom;
+$('btnReset').onclick=()=>{setAll(false);fillCustom()};
+$('btnClear').onclick=()=>{setAll(true);['c_head','c_sal','c_intro','c_pts','c_pray'].forEach(i=>$(i).value='')};
+
+const safe=s=>String(s).replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/[–—]/g,'-').replace(/…/g,'...').replace(/\u00a0/g,' ');
+
+/* ---------- layout engine (shared by preview and PDF) ---------- */
+const PT=14,W=595.28,H=841.89;
+const TIERS=[{side:70,top:62,bottom:50,lead:1.2,gap:9},{side:66,top:50,bottom:42,lead:1.14,gap:7},{side:60,top:42,bottom:36,lead:1.1,gap:5},{side:50,top:36,bottom:30,lead:1.06,gap:3},{side:42,top:30,bottom:26,lead:1.02,gap:2}];
+function words(str){const parts=safe(str).split('**');let b=false,cur=[];const ws=[];
+ parts.forEach(p=>{p.split(/(\s+)/).forEach(s=>{if(!s)return;if(/^\s+$/.test(s)){if(cur.length){ws.push(cur);cur=[]}}else cur.push({t:s,b})});b=!b});
+ if(cur.length)ws.push(cur);return ws}
+function layout(doc,D,B,P){
+ const L=P.side,R=W-P.side,CW=R-L,lead=PT*P.lead,ops=[];let y=P.top+11;
+ doc.setFontSize(PT);
+ const mw=(t,b)=>{doc.setFont('times',b?'bold':'normal');return doc.getTextWidth(t)};
+ const sp=mw(' ',false);
+ const ww=w=>{w.w=w.reduce((a,p)=>a+mw(p.t,p.b),0);return w.w};
+ function para(str,o={}){
+  const x=o.x??L,w=o.w??CW,hang=o.hang||0,first=o.first||0,al=o.align||'justify',ws=words(str);
+  if(!ws.length)return;ws.forEach(ww);
+  const lines=[];let cur=[],cw=0;
+  const avail=()=>x+w-(x+hang+(lines.length?0:first))-0;
+  ws.forEach(wd=>{const a=w-hang-(lines.length?0:first);const nw=cur.length?cw+sp+wd.w:wd.w;
+   if(cur.length&&nw>a){lines.push({ws:cur,cw});cur=[wd];cw=wd.w}else{cur.push(wd);cw=nw}});
+  lines.push({ws:cur,cw});
+  lines.forEach((ln,i)=>{
+   const a=w-hang-(i?0:first);let sx=x+hang+(i?0:first),gap=sp;
+   if(al==='justify'&&i<lines.length-1&&ln.ws.length>1)gap=(a-ln.ws.reduce((s,q)=>s+q.w,0))/(ln.ws.length-1);
+   else if(al==='center')sx=x+(w-ln.cw)/2;else if(al==='right')sx=x+w-ln.cw;
+   const x0=sx;let cx=sx;
+   ln.ws.forEach(wd=>{wd.forEach(p=>{const pw=mw(p.t,p.b);ops.push({t:p.t,b:p.b,x:cx,y});cx+=pw});cx+=gap});
+   cx-=gap;if(o.ul)ops.push({u:1,x1:x0,x2:cx,y:y+1.6});
+   if(i===0&&o.num)ops.push({t:o.num,b:false,x:o.numX,y});
+   y+=lead});
+  y+=o.gap??P.gap}
+ function at(str,x,al){const ws=words(str);ws.forEach(ww);let cx=x;const tw=ws.reduce((s,q)=>s+q.w,0)+sp*(ws.length-1);if(al==='c')cx=x-tw/2;
+  ws.forEach(wd=>{wd.forEach(p=>{ops.push({t:p.t,b:p.b,x:cx,y});cx+=mw(p.t,p.b)});cx+=sp});return tw}
+
+ para(`IN THE COURT OF **${D.judge}**, LD. **${D.desig}**, **${D.court}**`,{align:'center',ul:1,gap:P.gap*1.4});
+ // caption
+ at(`**${D.state}**`,L+105,'c');at('v/s',L+210,'c');
+ const nw=ww(words(`**${D.accused}**`)[0]||[]);const nx=Math.min(L+278,R-mw(D.accused,true));at(`**${D.accused}**`,nx);
+ y+=lead+P.gap*.6;
+ const rx=L+278,rw=R-rx,r={x:rx,w:rw,align:'left',gap:P.gap*.35};
+ para(`FIR No.: **${D.fir}** of **${D.year}**`,r);para(`U/S : **${D.sec}**`,r);para(`P.S. : **${D.ps}**`,r);para(`Pending for : **${D.pend}**`,{...r,gap:P.gap});
+ para(B.head,{ul:1});
+ if(B.sal)para(B.sal,{align:'left'});
+ if(B.intro)para(B.intro,{align:'left',first:8});
+ B.pts.forEach((p,i)=>para(p,{numX:L+16,num:`${i+1}.`,hang:36}));
+ if(B.pray)para(B.pray,{first:36,gap:P.gap*1.2});
+ para(D.place,{align:'left',gap:P.gap*.3});
+ // date line + applicant label
+ const dy=y;at(D.date,L);y=dy;at('Applicant/Accused',rx+16);y+=lead+P.gap*.5+lead*.6;
+ para(`**${D.accused} son of Sh. ${D.father}, R/o ${D.addr}**`,{x:rx,w:rw,align:'left',gap:P.gap});
+ para(`Through : **${D.advocate}**`,{x:L+72,w:CW-72,align:'left',gap:0});
+ const last=y-lead;
+ return {ops,ok:last<=H-P.bottom,last};
+}
+function fit(doc,D,B){let res;for(const P of TIERS){res=layout(doc,D,B,P);if(res.ok)return{...res,P}}return{...res,P:TIERS[TIERS.length-1]}}
+
+function collect(){
+ const g=id=>val(id);
+ return {judge:g('judge'),desig:g('desig'),court:g('court'),state:g('state'),accused:g('accused'),fir:g('fir'),year:g('year'),
+  sec:g('sec'),ps:g('ps'),pend:fmt($('pend').value),place:g('place'),date:fmt($('date').value),father:g('father'),addr:g('addr'),advocate:g('advocate')};
+}
+let measure=null,current=null;
+function jsp(){return window.jspdf&&window.jspdf.jsPDF}
+
+function validate(D,B){
+ const need=['judge','court','state','accused','fir','year','sec','ps','pend','place','date','father','addr','advocate'];
+ const miss=need.filter(k=>!(k==='pend'||k==='date'?D[k]:D[k]));
+ ALL.forEach(c=>$(c[0]).classList.toggle('err',need.includes(c[0])&&!D[c[0]]));
+ const msgs=[];
+ if(miss.length)msgs.push('Please fill the highlighted fields.');
+ if(!B.head||!B.pts.length)msgs.push('The application needs a heading and at least one numbered point.');
+ const all=JSON.stringify([D,B]);
+ if(/[^\u0000-\u00ff\u2018\u2019\u201c\u201d\u2013\u2014\u2026]/.test(all.replace(/\\u[0-9a-f]{4}/gi,'')))msgs.push('Only English (Latin) characters are supported in Times New Roman PDF output. Please type names and addresses in English.');
+ return msgs;
+}
+function render(res){
+ const p=$('paper');p.innerHTML='';
+ res.ops.forEach(o=>{let e;
+  if(o.u){e=document.createElement('i');e.style.left=o.x1+'px';e.style.width=(o.x2-o.x1)+'px';e.style.top=o.y+'px'}
+  else{e=document.createElement('span');e.textContent=o.t;e.style.left=o.x+'px';e.style.top=o.y+'px';if(o.b)e.style.fontWeight='700'}
+  p.appendChild(e)});
+ scale()}
+function scale(){const w=$('pvw').clientWidth||W,s=Math.min(1,w/W);$('paper').style.transform=`scale(${s})`;$('pvw').style.height=(H*s)+'px'}
+addEventListener('resize',scale);
+
+$('btnReview').onclick=()=>{
+ const J=jsp();const fm=$('formMsg');
+ if(!J){fm.textContent='The PDF library could not be loaded. Check your internet connection and reload.';fm.hidden=false;return}
+ const D=collect(),B=body(),msgs=validate(D,B);
+ if(msgs.length){fm.textContent=msgs.join(' ');fm.hidden=false;return}
+ fm.hidden=true;
+ measure=measure||new J({unit:'pt',format:'a4'});
+ current=fit(measure,D,B);current.D=D;current.B=B;
+ $('vForm').hidden=true;$('vReview').hidden=false;render(current);
+ const m=$('fitMsg');
+ if(current.ok){m.className='msg ok';m.textContent='Fits on a single A4 page (Times New Roman, 14 pt).'}
+ else{m.className='msg bad';m.textContent='This content is too long for one page at 14 pt. Please shorten the text (go back and edit) — the PDF cannot be generated until it fits.'}
+ $('verify').checked=false;$('btnPdf').disabled=true;$('dlMsg').textContent='';scrollTo(0,0);
+};
+$('verify').onchange=()=>{$('btnPdf').disabled=!($('verify').checked&&current&&current.ok)};
+$('btnBack').onclick=()=>{$('vReview').hidden=true;$('vForm').hidden=false};
+
+$('btnPdf').onclick=async()=>{
+ const J=jsp(),dm=$('dlMsg');if(!J||!current)return;
+ const doc=new J({unit:'pt',format:'a4'});doc.setProperties({title:'Application for exemption from personal appearance'});
+ const res=layout(doc,current.D,current.B,current.P);
+ if(!res.ok){dm.className='msg bad';dm.textContent='Content no longer fits on one page.';return}
+ doc.setFontSize(PT);doc.setLineWidth(.7);
+ res.ops.forEach(o=>{if(o.u)doc.line(o.x1,o.y,o.x2,o.y);else{doc.setFont('times',o.b?'bold':'normal');doc.text(o.t,o.x,o.y)}});
+ const name='Exemption_Application_'+(current.D.accused||'Accused').replace(/[^A-Za-z0-9]+/g,'_')+'.pdf';
+ const blob=doc.output('blob');
+ try{
+  const dl=window.claude&&await window.claude.use('downloads');
+  if(dl){await dl.save({filename:name,data:blob});dm.className='msg ok';dm.textContent='PDF ready.'}
+  else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();dm.className='msg ok';dm.textContent='PDF downloaded.'}
+ }catch(e){dm.className='msg bad';dm.textContent=(e&&e.code==='declined')?'Download cancelled.':'Could not save the PDF. Please try again.'}
+};
+</script>
+</body>
+</html>
